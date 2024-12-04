@@ -24,4 +24,9 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  .writing-mode-vertical {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    /* text-orientation: mixed; */
+  }
 }
