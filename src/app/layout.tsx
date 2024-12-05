@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+
 import Navbar from "@/components/navbar";
+
+import Footer from "@/components/footer";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -11,6 +17,11 @@ const geistSans = localFont({
 const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
+  weight: "100 900",
+});
+const geistFrankly = localFont({
+  src: "./fonts/FranklySpokenTwo.woff",
+  variable: "--font-geist-frankly",
   weight: "100 900",
 });
 
@@ -26,12 +37,20 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        
-      <Navbar/>
+      <body
+        className={`${geistFrankly.variable} ${geistMono.variable} antialiased`}
+      >
+        <Navbar/>
         {children}
-        
-        </body>
+        <ToastContainer
+            draggable
+            closeOnClick
+            autoClose={5000}
+            theme="dark"
+            position="bottom-right"
+          />
+        <Footer/>
+      </body>
     </html>
   );
 }
