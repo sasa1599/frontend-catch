@@ -4,8 +4,8 @@ import Wrapper from "@/helpers/wrapper";
 
 export default function AboutUs() {
   return (
-    <div className="h-screen w-full bg-white px-52">
-      <Wrapper>
+    <div className="h-screen w-full bg-white">
+      <div className="mx-11 md:mx-24">
         <div className="flex flex-col p-10 text-black font-bold justify-center">
           <div className="mb-4 md:text-lg uppercase">
             Who we are, what we do, and why we do it
@@ -49,7 +49,7 @@ export default function AboutUs() {
             </Link>
           </div>
         </div>
-      </Wrapper>
+      </div>
     </div>
   );
 }

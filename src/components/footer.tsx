@@ -21,19 +21,19 @@ export default function Footer() {
           <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
             <div>
               <h2 className="mb-6 text-lg font-bold uppercase ">
-                <span className="text-blue-400">CAT</span>ch the Moment
+                <span className="text-violet-500">CAT</span>ch the Moment
               </h2>
               <ul className=" font-medium">
                 <li className="mb-4">
                   <Link
-                    href="http://localhost:3000/"
+                    href="/about"
                     className="hover:underline"
                   >
                     About Us
                   </Link>
                 </li>
                 <li className="mb-4">
-                  <a href="http://localhost:3000/" className="hover:underline">
+                  <a href="/" className="hover:underline">
                     Why Us
                   </a>
                 </li>
@@ -46,7 +46,7 @@ export default function Footer() {
               <ul className="font-medium">
                 <li className="mb-4">
                   <Link
-                    href="http://localhost:3000/"
+                    href="/promotor/register"
                     className="hover:underline "
                   >
                     as Event Organizer
@@ -54,7 +54,7 @@ export default function Footer() {
                 </li>
                 <li>
                   <Link
-                    href="http://localhost:3000/"
+                    href="/"
                     className="hover:underline"
                   >
                     Why Event With Us
@@ -80,7 +80,7 @@ export default function Footer() {
         <div className="sm:flex sm:items-center sm:justify-between">
           <p className="text-sm  sm:text-center">
             © 2024{" "}
-            <Link href="http://localhost:3000/" className="hover:underline">
+            <Link href="/" className="hover:underline">
               <span>CAT</span>ch The Moment™
             </Link>
             . All Rights Reserved.
