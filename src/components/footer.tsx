@@ -25,10 +25,7 @@ export default function Footer() {
               </h2>
               <ul className=" font-medium">
                 <li className="mb-4">
-                  <Link
-                    href="/about"
-                    className="hover:underline"
-                  >
+                  <Link href="/about" className="hover:underline">
                     About Us
                   </Link>
                 </li>
@@ -40,23 +37,17 @@ export default function Footer() {
               </ul>
             </div>
             <div>
-              <h2 className="mb-6 text-lg font-bold text-gray-900 uppercase ">
+              <h2 className="mb-6 text-lg font-bold uppercase ">
                 Partner WITH US
               </h2>
               <ul className="font-medium">
                 <li className="mb-4">
-                  <Link
-                    href="/promotor/register"
-                    className="hover:underline "
-                  >
+                  <Link href="/promotor/register" className="hover:underline ">
                     as Event Organizer
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    href="/"
-                    className="hover:underline"
-                  >
+                  <Link href="/" className="hover:underline">
                     Why Event With Us
                   </Link>
                 </li>
