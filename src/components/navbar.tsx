@@ -1,12 +1,13 @@
 "use client";
 
+import useSession from "@/hooks/useSession";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Navbar = () => {
-  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const menuItems = [
     { label: "Browse events", href: "/events" },
@@ -14,11 +15,37 @@ const Navbar = () => {
     { label: "Careers", href: "/careers" },
     { label: "Help Center", href: "/help" },
     { label: "Blog", href: "/blog" },
-    { label: "Login", href: "/login" },
   ];
 
+  const loginOptions = [
+    { label: "Customer Login", href: "/sign-in/signCustomer" },
+    { label: "Promotor Login", href: "/sign-in/signPromotor" },
+  ];
+
+  const {user} = useSession();
+  console.log(user, "user");
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (
+        !target.closest(".dropdown-button") &&
+        !target.closest(".dropdown-menu")
+      ) {
+        setDropdownOpen(false);
+      }
+    };
+
+    if (dropdownOpen) {
+      document.addEventListener("click", handleOutsideClick);
+    } else {
+      document.removeEventListener("click", handleOutsideClick);
+    }
+
+    return () => document.removeEventListener("click", handleOutsideClick);
+  }, [dropdownOpen]);
+
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-white z-50 px-4 md:px-6 py-4 text-black shadow">
+    <nav className="fixed top-0 left-0 right-0 bg-white z-50 px-4 md:px-6 py-4 shadow text-black">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <Image src="/logo.gif" alt="Logo" width={40} height={40} />
@@ -33,23 +60,36 @@ const Navbar = () => {
         </div>
         <div className="hidden md:flex items-center gap-6">
           {menuItems.map((item) => (
-            <div
+            <Link
               key={item.label}
-              className="relative"
-              onMouseEnter={() => setHoveredItem(item.label)}
-              onMouseLeave={() => setHoveredItem(null)}
+              href={item.href}
+              className="text-black hover:opacity-70 transition-opacity"
             >
-              <Link
-                href={item.href}
-                className="text-black hover:opacity-70 transition-opacity"
-              >
-                {item.label}
-              </Link>
-              {hoveredItem === item.label && (
-                <div className="absolute -top-4 left-0 right-0 h-0.5 bg-black" />
-              )}
-            </div>
+              {item.label}
+            </Link>
           ))}
+          <div className="relative">
+            <button
+              className="dropdown-button text-black hover:opacity-70 transition-opacity"
+              onClick={() => setDropdownOpen((prev) => !prev)}
+            >
+              Login
+            </button>
+            {dropdownOpen && (
+              <div className="dropdown-menu absolute top-full mt-2 right-0 w-40 bg-white border border-gray-200 rounded-lg shadow-lg">
+                {loginOptions.map((option) => (
+                  <Link
+                    key={option.label}
+                    href={option.href}
+                    className="block px-4 py-2 text-black hover:bg-gray-100"
+                  >
+                    {option.label}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+
           <button className="px-4 py-2 bg-black text-white rounded-full hover:opacity-90">
             GET THE APP
           </button>
@@ -91,6 +131,27 @@ const Navbar = () => {
                 {item.label}
               </Link>
             ))}
+            <div className="relative">
+              <button
+                className="dropdown-button text-black hover:opacity-70 transition-opacity"
+                onClick={() => setDropdownOpen((prev) => !prev)}
+              >
+                Login
+              </button>
+              {dropdownOpen && (
+                <div className="dropdown-menu mt-2 bg-white border border-gray-200 rounded-lg shadow-lg">
+                  {loginOptions.map((option) => (
+                    <Link
+                      key={option.label}
+                      href={option.href}
+                      className="block px-4 py-2 text-black hover:bg-gray-100"
+                    >
+                      {option.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
             <button className="px-4 py-2 bg-black text-white rounded-full hover:opacity-90">
               GET THE APP
             </button>
