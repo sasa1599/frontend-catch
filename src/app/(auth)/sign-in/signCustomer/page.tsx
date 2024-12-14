@@ -13,8 +13,9 @@ interface FormValues {
   password: string;
   role: string;
 }
+
 const SignCustomer = () => {
-  const initialValues = {
+  const initialValues: FormValues = {
     username: "",
     password: "",
     role: "customer",
@@ -27,10 +28,14 @@ const SignCustomer = () => {
   });
 
   const [isLoading, setIsLoading] = useState(false);
-  const { isAuth, user, setIsAuth, setUser } = useSession();
+  const { setIsAuth, setUser, setRole } = useSession();
   const router = useRouter();
+
   const handleLogin = async (values: FormValues) => {
     try {
+      setIsLoading(true);
+
+      // Prepare payload
       const payload = {
         data: {
           username: values.username,
@@ -38,25 +43,35 @@ const SignCustomer = () => {
         },
         password: values.password,
       };
-      const res = await axios.post("http://localhost:8001/api/login", payload);
 
-      const result = res.data.customer;
-      setIsLoading(false);
+      // API call for login
+      const res = await axios.post("http://localhost:8001/api/login", payload, {
+        withCredentials: true,
+      });
+
+      // Extract response data
+      const { customer, message } = res.data;
+
+      // Update session state
+      setUser(customer);
+      setRole("customer");
       setIsAuth(true);
-      setUser(result);
-      
-      toast.success(result.message);
-      router.push("/");
-      setIsAuth(true);
-      setUser(null);
+
+      // Display success message and redirect
+      toast.success(message || "Login successful!");
+      window.location.assign("/customerDashboard");
     } catch (err: any) {
-      console.log(err);
-      setIsLoading(false);
-      toast.error(err.message);
+      // Extract error message safely
+      const errorMessage =
+        err.response?.data?.message ||
+        err.message ||
+        "An error occurred during login.";
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
   };
+
   return (
     <div className="min-h-screen flex flex-col lg:flex-row bg-gray-100 text-black">
       <div className="lg:w-1/2 w-full relative">
@@ -67,10 +82,9 @@ const SignCustomer = () => {
         />
         <img
           src="/loginCat.gif"
-          alt="Login background"
+          alt="Login animation"
           className="absolute bottom-0 right-0 w-1/3 h-auto object-cover"
         />
-        {/* <div className="absolute inset-0 bg-black bg-opacity-50"></div> */}
       </div>
       <div className="lg:w-1/2 w-full flex flex-col items-center justify-center p-8 mt-20 lg:p-12">
         <div className="mb-8 text-center w-full max-w-lg">
@@ -92,9 +106,7 @@ const SignCustomer = () => {
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
-            onSubmit={(values) => {
-              handleLogin(values);
-            }}
+            onSubmit={(values) => handleLogin(values)}
           >
             {({ isSubmitting }) => (
               <Form>
@@ -113,7 +125,7 @@ const SignCustomer = () => {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                   <ErrorMessage
-                    name="usrname"
+                    name="username"
                     component="div"
                     className="text-red-500 text-sm mt-1"
                   />
@@ -142,9 +154,9 @@ const SignCustomer = () => {
                 <button
                   type="submit"
                   className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition duration-200"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || isLoading}
                 >
-                  {isSubmitting ? "Signing In..." : "Sign In"}
+                  {isSubmitting || isLoading ? "Signing In..." : "Sign In"}
                 </button>
               </Form>
             )}

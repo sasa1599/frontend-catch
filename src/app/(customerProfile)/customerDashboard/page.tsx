@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
-
+import Image from "next/image";
+import Link from "next/link";
+import { deleteCookie } from "@/components/libs/action";
 import {
   ChevronLeft,
   ChevronRight,
@@ -14,18 +14,17 @@ import {
   UserCircle,
   LogOut,
 } from "lucide-react";
-import useProSession from "@/hooks/promotorSession";
-import { deleteCookie } from "@/components/libs/action";
+import useSession from "@/hooks/useSession";
+import { IUser } from "@/types/user";
 
-const DashboardSidebar = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const { user, isAuth, loading, error, setIsAuth } = useProSession();
+const CustomerDashboard = () => {
+  const { isAuth, user, role, setIsAuth } = useSession();
   const router = useRouter();
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const onLogout = () => {
     deleteCookie("token");
     setIsAuth(false);
-    
     router.push("/");
   };
 
@@ -35,25 +34,24 @@ const DashboardSidebar = () => {
       text: "Dashboard",
       href: "/dashboard",
     },
-    { icon: <Calendar size={24} />, text: "Events", href: "/events" },
+    { icon: <Calendar size={24} />, text: "Bookings", href: "/bookings" },
     {
       icon: <Receipt size={24} />,
       text: "Transactions",
-      href: "/dashboard/transaction",
+      href: "/transactions",
     },
     {
       icon: <UserCircle size={24} />,
       text: "My Profile",
-      href: "/dashboard/profile",
+      href: "/profile",
     },
   ];
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+  const customer = user as IUser;
 
-  if (error) {
-    return <p>{error}</p>;
+  if (role === "promotor") {
+    router.push("/promotor-dashboard");
+    return null;
   }
 
   return (
@@ -61,7 +59,7 @@ const DashboardSidebar = () => {
       <aside
         className={`${
           isCollapsed ? "w-20" : "w-64"
-        } bg-white shadow-lg transition-all duration-300 relative flex flex-col`}
+        } bg-white shadow-lg transition-all duration-300 flex flex-col`}
       >
         <div className="flex items-center p-4 border-b">
           <Image src="/logo.gif" alt="Logo" width={32} height={32} />
@@ -76,23 +74,14 @@ const DashboardSidebar = () => {
             <Link
               key={index}
               href={item.href}
-              className={`flex items-center px-3 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 group relative ${
-                !isCollapsed ? "gap-4" : "justify-center"
+              className={`flex items-center px-3 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 group ${
+                isCollapsed ? "justify-center" : "gap-4"
               }`}
             >
               <div className="text-gray-500 group-hover:text-blue-600">
                 {item.icon}
               </div>
-
-              {!isCollapsed ? (
-                <span className="font-medium">{item.text}</span>
-              ) : (
-                <span
-                  className="absolute left-full ml-6 p-2 bg-gray-800 text-white text-sm rounded-md whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50"
-                >
-                  {item.text}
-                </span>
-              )}
+              {!isCollapsed && <span className="font-medium">{item.text}</span>}
             </Link>
           ))}
         </nav>
@@ -101,7 +90,7 @@ const DashboardSidebar = () => {
             {!isCollapsed ? (
               <div className="flex items-center gap-3">
                 <Image
-                  src={user?.avatar || "/user.png"}
+                  src={customer?.avatar || "/user.png"}
                   alt="Profile"
                   width={32}
                   height={32}
@@ -109,34 +98,35 @@ const DashboardSidebar = () => {
                 />
                 <div className="flex-1">
                   <p className="text-sm font-medium text-gray-700">
-                    {user?.name || user?.username || "Guest"}
+                    {customer?.name || customer?.username || "Guest"}
                   </p>
-                  <p className="text-xs text-gray-500">{user?.email || ""}</p>
+                  <p className="text-xs text-gray-500">
+                    {customer?.email || ""}
+                  </p>
                   <p className="text-xs text-blue-600 capitalize">
-                    {user?.is_verify ? "Promotor (Verified)" : "Promotor"}
+                    {customer?.isVerify ? "Verified Customer" : "Customer"}
                   </p>
+                  {customer?.ref_code && (
+                    <p className="text-xs text-gray-400">
+                      Referral Code: {customer.ref_code}
+                    </p>
+                  )}
+                  {customer?.referred_code && (
+                    <p className="text-xs text-gray-400">
+                      Referred By: {customer.referred_code}
+                    </p>
+                  )}
                 </div>
               </div>
             ) : (
-              <div className="flex justify-center group relative">
+              <div className="flex justify-center">
                 <Image
-                  src={user?.avatar || "/user.png"}
+                  src={customer?.avatar || "/user.png"}
                   alt="Profile"
                   width={32}
                   height={32}
                   className="rounded-full"
                 />
-                <span
-                  className="absolute left-full ml-6 p-2 bg-gray-800 text-white text-sm rounded-md whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50"
-                >
-                  {user?.name || user?.username || "Guest"}
-                  {user?.email && <br />}
-                  {user?.email}
-                  <br />
-                  <span className="capitalize">
-                    {user?.is_verify ? "Promotor (Verified)" : "Promotor"}
-                  </span>
-                </span>
               </div>
             )}
           </div>
@@ -154,7 +144,9 @@ const DashboardSidebar = () => {
         <div className="border-t">
           <button
             onClick={onLogout}
-            className="w-full flex items-center justify-center p-4 text-red-500 hover:bg-red-50 transition-colors"
+            className={`w-full flex items-center justify-center p-4 text-red-500 hover:bg-red-50 transition-colors ${
+              isCollapsed ? "justify-center" : "gap-2"
+            }`}
           >
             <LogOut size={20} />
             {!isCollapsed && <span className="ml-3 font-medium">Logout</span>}
@@ -165,7 +157,7 @@ const DashboardSidebar = () => {
         <div className="max-w-7xl mx-auto">
           <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
           <p className="mt-2 text-gray-600">
-            Welcome, {isAuth ? user?.name || user?.username : "Guest"}!
+            Welcome, {isAuth ? customer?.name || customer?.username : "Guest"}!
           </p>
         </div>
       </main>
@@ -173,4 +165,4 @@ const DashboardSidebar = () => {
   );
 };
 
-export default DashboardSidebar;
+export default CustomerDashboard;
