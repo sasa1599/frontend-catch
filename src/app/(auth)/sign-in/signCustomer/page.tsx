@@ -53,13 +53,13 @@ const SignCustomer = () => {
       const { customer, message } = res.data;
 
       // Update session state
-      setUser(customer);
+      setUser({...customer, role: "customer"});
       setRole("customer");
       setIsAuth(true);
 
       // Display success message and redirect
       toast.success(message || "Login successful!");
-      window.location.assign("/customerDashboard");
+      router.push("/customerDashboard");
     } catch (err: any) {
       // Extract error message safely
       const errorMessage =

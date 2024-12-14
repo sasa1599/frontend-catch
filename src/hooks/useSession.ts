@@ -17,52 +17,41 @@ const useSession = () => {
   const [user, setUser] = useState<IUser | IPromotor | null>(null);
   const [role, setRole] = useState<SessionData["role"]>(null);
   const checkSession = async () => {
-    console.log(role, user, isAuth, "role")
-    if (role=="customer"){
-      try {
-        const customerRes = await axios.get(
-          "http://localhost:8001/api/customers/profile",
-          {
-            withCredentials: true,
-          }
-        );
-        if (customerRes.data) {
-          setUser(customerRes.data.user);
-          setIsAuth(true);
-          return;
-        }
-      } catch (err) {
-        console.warn("No customer session found");
-      }
-    }
-    if (role=="promotor"){
-      try {
-        const promotorRes = await axios.get(
-          "http://localhost:8001/api/promotors/profile",
-          {
-            withCredentials: true,
-          }
-        );
-        if (promotorRes.data) {
-          setUser(promotorRes.data.user);
-          setIsAuth(true);
-          return;
-        }
-      } catch (err) {
-        console.warn("No promotor session found");
-      }
-    }
+    console.log(role, user, isAuth, "role");
+    return role
+    // console.log(role, user, isAuth, "role");
 
+    // if (!role) {
+    //   setIsAuth(false);
+    //   setUser(null);
+    //   return;
+    // }
 
-    // Reset session if no valid session is found
-    setUser(null);
-    setRole(null);
-    setIsAuth(false);
+    // try {
+    //   const endpoint =
+    //     role === "customer"
+    //       ? "http://localhost:8001/api/customers/profile"
+    //       : "http://localhost:8001/api/promotors/profile";
+
+    //   const response = await axios.get(endpoint, {
+    //     withCredentials: true,
+    //   });
+
+    //   if (response.data) {
+    //     setUser(response.data.user);
+    //     setIsAuth(true);
+    //   }
+    // } catch (err) {
+    //   console.warn("No session found for role:",role)
+    //   setIsAuth(false);
+    //   setUser(null);
+    //   setRole(null);
+    // }
   };
 
   useEffect(() => {
     checkSession();
-  }, []);
+  }, [role]);
 
   return { isAuth, user, role, setIsAuth, setUser, setRole };
 };
