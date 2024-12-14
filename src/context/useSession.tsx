@@ -9,7 +9,6 @@ import React, {
   ReactNode,
 } from "react";
 
-
 interface SessionContextProps {
   isAuth: boolean;
   user: IUser | null;
@@ -29,10 +28,20 @@ export const SessionProvider: React.FC<{ children: ReactNode }> = ({
 
   const checkSession = async () => {
     try {
-      const res = await fetch("http://localhost:8001/api/customers/profile", {
-        method: "GET",
-        credentials: "include",
-      });
+      const role = await localStorage.getItem("role");
+      let res: any = [];
+      if (role === "customer") {
+        res = await fetch("http://localhost:8001/api/customers/profile", {
+          method: "GET",
+          credentials: "include",
+        });
+      }
+      if (role === "promotor") {
+        res = await fetch("http://localhost:8001/api/promotors/profile", {
+          method: "GET",
+          credentials: "include",
+        });
+      }
       const result = await res.json();
       if (!res.ok) throw result;
       setUser(result.user);

@@ -17,41 +17,37 @@ const useSession = () => {
   const [user, setUser] = useState<IUser | IPromotor | null>(null);
   const [role, setRole] = useState<SessionData["role"]>(null);
   const checkSession = async () => {
-    console.log(role, user, isAuth, "role");
-    return role
-    // console.log(role, user, isAuth, "role");
+    if (!role) {
+      setIsAuth(false);
+      setUser(null);
+      return;
+    }
 
-    // if (!role) {
-    //   setIsAuth(false);
-    //   setUser(null);
-    //   return;
-    // }
+    try {
+      const endpoint =
+        role === "customer"
+          ? "http://localhost:8001/api/customers/profile"
+          : "http://localhost:8001/api/promotors/profile";
 
-    // try {
-    //   const endpoint =
-    //     role === "customer"
-    //       ? "http://localhost:8001/api/customers/profile"
-    //       : "http://localhost:8001/api/promotors/profile";
+      const response = await axios.get(endpoint, {
+        withCredentials: true,
+      });
 
-    //   const response = await axios.get(endpoint, {
-    //     withCredentials: true,
-    //   });
-
-    //   if (response.data) {
-    //     setUser(response.data.user);
-    //     setIsAuth(true);
-    //   }
-    // } catch (err) {
-    //   console.warn("No session found for role:",role)
-    //   setIsAuth(false);
-    //   setUser(null);
-    //   setRole(null);
-    // }
+      if (response.data) {
+        setUser(response.data.user);
+        setIsAuth(true);
+      }
+    } catch (err) {
+      console.warn("No session found for role:",role)
+      setIsAuth(false);
+      setUser(null);
+      setRole(null);
+    }
   };
 
   useEffect(() => {
     checkSession();
-  }, [role]);
+  }, []);
 
   return { isAuth, user, role, setIsAuth, setUser, setRole };
 };

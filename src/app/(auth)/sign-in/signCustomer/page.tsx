@@ -1,6 +1,6 @@
 "use client";
 
-import useSession from "@/hooks/useSession";
+import { useSession } from "@/context/useSession";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useRouter } from "next/navigation";
@@ -28,7 +28,7 @@ const SignCustomer = () => {
   });
 
   const [isLoading, setIsLoading] = useState(false);
-  const { setIsAuth, setUser, setRole } = useSession();
+  const { setIsAuth, setUser } = useSession();
   const router = useRouter();
 
   const handleLogin = async (values: FormValues) => {
@@ -53,13 +53,14 @@ const SignCustomer = () => {
       const { customer, message } = res.data;
 
       // Update session state
-      setUser({...customer, role: "customer"});
-      setRole("customer");
+      setUser(customer);
       setIsAuth(true);
+      localStorage.setItem("role", "customer")
 
       // Display success message and redirect
       toast.success(message || "Login successful!");
       router.push("/customerDashboard");
+      setIsAuth(true);
     } catch (err: any) {
       // Extract error message safely
       const errorMessage =

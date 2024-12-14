@@ -1,6 +1,5 @@
 "use client";
 
-import useSession from "@/hooks/useSession";
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -8,13 +7,13 @@ import { usePathname, useRouter } from "next/navigation";
 import AvatarMenu from "./avatarmenu";
 import { deleteCookie } from "./libs/action";
 import { IUser, IPromotor } from "@/types/user";
+import { useSession } from "@/context/useSession";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { user, isAuth, setIsAuth } = useSession();
   const router = useRouter();
-console.log(user,"user");
   const menuItems = [
     { label: "Browse events", href: "/events" },
     { label: "About", href: "/about" },
@@ -28,10 +27,17 @@ console.log(user,"user");
     { label: "Promotor Login", href: "/sign-in/signPromotor" },
   ];
 
-  const pathName = ["/dashboard", "/customerDashboard", "/profile", "/events", "/transactions"]
+  const pathName = [
+    "/dashboard",
+    "/customerDashboard",
+    "/profile",
+    "/events",
+    "/transactions",
+  ];
   const paths = usePathname();
   const onLogout = () => {
     deleteCookie("token");
+    localStorage.removeItem("role");
     setIsAuth(false);
     router.push("/");
   };
@@ -66,7 +72,7 @@ console.log(user,"user");
   }, [dropdownOpen]);
 
   if (pathName.includes(paths)) {
-    return null
+    return null;
   }
   return (
     <nav className="fixed top-0 left-0 right-0 bg-white z-50 px-4 md:px-6 py-4 shadow text-black">
@@ -92,7 +98,7 @@ console.log(user,"user");
               {item.label}
             </Link>
           ))}
-          {isAuth && (isCustomer(user) || isPromotor(user)) ? (
+          {isAuth && user ? (
             <AvatarMenu user={user} onLogout={onLogout} />
           ) : (
             <div className="relative">

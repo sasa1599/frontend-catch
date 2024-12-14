@@ -1,6 +1,6 @@
 "use client";
 
-import useSession from "@/hooks/useSession";
+import { useSession } from "@/context/useSession";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useRouter } from "next/navigation";
@@ -28,7 +28,7 @@ const SignPromotor = () => {
   });
 
   const [isLoading, setIsLoading] = useState(false);
-  const { setIsAuth, setUser, setRole } = useSession();
+  const { setIsAuth, setUser } = useSession();
   const router = useRouter();
 
   const handleLogin = async (values: FormValues) => {
@@ -50,11 +50,11 @@ const SignPromotor = () => {
       const { promotor, message } = res.data;
 
       setUser(promotor);
-      setRole("promotor");
       setIsAuth(true);
+      localStorage.setItem("role", "promotor");
 
       toast.success(message || "Login successful!");
-      window.location.assign("/dashboard");
+      router.push("/dashboard");
     } catch (err: any) {
       const errorMessage =
         err.response?.data?.message || err.message || "Login failed.";
