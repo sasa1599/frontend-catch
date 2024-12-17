@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { IPromotor } from "@/types/promotors";
+import { IPromotor } from "@/types/user";
+
 
 const useProSession = () => {
   const [isAuth, setIsAuth] = useState<boolean>(false);

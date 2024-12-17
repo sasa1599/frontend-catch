@@ -27,7 +27,7 @@ const geistFrankly = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "DICE Clone",
+  title: "CATch the Moment",
   description: "Find more of the events you love",
 };
 

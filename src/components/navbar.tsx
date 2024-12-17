@@ -23,16 +23,20 @@ const Navbar = () => {
   ];
 
   const loginOptions = [
-    { label: "Customer Login", href: "/sign-in/signCustomer" },
-    { label: "Promotor Login", href: "/sign-in/signPromotor" },
+    { label: "Customer", href: "/sign-in/signCustomer" },
+    { label: "Promotor", href: "/sign-in/signPromotor" },
   ];
 
   const pathName = [
     "/dashboard",
-    "/customerDashboard",
-    "/profile",
+    "/dashboardCustomer",
+    "/profileCustomer",
     "/events",
     "/transactions",
+    "/bookingsCustomer",
+    "/transactionsCustomer",
+    "/loading",
+    "/profilePromotor"
   ];
   const paths = usePathname();
   const onLogout = () => {

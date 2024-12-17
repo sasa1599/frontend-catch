@@ -8,7 +8,7 @@ interface ToggleTabsProps {
 
 const ToggleTabs = ({ currentPath }: ToggleTabsProps) => {
   const isCustomer = currentPath === "/sign-up/customer";
-  const isPromoter = currentPath === "/sign-up/promoter";
+  const isPromotor = currentPath === "/sign-up/promotor";
 
   return (
     <div className="flex mb-8">
@@ -25,7 +25,7 @@ const ToggleTabs = ({ currentPath }: ToggleTabsProps) => {
       <Link
         href="/sign-up/promotor"
         className={`flex-1 text-center py-2 px-4 ${
-          isPromoter
+          isPromotor
             ? "bg-blue-500 text-white"
             : "bg-gray-800 text-gray-400 hover:bg-gray-700"
         }`}

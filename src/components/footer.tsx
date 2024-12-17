@@ -1,7 +1,24 @@
+"use client"
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Footer() {
+  const pathName = [
+    "/dashboard",
+    "/dashboardCustomer",
+    "/profileCustomer",
+    "/events",
+    "/transactions",
+    "/bookingsCustomer",
+    "/transactionsCustomer",
+    "/loading",
+    "/profilePromotor"
+  ];
+  const paths = usePathname();
+  if (pathName.includes(paths)) {
+    return null;
+  }
   return (
     <footer className="bg-white text-black">
       <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">

@@ -32,7 +32,7 @@ export default function PromotorSignUpPage() {
 
   // Validation schema using Yup
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Name is required"),
+    name: Yup.string().required("Organization Name is required"),
     username: Yup.string().required("Username is required"),
     email: Yup.string().email("Invalid email format").required("Email is required"),
     password: Yup.string()

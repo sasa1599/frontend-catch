@@ -59,7 +59,7 @@ const SignCustomer = () => {
 
       // Display success message and redirect
       toast.success(message || "Login successful!");
-      router.push("/customerDashboard");
+      router.push("/dashboardCustomer");
       setIsAuth(true);
     } catch (err: any) {
       // Extract error message safely
