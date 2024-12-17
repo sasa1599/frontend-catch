@@ -13,7 +13,9 @@ export default function Footer() {
     "/bookingsCustomer",
     "/transactionsCustomer",
     "/loading",
-    "/profilePromotor"
+    "/profilePromotor",
+    "/transactionsPromotor",
+    "/listEvent",
   ];
   const paths = usePathname();
   if (pathName.includes(paths)) {

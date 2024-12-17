@@ -36,7 +36,9 @@ const Navbar = () => {
     "/bookingsCustomer",
     "/transactionsCustomer",
     "/loading",
-    "/profilePromotor"
+    "/profilePromotor",
+    "/transactionsPromotor",
+    "/listEvent",
   ];
   const paths = usePathname();
   const onLogout = () => {
