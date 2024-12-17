@@ -15,7 +15,7 @@ const Navbar = () => {
   const { user, isAuth, setIsAuth } = useSession();
   const router = useRouter();
   const menuItems = [
-    { label: "Browse events", href: "/events" },
+    { label: "Browse events", href: "/browse_events" },
     { label: "About", href: "/about" },
     { label: "Careers", href: "/careers" },
     { label: "Help Center", href: "/help" },

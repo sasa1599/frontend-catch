@@ -54,12 +54,16 @@ export default function Footer() {
               </ul>
             </div>
             <div>
+
               <h2 className="mb-6 text-lg font-bold text-gray-900 uppercase">
+
                 Partner WITH US
               </h2>
               <ul className="font-medium">
                 <li className="mb-4">
+
                   <Link href="/sign-up/promotor" className="hover:underline">
+
                     as Event Organizer
                   </Link>
                 </li>

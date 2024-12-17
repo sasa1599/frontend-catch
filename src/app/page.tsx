@@ -13,7 +13,9 @@ export default function Home() {
         <FounderSection />
 
         <AboutUs />
-      </Wrapper>
+   
+
+
     </div>
   );
 }

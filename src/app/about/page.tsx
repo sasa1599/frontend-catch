@@ -2,12 +2,14 @@ import Image from "next/image";
 
 export default function About() {
   return (
-    <div className="h-[100vh] w-full bg-white flex justify-center items-center text-center">
+    <div className="h-[180vh] md:h-[180vh] w-full bg-white flex justify-center items-center text-center">
       <div className="text-black mx-11 lg:mx-96 flex flex-col items-center">
         <div>
-          <strong className="text-2xl font-extrabold">
-            THIS IS <br /> <span className="text-violet-500">CAT</span>CH THE
-            MOMENT!
+          <strong className="text-2xl font-bold">
+            THIS IS <br />{" "}
+            <span className="text-3xl font-extrabold">
+              <span className="text-violet-500">CAT</span>CH THE MOMENT!
+            </span>
           </strong>
           <p className="text-sm my-6">
             We&apos;ve always believed that live events have the power to
@@ -17,7 +19,7 @@ export default function About() {
           </p>
         </div>
         <Image
-          src="/Cat1.gif"
+          src="/cuteCat.png"
           width={400}
           height={400}
           sizes="100vw"
@@ -25,7 +27,9 @@ export default function About() {
           alt="concert Logo"
         />
         <div className="text-start flex flex-col gap-5 text-sm">
-          <p className="text-start text-xl font-bold">Going out makes us feel good</p>
+          <p className="text-start text-2xl font-semibold">
+            Going out makes us feel good
+          </p>
           <p>
             Whether you&apos;re into underground gigs or lively club nights,
             grand festivals or intimate parties, comedy shows or captivating
