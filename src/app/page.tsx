@@ -8,10 +8,14 @@ import Wrapper from "@/helpers/wrapper";
 export default function Home() {
   return (
     <div>
-      <Hero />
-      <FounderSection />
+      <Wrapper>
+        <Hero />
+        <FounderSection />
 
-      <AboutUs />
+        <AboutUs />
+   
+
+
     </div>
   );
 }
