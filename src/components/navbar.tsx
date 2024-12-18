@@ -37,6 +37,9 @@ const Navbar = () => {
     "/transactionsCustomer",
     "/loading",
     "/profilePromotor",
+    "/transactionsPromotor",
+    "/listEvent",
+    "/promotorManagement",
     "/browse_events"
   ];
   const paths = usePathname();
