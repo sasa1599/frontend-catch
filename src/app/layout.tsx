@@ -4,6 +4,10 @@ import "./globals.css";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+import { SessionProvider } from "@/context/useSession";
+
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -21,7 +25,7 @@ const geistFrankly = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "DICE Clone",
+  title: "CATch the Moment",
   description: "Find more of the events you love",
 };
 
@@ -35,9 +39,19 @@ export default function RootLayout({
       <body
         className={`${geistFrankly.variable} ${geistMono.variable} antialiased`}
       >
-        <Navbar />
-        {children}
-        <Footer />
+        <SessionProvider>
+          {" "}
+          <Navbar />
+          {children}
+          <ToastContainer
+            draggable
+            closeOnClick
+            autoClose={5000}
+            theme="dark"
+            position="bottom-right"
+          />
+          <Footer />
+        </SessionProvider>{" "}
       </body>
     </html>
   );

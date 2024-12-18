@@ -1,7 +1,24 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Footer() {
+  const pathName = [
+    "/dashboard",
+    "/dashboardCustomer",
+    "/profileCustomer",
+    "/events",
+    "/transactions",
+    "/bookingsCustomer",
+    "/transactionsCustomer",
+    "/loading",
+    "/profilePromotor",
+  ];
+  const paths = usePathname();
+  if (pathName.includes(paths)) {
+    return null;
+  }
   return (
     <footer className="bg-white text-black">
       <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
@@ -18,12 +35,12 @@ export default function Footer() {
               />
             </Link>
           </div>
-          <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
+          <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3 md:grid-cols-4">
             <div>
-              <h2 className="mb-6 text-lg font-bold uppercase ">
+              <h2 className="mb-6 text-lg font-bold uppercase">
                 <span className="text-violet-500">CAT</span>ch the Moment
               </h2>
-              <ul className=" font-medium">
+              <ul className="font-medium">
                 <li className="mb-4">
                   <Link href="/about" className="hover:underline">
                     About Us
@@ -37,12 +54,12 @@ export default function Footer() {
               </ul>
             </div>
             <div>
-              <h2 className="mb-6 text-lg font-bold uppercase ">
+              <h2 className="mb-6 text-lg font-bold text-gray-900 uppercase">
                 Partner WITH US
               </h2>
               <ul className="font-medium">
                 <li className="mb-4">
-                  <Link href="/promotor/register" className="hover:underline ">
+                  <Link href="/sign-up/promotor" className="hover:underline">
                     as Event Organizer
                   </Link>
                 </li>
@@ -54,10 +71,10 @@ export default function Footer() {
               </ul>
             </div>
             <div>
-              <h2 className="mb-6 text-lg font-semibold  uppercase ">
+              <h2 className="mb-6 text-lg font-semibold uppercase">
                 The Event
               </h2>
-              <ul className=" font-medium">
+              <ul className="font-medium">
                 <li className="mb-4">
                   <Link href="#" className="hover:underline">
                     Our Event
@@ -65,11 +82,12 @@ export default function Footer() {
                 </li>
               </ul>
             </div>
+            <div></div>
           </div>
         </div>
         <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
         <div className="sm:flex sm:items-center sm:justify-between">
-          <p className="text-sm  sm:text-center">
+          <p className="text-sm sm:text-center">
             © 2024{" "}
             <Link href="/" className="hover:underline">
               <span>CAT</span>ch The Moment™

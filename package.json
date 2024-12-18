@@ -9,10 +9,19 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.1.1",
+    "@types/react-toastify": "^4.0.2",
+    "axios": "^1.7.9",
+    "chart.js": "^4.4.7",
+    "class-variance-authority": "^0.7.1",
     "formik": "^2.4.6",
+    "lucide-react": "^0.468.0",
     "next": "14.2.17",
     "react": "^18",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18",
+    "react-icons": "^5.4.0",
+    "react-quill": "^2.0.0",
     "react-toastify": "^10.0.6",
     "yup": "^1.5.0"
   },
