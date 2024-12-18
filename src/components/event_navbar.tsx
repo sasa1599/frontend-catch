@@ -8,8 +8,9 @@ import AvatarMenu from "./avatarmenu";
 import { deleteCookie } from "./libs/action";
 import { IUser, IPromotor } from "@/types/user";
 import { useSession } from "@/context/useSession";
+import EventAvatarMenu from "./event_avatar";
 
-const Navbar = () => {
+const EventNavbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { user, isAuth, setIsAuth } = useSession();
@@ -27,18 +28,6 @@ const Navbar = () => {
     { label: "Promotor", href: "/sign-in/signPromotor" },
   ];
 
-  const pathName = [
-    "/dashboard",
-    "/dashboardCustomer",
-    "/profileCustomer",
-    "/events",
-    "/transactions",
-    "/bookingsCustomer",
-    "/transactionsCustomer",
-    "/loading",
-    "/profilePromotor",
-    "/browse_events"
-  ];
   const paths = usePathname();
   const onLogout = () => {
     deleteCookie("token");
@@ -76,11 +65,8 @@ const Navbar = () => {
     return () => document.removeEventListener("click", handleOutsideClick);
   }, [dropdownOpen]);
 
-  if (pathName.includes(paths)) {
-    return null;
-  }
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-white z-50 px-4 md:px-6 py-4 shadow text-black">
+    <nav className="fixed top-0 left-0 right-0 bg-black z-50 px-4 md:px-6 py-4 shadow text-white">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <Image src="/logo.gif" alt="Logo" width={40} height={40} />
@@ -98,17 +84,17 @@ const Navbar = () => {
             <Link
               key={item.label}
               href={item.href}
-              className="text-black hover:opacity-70 transition-opacity"
+              className="text-white hover:opacity-70 transition-opacity"
             >
               {item.label}
             </Link>
           ))}
           {isAuth && user ? (
-            <AvatarMenu user={user} onLogout={onLogout} />
+            <EventAvatarMenu user={user} onLogout={onLogout} />
           ) : (
             <div className="relative">
               <button
-                className="dropdown-button text-black hover:opacity-70 transition-opacity"
+                className="dropdown-button text-white hover:opacity-70 transition-opacity"
                 onClick={() => setDropdownOpen((prev) => !prev)}
               >
                 Login
@@ -119,7 +105,7 @@ const Navbar = () => {
                     <Link
                       key={option.label}
                       href={option.href}
-                      className="block px-4 py-2 text-black hover:bg-gray-100"
+                      className="block px-4 py-2 text-white hover:bg-gray-100"
                     >
                       {option.label}
                     </Link>
@@ -133,7 +119,7 @@ const Navbar = () => {
           </button>
         </div>
         <button
-          className="block md:hidden text-black"
+          className="block md:hidden text-white"
           onClick={() => setMenuOpen((prev) => !prev)}
         >
           <svg
@@ -165,7 +151,7 @@ const Navbar = () => {
               <li key={item.label}>
                 <Link
                   href={item.href}
-                  className="block px-4 py-2 text-black hover:bg-gray-100"
+                  className="block px-4 py-2 text-white hover:bg-gray-100"
                 >
                   {item.label}
                 </Link>
@@ -178,7 +164,7 @@ const Navbar = () => {
             ) : (
               <li>
                 <button
-                  className="dropdown-button text-black hover:opacity-70 transition-opacity"
+                  className="dropdown-button text-white hover:opacity-70 transition-opacity"
                   onClick={() => setDropdownOpen((prev) => !prev)}
                 >
                   Login
@@ -189,7 +175,7 @@ const Navbar = () => {
                       <Link
                         key={option.label}
                         href={option.href}
-                        className="block px-4 py-2 text-black hover:bg-gray-100"
+                        className="block px-4 py-2 text-white hover:bg-gray-100"
                       >
                         {option.label}
                       </Link>
@@ -210,4 +196,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default EventNavbar;

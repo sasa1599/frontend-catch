@@ -8,8 +8,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { SessionProvider } from "@/context/useSession";
 
-
-
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -41,19 +39,19 @@ export default function RootLayout({
       <body
         className={`${geistFrankly.variable} ${geistMono.variable} antialiased`}
       >
-
         <SessionProvider>
-        <Navbar/>
-        {children}
-        <ToastContainer
+          {" "}
+          <Navbar />
+          {children}
+          <ToastContainer
             draggable
             closeOnClick
             autoClose={5000}
             theme="dark"
             position="bottom-right"
           />
-        <Footer/>
-      
+          <Footer />
+        </SessionProvider>{" "}
       </body>
     </html>
   );
