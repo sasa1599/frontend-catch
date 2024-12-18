@@ -76,7 +76,7 @@ const PromotorSidebar = () => {
         <div className="flex items-center p-4 border-b">
           <Image src="/logo.gif" alt="Logo" width={32} height={32} />
           {!isCollapsed && (
-            <span className="ml-3 text-xl font-bold text-gray-800">CATch</span>
+            <Link href={"/"}><span className="ml-3 text-xl font-bold text-gray-800">CATch</span></Link>
           )}
         </div>
         <nav className="flex-1 mt-8 space-y-2 px-3">

@@ -16,6 +16,7 @@ export default function Footer() {
     "/profilePromotor",
     "/transactionsPromotor",
     "/listEvent",
+    "/promotorManagement",
   ];
   const paths = usePathname();
   if (pathName.includes(paths)) {
