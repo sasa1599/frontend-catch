@@ -9,6 +9,8 @@ import { deleteCookie } from "./libs/action";
 import { IUser, IPromotor } from "@/types/user";
 import { useSession } from "@/context/useSession";
 import EventAvatarMenu from "./event_avatar";
+import SearchBar from "@/helpers/searchBar";
+import EventSearchBar from "@/helpers/eventSearchBar";
 
 const EventNavbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -66,18 +68,14 @@ const EventNavbar = () => {
   }, [dropdownOpen]);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-black z-50 px-4 md:px-6 py-4 shadow text-white">
+    <nav className="fixed top-0 left-0 right-0 bg-black z-50 px-4 md:px-6 py-4 shadow text-black">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <Image src="/logo.gif" alt="Logo" width={40} height={40} />
-          <span className="text-lg md:text-2xl font-bold">CATch</span>
+          <span className="text-lg md:text-2xl font-bold text-white">CATch</span>
         </Link>
         <div className="hidden md:flex flex-1 mx-4">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:outline-none"
-          />
+          <EventSearchBar />
         </div>
         <div className="hidden md:flex items-center gap-6">
           {menuItems.map((item) => (

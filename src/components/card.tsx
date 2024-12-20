@@ -11,11 +11,6 @@ interface Ticket {
   price: number;
 }
 
-interface Promotor {
-  username: string;
-  avatar?: string;
-}
-
 interface ICardEvent {
   title: string;
   slug?: string;
@@ -28,6 +23,7 @@ interface ICardEvent {
   datetime: string;
   tickets: Ticket[];
   promotor: {
+    username: string,
     name: string;
     avatar?: string;
   };
@@ -53,7 +49,7 @@ export default function Card({
   return (
     <Link href={`/browse_events/${slug}`}>
       <div className="w-full  mx-auto flex flex-row items-center rounded-lg p-4 
-        md:flex-col">
+        md:flex-col hover:scale-105">
         {/* Thumbnail */}
         {thumbnail && (
           <div className="flex-shrink-0">

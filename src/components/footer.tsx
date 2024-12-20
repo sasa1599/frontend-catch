@@ -18,10 +18,16 @@ export default function Footer() {
     "/listEvent",
     "/promotorManagement",
   ];
+  
   const paths = usePathname();
-  if (pathName.includes(paths)) {
+  
+  const shouldHideFooter =
+    pathName.includes(paths) || paths.startsWith("/promotorManagement/");
+  
+  if (shouldHideFooter) {
     return null;
   }
+  
   return (
     <footer className="bg-white text-black">
       <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">

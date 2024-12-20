@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { formatDateEvent, timeFormat } from "@/helpers/formatDate"; // Ensure you import the formatDate function
 import { getEventSlug } from "@/components/libs/event";
+import ShowTickets from "@/components/ticket/showTicket";
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const event: IEvent[] = await getEventSlug(params.slug);
@@ -44,13 +45,13 @@ export default async function EventDetail({
     );
   }
 
-  const { username, avatar } = event[0].promotor;
+  const { name, username, avatar } = event[0].promotor;
   const datetime = event[0].datetime; 
 
   return (
     <div
       className="flex flex-col justify-center items-center px-4 
-    md:items-start md:px-60 md:gap-10 md:flex-row "
+    md:items-start md:px-60 md:gap-10 md:flex-row bg-black py-28 "
     >
       {/* Upper / Left Section */}
       <div className="my-4 w-[400px] h-[400px] md:w-[400px] md:h-[400px] rounded-lg overflow-hidden">
@@ -80,7 +81,7 @@ export default async function EventDetail({
               className="rounded-full"
             />
           )}
-          <p className="ml-2 text-sm font-semibold">{username}</p>
+          <p className="ml-2 text-sm font-semibold">{name}</p>
         </div>
         <div className="text-sm text-yellow-400 my-4 font-bold">
           {formatDateEvent(datetime)}
@@ -88,7 +89,8 @@ export default async function EventDetail({
         <div className="flex flex-col gap-1">
           <hr className=" border-t-2 border-gray-300" />
           <div className="text-white text-sm font-semibold">About</div>
-          <div className="text-xs text-start">{event[0].description}</div>
+          <div dangerouslySetInnerHTML={{__html: event[0].description}}/>
+          <ShowTickets tickets={event[0].tickets!} />
           <hr className="my-4 border-t-2 border-gray-300" />
           <div className="text-white text-sm font-semibold">Venue</div>
           <div className="text-md text-justify">{event[0].venue}</div>
@@ -102,7 +104,7 @@ export default async function EventDetail({
             fans and artists from resellers
           </div>
           <hr className="my-4 border-t-2 border-gray-300" />
-          <Link href={"/"}> Browse another event</Link>
+          <Link href={"/browse_events"}> Browse another event</Link>
         </div>
       </div>
     </div>

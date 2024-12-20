@@ -8,6 +8,7 @@ import AvatarMenu from "./avatarmenu";
 import { deleteCookie } from "./libs/action";
 import { IUser, IPromotor } from "@/types/user";
 import { useSession } from "@/context/useSession";
+import SearchBar from "@/helpers/searchBar";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -90,11 +91,7 @@ const Navbar = () => {
           <span className="text-lg md:text-2xl font-bold">CATch</span>
         </Link>
         <div className="hidden md:flex flex-1 mx-4">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:outline-none"
-          />
+          <SearchBar/>
         </div>
         <div className="hidden md:flex items-center gap-6">
           {menuItems.map((item) => (
