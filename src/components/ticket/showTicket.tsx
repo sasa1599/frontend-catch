@@ -35,8 +35,8 @@ export default function ShowTickets({ tickets }: EventTicketsProps) {
   const total = selectedTicket ? selectedTicket.price * quantity : 0;
 
   return (
-    <div className="rounded-xl bg-zinc-900 p-6 text-white">
-      <h2 className="mb-4 text-xl font-bold">Select Tickets</h2>
+    <div>
+      {/* <h2 className="mb-4 text-xl font-bold">Select Tickets</h2> */}
       
       <div className="space-y-3 mb-6">
         {tickets.map((ticket) => (
@@ -59,7 +59,7 @@ export default function ShowTickets({ tickets }: EventTicketsProps) {
                   {ticket.seats} tickets left
                 </p>
               </div>
-              <span className="text-lg font-semibold text-orange-400">
+              <span className="text-lg font-semibold text-yellow-400">
                 {formatPrice(ticket.price)}
               </span>
             </div>
@@ -95,13 +95,13 @@ export default function ShowTickets({ tickets }: EventTicketsProps) {
           <div className="border-t border-zinc-800 pt-4">
             <div className="flex justify-between items-center mb-4">
               <span className="text-gray-400">Total Price</span>
-              <span className="text-xl font-bold text-orange-400">
+              <span className="text-xl font-bold text-yellow-400">
                 {formatPrice(total)}
               </span>
             </div>
             
-            <button className="w-full bg-orange-500 text-white py-3 rounded-lg font-medium hover:bg-orange-600 transition-colors">
-              Buy Tickets
+            <button className="w-full bg-yellow-500 text-white py-3 rounded-lg font-medium hover:bg-orange-600 transition-colors">
+              Book Ticket
             </button>
           </div>
         </div>
