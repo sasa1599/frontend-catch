@@ -1,17 +1,16 @@
 // Enums
 export enum ICategory {
-  MUSIC = "MUSIC",
-  SPORTS = "SPORTS",
-  THEATER = "THEATER",
-  FANMEET = "FANMEET",
-  SEMINAR = "SEMINAR",
+  concert = "concert",
+  sports = "sports",
+  theater = "theater",
+  fanmeet = "fanmeet",
+  seminar = "seminar",
 }
 
 export enum ILocation {
-  JAKARTA = "JAKARTA",
-  BANDUNG = "BANDUNG",
-  YOGYAKARTA = "YOGYAKARTA",
-  PADANG = "PADANG",
+  jakarta = "jakarta",
+  bandung = "bandung",
+  yogyakarta = "yogyakarta",
 }
 
 export enum IStatusOrder {
@@ -74,7 +73,7 @@ export interface IOrderDetails {
   updated_at: Date;
   created_at: Date;
   order: IOrder;
-  ticket: Ticket;
+  ticket: ITicket;
 }
 
 export interface IOrder {
@@ -110,7 +109,7 @@ export interface IPromotor {
   name: string;
   email: string;
   password: string;
-  avatar?: string;
+  avatar: string | null;
   is_verify: boolean;
   updated_at: Date;
   created_at: Date;
@@ -118,34 +117,30 @@ export interface IPromotor {
 }
 
 export interface IEvent {
-  id?: number; // Optional
-  slug?: string; // Optional
+  id: number;
   title: string;
   description: string;
-  category: ICategory;
-  location: ILocation;
+  category: string;
+  location: string;
+  thumbnail: string;
   venue: string;
-  thumbnail?: string;
+  slug: string;
   datetime: string;
-  promotor_id: number;
-  updated_at: Date;
-  created_at: Date;
-  promotor: IPromotor;
-  tickets?: Ticket[];
-  Order?: IOrder[];
-  Review?: IReview[];
+  promotor: {
+    id: number;
+    name: string;
+    username: string;
+    avatar: string | null;
+  };
+  tickets: ITicket[]; // Use the shared ITicket interface
 }
 
-export interface Ticket {
-  id: number;
+export interface ITicket {
+  id: number,
   category: ITicketCategory;
   description: string;
   seats: number;
   maxSeats: number;
   price: number;
-  event_id: number;
-  updated_at: Date;
-  created_at: Date;
-  event: Event;
   OrderDetails?: IOrderDetails[];
 }
