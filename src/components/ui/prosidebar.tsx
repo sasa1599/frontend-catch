@@ -16,7 +16,7 @@ import {
   LogOut,
 } from "lucide-react";
 import useProSession from "@/hooks/promotorSession";
-import { deleteCookie } from "@/components/libs/action";
+import { deleteCookie } from "@/libs/action";
 
 const PromotorSidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -41,9 +41,9 @@ const PromotorSidebar = () => {
       href: "/transactionsPromotor",
     },
     {
-        icon: <ListChecks size={24} />,
-        text: "List Event",
-        href: "/listEvent",
+      icon: <ListChecks size={24} />,
+      text: "List Event",
+      href: "/listEvent",
     },
     {
       icon: <Briefcase size={24} />,
@@ -131,9 +131,7 @@ const PromotorSidebar = () => {
                   height={32}
                   className="rounded-full"
                 />
-                <span
-                  className="absolute left-full ml-6 p-2 bg-gray-800 text-white text-sm rounded-md whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50"
-                >
+                <span className="absolute left-full ml-6 p-2 bg-gray-800 text-white text-sm rounded-md whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                   {user?.name || user?.username || "Promotor"}
                   {user?.email && <br />}
                   {user?.email}
@@ -145,7 +143,11 @@ const PromotorSidebar = () => {
             onClick={() => setIsCollapsed(!isCollapsed)}
             className="w-full p-4 text-gray-500 hover:bg-gray-100 transition-colors flex justify-center"
           >
-            {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+            {isCollapsed ? (
+              <ChevronRight size={20} />
+            ) : (
+              <ChevronLeft size={20} />
+            )}
           </button>
         </div>
         <div className="border-t">

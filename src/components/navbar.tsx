@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import AvatarMenu from "./avatarmenu";
-import { deleteCookie } from "./libs/action";
+import { deleteCookie } from "../libs/action";
 import { IUser, IPromotor } from "@/types/user";
 import { useSession } from "@/context/useSession";
 import SearchBar from "@/helpers/searchBar";
@@ -41,7 +41,7 @@ const Navbar = () => {
     "/transactionsPromotor",
     "/listEvent",
     "/promotorManagement",
-    "/browse_events"
+    "/browse_events",
   ];
   const paths = usePathname();
   const onLogout = () => {
@@ -91,7 +91,7 @@ const Navbar = () => {
           <span className="text-lg md:text-2xl font-bold">CATch</span>
         </Link>
         <div className="hidden md:flex flex-1 mx-4">
-          <SearchBar/>
+          <SearchBar />
         </div>
         <div className="hidden md:flex items-center gap-6">
           {menuItems.map((item) => (

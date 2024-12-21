@@ -1,6 +1,6 @@
 import Card from "@/components/card";
 import LinkCategory from "@/components/category";
-import { getCategory } from "@/components/libs/event";
+import { getCategory } from "@/libs/event";
 import { formatDate } from "@/helpers/formatDate";
 import { IEvent } from "@/types/allInterface";
 
