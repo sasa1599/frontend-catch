@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import AvatarMenu from "./avatarmenu";
-import { deleteCookie } from "./libs/action";
+import { deleteCookie } from "../libs/action";
 import { IUser, IPromotor } from "@/types/user";
 import { useSession } from "@/context/useSession";
 import EventAvatarMenu from "./event_avatar";
@@ -72,7 +72,9 @@ const EventNavbar = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <Image src="/logo.gif" alt="Logo" width={40} height={40} />
-          <span className="text-lg md:text-2xl font-bold text-white">CATch</span>
+          <span className="text-lg md:text-2xl font-bold text-white">
+            CATch
+          </span>
         </Link>
         <div className="hidden md:flex flex-1 mx-4">
           <EventSearchBar />

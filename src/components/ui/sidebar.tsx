@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { deleteCookie } from "@/components/libs/action";
+import { deleteCookie } from "@/libs/action";
 import {
   ChevronLeft,
   ChevronRight,
@@ -35,7 +35,11 @@ const CustomerSidebar = () => {
       text: "Dashboard",
       href: "/dashboardCustomer",
     },
-    { icon: <Calendar size={24} />, text: "Bookings", href: "/bookingsCustomer" },
+    {
+      icon: <Calendar size={24} />,
+      text: "Bookings",
+      href: "/bookingsCustomer",
+    },
     {
       icon: <Receipt size={24} />,
       text: "Transactions",
@@ -60,12 +64,14 @@ const CustomerSidebar = () => {
         <div className="flex items-center p-4 border-b">
           <Image src="/logo.gif" alt="Logo" width={32} height={32} />
           {!isCollapsed && (
-            <Link href="/" className="ml-3 text-xl font-bold text-gray-800">Catch</Link>
+            <Link href="/" className="ml-3 text-xl font-bold text-gray-800">
+              Catch
+            </Link>
           )}
         </div>
         <nav className="flex-1 mt-8 space-y-2 px-3">
           {menuItems.map((item, index) => {
-            const isActive = pathname === item.href; 
+            const isActive = pathname === item.href;
             return (
               <Link
                 key={index}
@@ -80,7 +86,9 @@ const CustomerSidebar = () => {
               >
                 <div
                   className={`${
-                    isActive ? "text-blue-600" : "text-gray-500 group-hover:text-blue-600"
+                    isActive
+                      ? "text-blue-600"
+                      : "text-gray-500 group-hover:text-blue-600"
                   }`}
                 >
                   {item.icon}

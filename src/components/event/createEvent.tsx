@@ -7,8 +7,8 @@ import { useRouter } from "next/navigation";
 import { ICategory, IEvent, ILocation, IPromotor } from "@/types/allInterface";
 import RichTextEditor from "@/components/form/textEditor";
 import { FieldThumbnail } from "@/components/form/thumbnail";
-import { revalidate } from "../libs/action";
-import { eventSchema } from "../libs/schema";
+import { revalidate } from "../../libs/action";
+import { eventSchema } from "../../libs/schema";
 import DateTimePicker from "react-datetime-picker";
 import "react-datetime-picker/dist/DateTimePicker.css";
 import "react-calendar/dist/Calendar.css";
@@ -28,11 +28,10 @@ const initialValues: IEvent = {
     id: 0,
     name: "",
     username: "",
-    avatar: null, 
+    avatar: null,
   },
   tickets: [], // Default tickets (empty array)
 };
-
 
 const base_url = process.env.NEXT_PUBLIC_BASE_URL_BE;
 
@@ -88,17 +87,16 @@ export default function CreateEventPage() {
         const formattedValues = {
           ...values,
           datetime: values.datetime
-            ? new Date(values.datetime).toISOString() 
+            ? new Date(values.datetime).toISOString()
             : null!,
         };
 
-        console.log("Formatted Values for Database:", formattedValues); 
+        console.log("Formatted Values for Database:", formattedValues);
         onCreate(formattedValues);
         actions.resetForm();
       }}
     >
       {(props) => {
-
         return (
           <Form className="flex flex-col gap-3 w-full items-center justify-center text-black">
             {/* Thumbnail */}

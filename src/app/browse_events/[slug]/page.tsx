@@ -2,7 +2,7 @@ import { IEvent } from "@/types/allInterface";
 import Image from "next/image";
 import Link from "next/link";
 import { formatDateEvent, timeFormat } from "@/helpers/formatDate"; // Ensure you import the formatDate function
-import { getEventSlug } from "@/components/libs/event";
+import { getEventSlug } from "@/libs/event";
 import ShowTickets from "@/components/ticket/showTicket";
 import { FaLocationArrow, FaTag, FaTags } from "react-icons/fa";
 
