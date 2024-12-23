@@ -5,6 +5,7 @@ import { useDebounce } from "use-debounce";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { IEvent } from "@/types/allInterface";
 import Link from "next/link";
+import Image from "next/image";
 
 const base_url = process.env.NEXT_PUBLIC_BASE_URL_BE;
 
@@ -75,13 +76,14 @@ export default function EventSearchBar() {
                   className="p-2 hover:bg-gray-300"
                 >
                   <div className="flex items-center space-x-4">
-                    <img
-                      src={item.thumbnail}
-                      height={50}
-                      width={50}
-                      alt={item.title}
-                      className="rounded-md"
-                    />
+                    <div>
+                      <Image
+                        src={item.thumbnail}
+                        fill
+                        alt={item.title}
+                        className="rounded-md"
+                      />
+                    </div>
                     <div>
                       <Link href={`/browse_events/${item.slug}`}>
                         <div className="font-bold">{item.title}</div>

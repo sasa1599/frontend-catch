@@ -1,8 +1,8 @@
 import { IEvent } from "@/types/allInterface";
 import Image from "next/image";
 import Link from "next/link";
-import { formatDateEvent, timeFormat } from "@/helpers/formatDate"; // Ensure you import the formatDate function
-import { getEventSlug } from "@/components/libs/event";
+import { formatDateEvent, timeFormat } from "@/helpers/formatDate"; 
+import { getEventSlug } from "@/libs/event";
 import ShowTickets from "@/components/ticket/showTicket";
 import { FaLocationArrow, FaTag, FaTags } from "react-icons/fa";
 
@@ -28,6 +28,7 @@ export async function generateMetadata({
     venue: event[0].venue,
     tickets: event[0].tickets,
     thumbnail: event[0].thumbnail,
+
   };
 }
 
@@ -109,7 +110,7 @@ export default async function EventDetail({
 
         <div className="flex flex-col gap-2">
           {/* Ticket */}
-          <ShowTickets tickets={event[0].tickets!} />
+          <ShowTickets tickets={event[0].tickets!} userPoints={event[0].userPoints}/>
 
           <hr className=" border-t-2 border-gray-300 mt-5" />
           <div className="text-white text-sm font-semibold">About</div>

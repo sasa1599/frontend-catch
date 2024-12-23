@@ -133,6 +133,7 @@ export interface IEvent {
     avatar: string | null;
   };
   tickets: ITicket[]; // Use the shared ITicket interface
+  userPoints: number
 }
 
 export interface ITicket {

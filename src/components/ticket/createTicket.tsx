@@ -6,11 +6,11 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { ITicket, ITicketCategory } from "@/types/allInterface";
 import RichTextEditor from "@/components/form/textEditor";
-import { revalidate } from "../libs/action";
-import { ticketSchema } from "../libs/schema";
+import { revalidate } from "../../libs/action";
+import { ticketSchema } from "../../libs/schema";
 
 const initialValues: ITicket = {
-  id:0,
+  id: 0,
   category: ITicketCategory.REGULAR,
   description: "",
   seats: 0,
@@ -67,7 +67,7 @@ export default function CreateTicketPage({
     >
       {(props) => {
         console.log(props);
-        
+
         return (
           <Form className="flex flex-col gap-3 pt-5 w-full items-center justify-center text-black">
             <p>Ticket Detail</p>
@@ -139,7 +139,7 @@ export default function CreateTicketPage({
                 value={props.values.seats === 0 ? "" : props.values.seats}
                 placeholder="Enter available seats"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  const rawValue = e.target.value.replace(/[^\d]/g, ""); 
+                  const rawValue = e.target.value.replace(/[^\d]/g, "");
                   const numericValue = rawValue ? parseInt(rawValue, 10) : 0;
                   props.setFieldValue("seats", numericValue);
                 }}
@@ -166,9 +166,9 @@ export default function CreateTicketPage({
                 value={props.values.maxSeats === 1 ? "" : props.values.maxSeats}
                 placeholder="Enter max seats"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  const rawValue = e.target.value.replace(/[^\d]/g, ""); 
+                  const rawValue = e.target.value.replace(/[^\d]/g, "");
                   const numericValue = rawValue ? parseInt(rawValue, 10) : 0;
-                  props.setFieldValue("maxSeats", numericValue); 
+                  props.setFieldValue("maxSeats", numericValue);
                 }}
               />
               <ErrorMessage
