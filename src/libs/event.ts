@@ -13,16 +13,28 @@ export const getEventSlug = async (slug: string) => {
   const res = await fetch(
     `${base_url}/events/${slug}`,
     {
-      next: { revalidate: 0 },
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
     }
   );
+
   if (!res.ok) {
-    console.error(`Failed to fetch event ${slug}:`, res.statusText);
+    if (res.status === 401) {
+      console.error('User not authenticated');
+    } else {
+      console.error(`Failed to fetch event ${slug}:`, res.statusText);
+    }
     return [];
   }
+
   const data = await res.json();
   return data?.event ? [data.event] : [];
 };
+
+
 
 export const getCategory = async (category: string) => {
   const res = await fetch(

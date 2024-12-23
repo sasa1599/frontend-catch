@@ -156,8 +156,7 @@ export default function ShowTickets({ tickets, userPoints }: EventTicketsProps) 
               />
             </div>
 
-            {/* Toggle for Points Usage */}
-            {userPoints > 0 && selectedTicket.price >= 10000 && (
+            {userPoints >= 0 && selectedTicket.price >= 10000 && (
               <div className="mb-4 flex items-center gap-3">
                 <label className="text-sm text-gray-300">Use Points</label>
                 <input
@@ -169,13 +168,18 @@ export default function ShowTickets({ tickets, userPoints }: EventTicketsProps) 
               </div>
             )}
 
+            {/* Display total price after adjustments */}
             <div className="flex justify-between items-center mb-4">
               <span className="text-gray-400">Total Price</span>
               <span className="text-xl font-bold text-yellow-400">
-                {formatPrice(total - pointsUsed)}
+                {formatPrice(total - pointsUsed)} {/* Display the final price */}
+                {usePoints && pointsUsed > 0 && (
+                  <span className="text-sm text-gray-400">(Points used: {formatPrice(pointsUsed)})</span>
+                )}
               </span>
             </div>
 
+            {/* Book Ticket Button */}
             <button
               onClick={handleBookTicket}
               disabled={isLoading}
