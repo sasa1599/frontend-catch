@@ -10,18 +10,15 @@ export const getEvent = async () => {
 };
 
 export const getEventSlug = async (slug: string) => {
-  const res = await fetch(
-    `${base_url}/events/${slug}`,
-    {
-      next: { revalidate: 0 },
-    }
-  );
+  const res = await fetch(`${base_url}/events/${slug}`, {
+    next: { revalidate: 0 },
+  });
   if (!res.ok) {
     console.error(`Failed to fetch event ${slug}:`, res.statusText);
     return [];
   }
   const data = await res.json();
-  return data?.event ? [data.event] : [];
+  return data 
 };
 
 export const getCategory = async (category: string) => {

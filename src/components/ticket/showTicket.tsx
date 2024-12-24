@@ -3,26 +3,24 @@
 import { useState } from "react";
 import { Minus, Plus } from "lucide-react";
 import { formatPrice } from "@/helpers/formatPrice";
+import { useRouter } from "next/navigation";
 
 interface ITicket {
   id: number;
   category: string;
-  description: string;
   seats: number;
-  maxSeats: number;
   price: number;
 }
 
 interface EventTicketsProps {
   tickets: ITicket[];
-  userPoints: number; // Add userPoints as a prop
 }
 
-export default function ShowTickets({ tickets, userPoints }: EventTicketsProps) {
+export default function ShowTickets({ tickets }: EventTicketsProps) {
+  const router = useRouter();
   const [selectedTicketId, setSelectedTicketId] = useState<number | null>(null);
   const [quantity, setQuantity] = useState(1);
-  const [couponId, setCouponId] = useState<string | null>(null); // For coupon
-  const [usePoints, setUsePoints] = useState<boolean>(false); // Toggle for using points
+  const [couponId, setCouponId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const base_url = process.env.NEXT_PUBLIC_BASE_URL_BE;
 
@@ -39,28 +37,19 @@ export default function ShowTickets({ tickets, userPoints }: EventTicketsProps) 
 
   const total = selectedTicket ? selectedTicket.price * quantity : 0;
 
-  // Calculate points used automatically when toggle is on
-  const pointsUsed = usePoints
-    ? Math.min(userPoints, total) // User can only use up to total price or available points
-    : 0;
-
   const handleBookTicket = async () => {
     if (!selectedTicket) return;
-
     setIsLoading(true);
-
     const orderData = {
-      total_price: total,
-      final_price: total - pointsUsed,
       ticketCart: [
         {
           ticket: { id: selectedTicket.id, price: selectedTicket.price },
           seats: quantity,
+          subprice: selectedTicket.price,
         },
       ],
-      coupon_id: couponId, // Pass couponId to backend
-      points_used: pointsUsed, // Pass pointsUsed to backend
     };
+    console.log(orderData);
 
     try {
       const response = await fetch(`${base_url}/order`, {
@@ -146,7 +135,9 @@ export default function ShowTickets({ tickets, userPoints }: EventTicketsProps) 
           <div className="border-t border-zinc-800 pt-4">
             {/* Add Coupon Input */}
             <div className="mb-4">
-              <label className="block text-sm text-gray-300 mb-2">Coupon Code</label>
+              <label className="block text-sm text-gray-300 mb-2">
+                Coupon Code
+              </label>
               <input
                 type="text"
                 className="w-full px-4 py-2 bg-zinc-800 text-white border border-zinc-700 rounded-lg"
@@ -156,32 +147,20 @@ export default function ShowTickets({ tickets, userPoints }: EventTicketsProps) 
               />
             </div>
 
-            {/* Toggle for Points Usage */}
-            {userPoints > 0 && selectedTicket.price >= 10000 && (
-              <div className="mb-4 flex items-center gap-3">
-                <label className="text-sm text-gray-300">Use Points</label>
-                <input
-                  type="checkbox"
-                  checked={usePoints}
-                  onChange={() => setUsePoints(!usePoints)}
-                  className="w-5 h-5 text-yellow-400 rounded-full"
-                />
-              </div>
-            )}
-
+            {/* Display total price after adjustments */}
             <div className="flex justify-between items-center mb-4">
               <span className="text-gray-400">Total Price</span>
               <span className="text-xl font-bold text-yellow-400">
-                {formatPrice(total - pointsUsed)}
+                {formatPrice(total)}
               </span>
             </div>
 
             <button
               onClick={handleBookTicket}
               disabled={isLoading}
-              className="w-full bg-yellow-500 text-white py-3 rounded-lg font-medium hover:bg-orange-600 transition-colors disabled:opacity-50"
+              className="w-full bg-yellow-500 text-white py-3 rounded-lg font-medium hover:bg-orange-600 transition-colors"
             >
-              {isLoading ? "Processing..." : "Book Ticket"}
+              Book Ticket
             </button>
           </div>
         </div>
