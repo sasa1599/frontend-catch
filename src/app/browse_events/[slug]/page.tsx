@@ -12,8 +12,10 @@ export default async function EventDetail({
 }: {
   params: { slug: string };
 }) {
-  const event: IEvent = await getEventSlug(params.slug);
-  const ticket: ITicket[] = await getTicket(`${event.id}`);
+  const  event  = await getEventSlug(params.slug);
+  const ticket: ITicket[] = await getTicket(+event.id);
+  
+  
 
   if (!event) {
     return (
@@ -31,9 +33,10 @@ export default async function EventDetail({
   const datetime = event.datetime;
 
   return (
-    <main 
+    <main
       className="flex flex-col justify-center items-center px-4 py-14
-    md:items-start md:px-60 md:gap-10 md:flex-row bg-black md:py-28 "
+    md:items-start md:px-60  md:gap-10 md:flex-row bg-black md:py-28 
+    lg:px-[500px]"
     >
       {/* Upper / Left Section */}
       <div className="my-4 w-[430px] h-[430px] md:w-[400px] md:h-[400px] rounded-lg overflow-hidden">
@@ -86,7 +89,7 @@ export default async function EventDetail({
 
         <div className="flex flex-col gap-2">
           {/* Ticket */}
-          <ShowTickets tickets={ticket} />
+          <ShowTickets tickets={ticket} result={event} />
 
           <hr className=" border-t-2 border-gray-300 mt-5" />
           <div className="text-white text-sm font-semibold">About</div>

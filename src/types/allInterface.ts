@@ -135,11 +135,10 @@ export interface IEvent {
 }
 
 export interface ITicket {
-  id: number,
+  id: number;
   category: ITicketCategory;
   description: string;
   seats: number;
   maxSeats: number;
   price: number;
-  OrderDetails?: IOrderDetails[];
 }
