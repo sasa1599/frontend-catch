@@ -1,68 +1,45 @@
 "use client";
 
-import { useState } from "react";
-import { Minus, Plus } from "lucide-react";
+import { createContext, useEffect, useState } from "react";
 import { formatPrice } from "@/helpers/formatPrice";
-
-interface ITicket {
-  id: number;
-  category: string;
-  description: string;
-  seats: number;
-  maxSeats: number;
-  price: number;
-}
+import { useRouter } from "next/navigation";
+import { IEvent, ITicket } from "@/types/allInterface";
+import TicketOrder from "./ticketOrder";
 
 interface EventTicketsProps {
   tickets: ITicket[];
-  userPoints: number; // Add userPoints as a prop
+  result: IEvent;
 }
 
-export default function ShowTickets({ tickets, userPoints }: EventTicketsProps) {
-  const [selectedTicketId, setSelectedTicketId] = useState<number | null>(null);
-  const [quantity, setQuantity] = useState(1);
-  const [couponId, setCouponId] = useState<string | null>(null); // For coupon
-  const [usePoints, setUsePoints] = useState<boolean>(false); // Toggle for using points
-  const [isLoading, setIsLoading] = useState(false);
+interface ITicketContext {
+  ticket: ITicket;
+  quantity: number;
+}
+
+export interface TicketContextValue {
+  ticketCart: ITicketContext[] | null;
+  setTicketCart: (param: ITicketContext[] | null) => void;
+}
+
+export const TicketContext = createContext<TicketContextValue | null>(null);
+
+export default function ShowTickets({ tickets, result }: EventTicketsProps) {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [ticketCart, setTicketCart] = useState<ITicketContext[] | null>(null);
+
   const base_url = process.env.NEXT_PUBLIC_BASE_URL_BE;
 
-  const selectedTicket = tickets.find((t) => t.id === selectedTicketId);
-
-  const handleQuantityChange = (change: number) => {
-    if (!selectedTicket) return;
-
-    const newQuantity = quantity + change;
-    if (newQuantity >= 1 && newQuantity <= selectedTicket.seats) {
-      setQuantity(newQuantity);
-    }
-  };
-
-  const total = selectedTicket ? selectedTicket.price * quantity : 0;
-
-  // Calculate points used automatically when toggle is on
-  const pointsUsed = usePoints
-    ? Math.min(userPoints, total) // User can only use up to total price or available points
-    : 0;
-
-  const handleBookTicket = async () => {
-    if (!selectedTicket) return;
-
-    setIsLoading(true);
-
-    const orderData = {
-      total_price: total,
-      final_price: total - pointsUsed,
-      ticketCart: [
-        {
-          ticket: { id: selectedTicket.id, price: selectedTicket.price },
-          seats: quantity,
-        },
-      ],
-      coupon_id: couponId, // Pass couponId to backend
-      points_used: pointsUsed, // Pass pointsUsed to backend
-    };
-
+  const handleOrderTicket = async () => {
     try {
+      setIsLoading(true);
+      const orderData = {
+        total_price: totalPrice,
+        final_price: totalPrice,
+        ticketCart,
+      };
+
       const response = await fetch(`${base_url}/order`, {
         method: "POST",
         headers: {
@@ -71,14 +48,9 @@ export default function ShowTickets({ tickets, userPoints }: EventTicketsProps) 
         body: JSON.stringify(orderData),
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const result = await response.json();
-      console.log("Order created successfully:", result);
-
-      alert("Order created successfully!");
+      const data = await response.json();
+      console.log("Order created successfully:", data);
+      router.push("/bookingCustomer");
     } catch (error) {
       console.error("Failed to create order:", error);
       alert("Failed to create order. Please try again.");
@@ -87,109 +59,86 @@ export default function ShowTickets({ tickets, userPoints }: EventTicketsProps) 
     }
   };
 
+  useEffect(() => {
+    if (ticketCart) {
+      setTotalPrice(
+        ticketCart.reduce((a, b) => a + b.ticket.price * b.quantity, 0)
+      );
+    }
+  }, [ticketCart]);
+
   return (
-    <div>
-      <div className="space-y-3 mb-6">
-        {tickets.map((ticket) => (
-          <div
-            key={ticket.id}
-            onClick={() => {
-              setSelectedTicketId(ticket.id);
-              setQuantity(1);
-            }}
-            className={`cursor-pointer rounded-lg p-4 transition-all ${
-              selectedTicketId === ticket.id
-                ? "bg-zinc-800 border-2 border-orange-500"
-                : "bg-zinc-800/50 border-2 border-transparent hover:bg-zinc-800"
-            }`}
-          >
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="font-medium">{ticket.category}</h3>
-                <p className="text-sm text-gray-400">
-                  {ticket.seats} tickets left
-                </p>
-              </div>
-              <span className="text-lg font-semibold text-yellow-400">
-                {formatPrice(ticket.price)}
-              </span>
+    <main>
+      <TicketContext.Provider value={{ ticketCart, setTicketCart }}>
+        <div className= "flex flex-col xl:px-6">
+          <div className="mt-10 desc-content">
+            {/* isi kontent */}
+            <div className="flex flex-col">
+              {tickets.map((item, idx) => {
+                return <TicketOrder key={idx} ticket={item} />;
+              })}
             </div>
           </div>
-        ))}
-      </div>
-
-      {selectedTicket && (
-        <div className="space-y-4">
-          <div className="rounded-lg bg-zinc-800 p-4">
-            <div className="flex justify-between items-center">
-              <span className="text-gray-300">Quantity</span>
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => handleQuantityChange(-1)}
-                  disabled={quantity <= 1}
-                  className="p-1 rounded-full hover:bg-zinc-700 disabled:opacity-50"
-                >
-                  <Minus className="h-4 w-4" />
-                </button>
-                <span className="w-8 text-center">{quantity}</span>
-                <button
-                  onClick={() => handleQuantityChange(1)}
-                  disabled={quantity >= selectedTicket.seats}
-                  className="p-1 rounded-full hover:bg-zinc-700 disabled:opacity-50"
-                >
-                  <Plus className="h-4 w-4" />
-                </button>
-              </div>
+        </div>
+        <div className="sticky top-0 flex flex-col xl:w-[30%] xl:self-start">
+          <div className="rounded-xl shadow-2xl flex flex-col gap-4 px-4 py-6">
+            <div className="flex flex-col gap-6">
+              {ticketCart && ticketCart.length > 0 ? (
+                ticketCart.map((item, idx) => {
+                  return (
+                    <div
+                      className="flex border-b pb-4 rounded-md gap-4"
+                      key={idx}
+                    >
+                      <div className="flex flex-col w-full gap-2">
+                        <span className="font-semibold">
+                          {item.ticket.category}
+                        </span>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-slate-500 font-semibold">
+                            {item.quantity} Tiket
+                          </span>
+                          <span className="font-semibold text-yellow-400">
+                            {formatPrice(item.quantity * item.ticket.price)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <h1>DISINI ADA TIKET</h1>
+              )}
             </div>
-          </div>
-
-          <div className="border-t border-zinc-800 pt-4">
-            {/* Add Coupon Input */}
-            <div className="mb-4">
-              <label className="block text-sm text-gray-300 mb-2">Coupon Code</label>
-              <input
-                type="text"
-                className="w-full px-4 py-2 bg-zinc-800 text-white border border-zinc-700 rounded-lg"
-                value={couponId || ""}
-                onChange={(e) => setCouponId(e.target.value)}
-                placeholder="Enter coupon code (if any)"
-              />
+            <div className="flex flex-col gap-2">
+              {ticketCart && ticketCart?.length > 0 ? (
+                <>
+                  <div className="flex justify-between items-center py-2">
+                    <span>
+                      Selected {ticketCart.reduce((a, b) => a + b.quantity, 0)}{" "}
+                      tickets
+                    </span>
+                    <span className="font-semibold text-yellow-400 text-xl">
+                      {formatPrice(totalPrice)}
+                    </span>
+                  </div>
+                </>
+              ) : null}
             </div>
-
-            {userPoints >= 0 && selectedTicket.price >= 10000 && (
-              <div className="mb-4 flex items-center gap-3">
-                <label className="text-sm text-gray-300">Use Points</label>
-                <input
-                  type="checkbox"
-                  checked={usePoints}
-                  onChange={() => setUsePoints(!usePoints)}
-                  className="w-5 h-5 text-yellow-400 rounded-full"
-                />
-              </div>
-            )}
-
-            {/* Display total price after adjustments */}
-            <div className="flex justify-between items-center mb-4">
-              <span className="text-gray-400">Total Price</span>
-              <span className="text-xl font-bold text-yellow-400">
-                {formatPrice(total - pointsUsed)} {/* Display the final price */}
-                {usePoints && pointsUsed > 0 && (
-                  <span className="text-sm text-gray-400">(Points used: {formatPrice(pointsUsed)})</span>
-                )}
-              </span>
-            </div>
-
-            {/* Book Ticket Button */}
             <button
-              onClick={handleBookTicket}
               disabled={isLoading}
-              className="w-full bg-yellow-500 text-white py-3 rounded-lg font-medium hover:bg-orange-600 transition-colors disabled:opacity-50"
+              onClick={handleOrderTicket}
+              className={`${
+                isLoading &&
+                "disabled:opacity-[0.5] disabled:cursor-not-allowed"
+              } bg-lightBlue rounded-md text-center text-white py-2 font-semibold`}
             >
-              {isLoading ? "Processing..." : "Book Ticket"}
+              {isLoading ? "Loading ..." : "Pesan Sekarang"}
             </button>
           </div>
         </div>
-      )}
-    </div>
+      </TicketContext.Provider>
+    </main>
   );
 }
+

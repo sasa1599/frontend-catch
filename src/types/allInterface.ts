@@ -132,16 +132,13 @@ export interface IEvent {
     username: string;
     avatar: string | null;
   };
-  tickets: ITicket[]; // Use the shared ITicket interface
-  userPoints: number
 }
 
 export interface ITicket {
-  id: number,
+  id: number;
   category: ITicketCategory;
   description: string;
   seats: number;
   maxSeats: number;
   price: number;
-  OrderDetails?: IOrderDetails[];
 }
