@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import CustomerSidebar from "@/components/ui/sidebar";
+import { formatPrice } from "@/helpers/formatPrice";
 
 interface Ticket {
   id: string;
@@ -57,14 +58,6 @@ const tickets: Ticket[] = [
   },
 ];
 
-// Helper function to format price into IDR
-const formatToRupiah = (value: number) => {
-  return new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-  }).format(value);
-};
-
 export default function BookingsCustomer() {
   const [filter, setFilter] = useState<string>("All");
 
@@ -74,7 +67,7 @@ export default function BookingsCustomer() {
   );
 
   return (
-    <div className="flex h-screen">
+    <main className="flex h-screen">
       <CustomerSidebar />
       <main className="flex-1 p-6 bg-gray-50">
         <div className="max-w-7xl mx-auto">
@@ -160,7 +153,7 @@ export default function BookingsCustomer() {
                       <span className="font-semibold">{ticket.tickets}</span>
                     </p>
                     <p className="text-lg font-bold text-gray-800">
-                      {formatToRupiah(ticket.total)}
+                      {formatPrice(ticket.total)}
                     </p>
                   </div>
                   <div className="flex gap-2 mt-4">
@@ -181,6 +174,6 @@ export default function BookingsCustomer() {
           </div>
         </div>
       </main>
-    </div>
+    </main>
   );
 }
