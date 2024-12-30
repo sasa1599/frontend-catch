@@ -12,6 +12,7 @@ export const getEvent = async () => {
 export const getEventSlug = async (slug: string) => {
   const res = await fetch(`${base_url}/events/${slug}`, {
     next: { revalidate: 0 },
+    credentials: "include",
   });
   if (!res.ok) {
     if (res.status === 401) {

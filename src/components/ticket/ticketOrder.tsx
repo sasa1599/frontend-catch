@@ -55,14 +55,12 @@ export default function TicketOrder({ ticket }: { ticket: ITicket }) {
   };
 
   return (
-    <div className="flex flex-col pt-4 gap-0 bg-gray-950 w-full">
-      {/* <div className="w-[40px] h-[40px] rounded-full bg-black absolute -right-5 bottom-9 border-l border-lightBlue"></div>
-      <div className="w-[40px] h-[40px] rounded-full black absolute -left-5 bottom-9 border-r border-lightBlue"></div> */}
-      <p className="font-semibold text-xl">{ticket.category}</p>
+    <div className="flex flex-col bg-black w-full">
+      <p className="font-semibold text-xl pt-4">{ticket.category}</p>
       {/* <p dangerouslySetInnerHTML={{ __html: ticket.description }}></p> */}
 
       {/* Click to Order Ticket */}
-      <div className="py-4 border-t border-black flex items-center justify-between">
+      <div className="flex items-center justify-between">
         <span className="font-bold text-yellow-400">
           {formatPrice(ticket.price)}
         </span>
@@ -84,7 +82,7 @@ export default function TicketOrder({ ticket }: { ticket: ITicket }) {
         </div>
       </div>
 
-      <span>available seats: {ticket.seats} left</span>
+      <span className="text-xs">available seats: {ticket.seats} left</span>
     </div>
   );
 }

@@ -132,6 +132,7 @@ export interface IEvent {
     username: string;
     avatar: string | null;
   };
+  tickets: ITicket[]
 }
 
 export interface ITicket {

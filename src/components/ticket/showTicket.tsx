@@ -5,10 +5,10 @@ import { formatPrice } from "@/helpers/formatPrice";
 import { useRouter } from "next/navigation";
 import { IEvent, ITicket } from "@/types/allInterface";
 import TicketOrder from "./ticketOrder";
+import useSession from "@/hooks/useSession";
 
 interface EventTicketsProps {
   tickets: ITicket[];
-  result: IEvent;
 }
 
 interface ITicketContext {
@@ -23,8 +23,9 @@ export interface TicketContextValue {
 
 export const TicketContext = createContext<TicketContextValue | null>(null);
 
-export default function ShowTickets({ tickets, result }: EventTicketsProps) {
+export default function ShowTickets({ tickets }: EventTicketsProps) {
   const router = useRouter();
+  const { user } = useSession();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const [ticketCart, setTicketCart] = useState<ITicketContext[] | null>(null);
@@ -32,6 +33,7 @@ export default function ShowTickets({ tickets, result }: EventTicketsProps) {
   const base_url = process.env.NEXT_PUBLIC_BASE_URL_BE;
 
   const handleOrderTicket = async () => {
+    if (!user) return;
     try {
       setIsLoading(true);
       const orderData = {
@@ -46,11 +48,12 @@ export default function ShowTickets({ tickets, result }: EventTicketsProps) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(orderData),
+        credentials: "include",
       });
 
       const data = await response.json();
       console.log("Order created successfully:", data);
-      router.push("/bookingCustomer");
+      router.push("/Order");
     } catch (error) {
       console.error("Failed to create order:", error);
       alert("Failed to create order. Please try again.");
@@ -70,8 +73,8 @@ export default function ShowTickets({ tickets, result }: EventTicketsProps) {
   return (
     <main>
       <TicketContext.Provider value={{ ticketCart, setTicketCart }}>
-        <div className= "flex flex-col xl:px-6">
-          <div className="mt-10 desc-content">
+        <div className="flex flex-col">
+          <div className="desc-content">
             {/* isi kontent */}
             <div className="flex flex-col">
               {tickets.map((item, idx) => {
@@ -80,8 +83,8 @@ export default function ShowTickets({ tickets, result }: EventTicketsProps) {
             </div>
           </div>
         </div>
-        <div className="sticky top-0 flex flex-col xl:w-[30%] xl:self-start">
-          <div className="rounded-xl shadow-2xl flex flex-col gap-4 px-4 py-6">
+        <div className="sticky top-0 flex flex-col xl:self-start">
+          <div className="rounded-xl shadow-2xl flex flex-col gap-4  py-6">
             <div className="flex flex-col gap-6">
               {ticketCart && ticketCart.length > 0 ? (
                 ticketCart.map((item, idx) => {
@@ -96,7 +99,7 @@ export default function ShowTickets({ tickets, result }: EventTicketsProps) {
                         </span>
                         <div className="flex items-center justify-between">
                           <span className="text-xs text-slate-500 font-semibold">
-                            {item.quantity} Tiket
+                            {item.quantity} Ticket
                           </span>
                           <span className="font-semibold text-yellow-400">
                             {formatPrice(item.quantity * item.ticket.price)}
@@ -107,7 +110,7 @@ export default function ShowTickets({ tickets, result }: EventTicketsProps) {
                   );
                 })
               ) : (
-                <h1>DISINI ADA TIKET</h1>
+                <h1></h1>
               )}
             </div>
             <div className="flex flex-col gap-2">
@@ -131,9 +134,9 @@ export default function ShowTickets({ tickets, result }: EventTicketsProps) {
               className={`${
                 isLoading &&
                 "disabled:opacity-[0.5] disabled:cursor-not-allowed"
-              } bg-lightBlue rounded-md text-center text-white py-2 font-semibold`}
+              } bg-yellow-500 rounded-md text-center text-white py-2 font-semibold`}
             >
-              {isLoading ? "Loading ..." : "Pesan Sekarang"}
+              {isLoading ? "Loading ..." : "Book your ticket now!"}
             </button>
           </div>
         </div>
@@ -141,4 +144,3 @@ export default function ShowTickets({ tickets, result }: EventTicketsProps) {
     </main>
   );
 }
-

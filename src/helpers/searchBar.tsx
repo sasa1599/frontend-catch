@@ -7,7 +7,6 @@ import { IEvent } from "@/types/allInterface";
 import Link from "next/link";
 import { formatDateEvent } from "./formatDate";
 import { truncateText } from "./truncateText";
-import Image from "next/image";
 
 const base_url = process.env.NEXT_PUBLIC_BASE_URL_BE;
 
@@ -26,7 +25,7 @@ export default function SearchBar() {
       setIsloading(true);
       const url = text
         ? `${base_url}/events?search=${text}`
-        : `${base_url}/events?limit=8`;
+        : `${base_url}/events?limit=3`;
       const res = await fetch(url);
       const result = await res.json();
       setEvents(result.event);
