@@ -5,7 +5,18 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --font-geist-frankly: 'default-system-font'
+  --font-geist-frankly: "default-system-font";
+}
+
+.custom-calendar {
+  @apply text-black bg-gray-50 border border-gray-300  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 
+  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 
+  dark:focus:border-blue-500;
+}
+
+.custom-calendar .react-calendar__tile:enabled:hover,
+.custom-calendar .react-calendar__tile:enabled:focus {
+  @apply bg-gray-200 text-black;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -18,7 +29,7 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-geist-sans)
+  font-family: var(--font-geist-sans);
 }
 
 @layer utilities {

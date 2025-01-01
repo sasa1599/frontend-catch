@@ -16,7 +16,7 @@ import {
   LogOut,
 } from "lucide-react";
 import useProSession from "@/hooks/promotorSession";
-import { deleteCookie } from "@/components/libs/action";
+import { deleteCookie } from "@/libs/action";
 
 const PromotorSidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
