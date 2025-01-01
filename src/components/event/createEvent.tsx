@@ -15,7 +15,7 @@ import "react-calendar/dist/Calendar.css";
 import "react-clock/dist/Clock.css";
 
 const initialValues: IEvent = {
-  id: 0, // Default ID
+  id: 0,
   title: "",
   category: ICategory.concert,
   thumbnail: "",
@@ -23,14 +23,15 @@ const initialValues: IEvent = {
   location: ILocation.jakarta,
   venue: "",
   datetime: "",
-  slug: "", // Default slug
+  slug: "",
+  coupon_promotor: 0,
   promotor: {
     id: 0,
     name: "",
     username: "",
     avatar: null,
   },
-  tickets: [], // Default tickets (empty array)
+  tickets: [],
 };
 
 const base_url = process.env.NEXT_PUBLIC_BASE_URL_BE;
@@ -255,6 +256,34 @@ export default function CreateEventPage() {
                 />
               </div>
             </div>
+            {/* Discount Coupon */}
+            <div className="flex flex-col px-2 w-[230px]">
+              <label
+                htmlFor="coupon_seat"
+                className="my-2 text-black font-[500]"
+              >
+                Coupon for customer
+              </label>
+              <Field
+                type="number"
+                name="coupon_seat"
+                id="coupon_seat"
+                className="py-1 px-2 outline-none border rounded-md w-fit"
+                min={0}
+              />
+              <ErrorMessage
+                name="coupon_seat"
+                component="div"
+                className="text-red-500 text-xs mt-1 ml-1"
+              />
+              {!props.errors.coupon_promotor && (
+                <div className="text-xs ml-2 text-blue-400">
+                  Set the max number of people who can use a coupon. If left
+                  blank, anyone can use a coupon.
+                </div>
+              )}
+            </div>
+
             {/* Description */}
             <div>
               <label
