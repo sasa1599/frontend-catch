@@ -41,8 +41,10 @@ const Navbar = () => {
     "/transactionsPromotor",
     "/listEvent",
     "/promotorManagement",
+
     "/browse_events",
     "/Order",
+
   ];
   const paths = usePathname();
   const onLogout = () => {

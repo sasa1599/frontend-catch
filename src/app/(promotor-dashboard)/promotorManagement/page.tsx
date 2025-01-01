@@ -1,3 +1,4 @@
+
 import CreateEventPage from "@/components/event/createEvent";
 import PromotorSidebar from "@/components/ui/prosidebar";
 
@@ -15,3 +16,4 @@ export default function PromotorManagement() {
     </div>
   );
 }
+

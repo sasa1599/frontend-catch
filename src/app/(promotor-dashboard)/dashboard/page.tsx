@@ -107,6 +107,29 @@ const DashboardPromotor: React.FC = () => {
             ))}
           </ul>
         </div>
+        <div className="bg-white shadow rounded-lg p-6">
+          <h3 className="font-semibold text-gray-700 mb-4">Recent Transactions</h3>
+          <ul className="space-y-4">
+            {[
+              { customer: "John Doe", event: "BTS World Tour", amount: 500000, status: "SUCCESS" },
+              { customer: "Jane Smith", event: "Running Man Fanmeet", amount: 750000, status: "PENDING" },
+              { customer: "Michael Brown", event: "Seoul Tech Seminar", amount: 600000, status: "FAILED" },
+            ].map((transaction, index) => (
+              <li key={index} className="flex justify-between items-center border-b pb-2">
+                <div>
+                  <p className="text-gray-800 font-medium">{transaction.customer}</p>
+                  <p className="text-gray-500 text-sm">Event: {transaction.event}</p>
+                </div>
+                <div>
+                  <p className="text-blue-500 font-semibold">{formatRupiah(transaction.amount)}</p>
+                  <p className={`text-sm font-medium ${transaction.status === "SUCCESS" ? "text-green-500" : transaction.status === "PENDING" ? "text-yellow-500" : "text-red-500"}`}>
+                    {transaction.status}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );
