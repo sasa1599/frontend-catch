@@ -41,6 +41,7 @@ const Navbar = () => {
     "/transactionsPromotor",
     "/listEvent",
     "/promotorManagement",
+
     "/browse_events",
     "/Order",
     "/ListEvents",
