@@ -1,10 +1,13 @@
-const base_url = process.env.NEXT_PUBLIC_BASE_URL_BE
+const base_url = process.env.NEXT_PUBLIC_BASE_URL_BE;
 
-export const getTicket = async (event_id:number) => {
-    const res = await fetch(`${base_url}/tickets/${event_id}`, {
-      next: { revalidate: 0 },
-    });
-    const data = await res.json();
-  
-    return data.result
-  };
+export const getTicket = async (event_id: number) => {
+  const res = await fetch(`${base_url}/tickets/${event_id}`, {
+    next: { revalidate: 0 },
+    credentials: "include",
+  });
+  console.log("response", res);
+
+  const data = await res.json();
+
+  return data.result;
+};

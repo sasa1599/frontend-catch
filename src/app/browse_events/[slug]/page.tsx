@@ -14,6 +14,8 @@ export default async function EventDetail({
 }) {
   const event = await getEventSlug(params.slug);
   const ticket: ITicket[] = await getTicket(+event.id);
+  console.log("ticket",ticket);
+  
 
   if (!event) {
     return (
@@ -41,8 +43,8 @@ export default async function EventDetail({
         <Image
           src={`${event.thumbnail}`}
           alt={event.title}
-          width={500} // Explicit width
-          height={500} // Explicit height
+          width={500} 
+          height={500} 
           className="object-contain"
           priority
         />

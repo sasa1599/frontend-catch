@@ -77,7 +77,7 @@ export default function ShowTickets({ tickets }: EventTicketsProps) {
           <div className="desc-content">
             {/* isi kontent */}
             <div className="flex flex-col">
-              {tickets.map((item, idx) => {
+              {tickets && tickets.map((item, idx) => {
                 return <TicketOrder key={idx} ticket={item} />;
               })}
             </div>
