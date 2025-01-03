@@ -53,61 +53,57 @@ export default function BookingsCustomerClient({
               return (
                 <div
                   key={idx}
-                  className="bg-white p-6 rounded-lg shadow hover:shadow-md transition"
+                  className="bg-white p-6 rounded-lg shadow hover:shadow-md transition flex flex-col justify-between"
                 >
-                  <div className="flex justify-between items-center mb-4">
-                    <span
-                      className={`text-sm font-medium px-2 py-1 rounded-full ${
-                        order.status_order === "PENDING"
-                          ? "bg-yellow-100 text-yellow-700"
-                          : order.status_order === "SUCCESS"
-                          ? "bg-green-100 text-green-700"
-                          : order.status_order === "FAILED"
-                          ? "bg-red-100 text-red-700"
-                          : "bg-gray-200 text-gray-700"
-                      }`}
-                    >
-                      {order.status_order}
-                    </span>
-                  </div>
-                  <h2 className="text-lg font-semibold text-gray-800">
-                    {ticketEvent.title || "Unknown Event"}
-                  </h2>
-                  <p className="text-sm text-gray-600 mt-2">
-                    {ticketEvent.datetime
-                      ? formatOrderDate(ticketEvent.datetime)
-                      : "No date available"}
-                  </p>
-                  <p className="text-sm text-gray-600 mt-1">
-                    <span className="font-medium">Venue:</span>{" "}
-                    {ticketEvent?.venue || "No venue available"}
-                  </p>
-                  <div className="mt-4 flex justify-between items-center">
-                    <p className="text-gray-600 text-sm">
-                      Tickets:{" "}
-                      <span className="font-semibold">
-                        {ticketTransaction?.quantity || 0}
+                  <div>
+                    <div className="flex justify-between items-center mb-4">
+                      <span
+                        className={`text-sm font-medium px-2 py-1 rounded-full ${
+                          order.status_order === "PENDING"
+                            ? "bg-yellow-100 text-yellow-700"
+                            : order.status_order === "SUCCESS"
+                            ? "bg-green-100 text-green-700"
+                            : order.status_order === "FAILED"
+                            ? "bg-red-100 text-red-700"
+                            : "bg-gray-200 text-gray-700"
+                        }`}
+                      >
+                        {order.status_order}
                       </span>
+                    </div>
+                    <h2 className="text-lg font-semibold text-gray-800">
+                      {ticketEvent.title || "Unknown Event"}
+                    </h2>
+                    <p className="text-sm text-gray-600 mt-2">
+                      {ticketEvent.datetime
+                        ? formatOrderDate(ticketEvent.datetime)
+                        : "No date available"}
                     </p>
-                    <p className="text-lg font-bold text-gray-800">
-                      {formatPrice(order.final_price)}
+                    <p className="text-sm text-gray-600 mt-1">
+                      <span className="font-medium">Venue:</span>{" "}
+                      {ticketEvent?.venue || "No venue available"}
                     </p>
+                    <div className="mt-4 flex justify-between items-center">
+                      <p className="text-gray-600 text-sm">
+                        Tickets:{" "}
+                        <span className="font-semibold">
+                          {ticketTransaction?.quantity || 0}
+                        </span>
+                      </p>
+                      <p className="text-lg font-bold text-gray-800">
+                        {formatPrice(order.final_price)}
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex gap-2 mt-4">
-                    {order.status_order === "PENDING" ? (
-                      <button className="flex-1 py-2 text-center text-blue-600 border border-blue-500 rounded hover:bg-blue-50">
-                        Pay
-                      </button>
-                    ) : (
-                      <>
-                        <button className="flex-1 py-2 text-center text-blue-600 border border-blue-500 rounded hover:bg-blue-50">
-                          View Details
-                        </button>
-                        <button className="flex-1 py-2 text-center text-green-600 border border-green-500 rounded hover:bg-green-50">
-                          Download Ticket
-                        </button>
-                      </>
-                    )}
+                  {/* Action Buttons */}
+                  <div className="mt-4 flex gap-2">
+                    {/* Remove Pay button */}
+                    <button className="flex-1 py-2 text-center text-blue-600 border border-blue-500 rounded hover:bg-blue-50">
+                      View Details
+                    </button>
+                    <button className="flex-1 py-2 text-center text-green-600 border border-green-500 rounded hover:bg-green-50">
+                      Download Ticket
+                    </button>
                   </div>
                 </div>
               );

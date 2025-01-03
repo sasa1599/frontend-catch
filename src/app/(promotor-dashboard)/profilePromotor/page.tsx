@@ -6,6 +6,7 @@ import axios from "axios";
 import Image from "next/image";
 import { toast } from "react-toastify";
 import PromotorSidebar from "@/components/ui/prosidebar";
+import dashPromoGuard from "@/hoc/dashPromoGuard";
 
 const ProfilePromotor: React.FC = () => {
   const { user, isAuth, loading, error } = useProSession();
@@ -156,4 +157,4 @@ const ProfilePromotor: React.FC = () => {
   );
 };
 
-export default ProfilePromotor;
+export default  dashPromoGuard(ProfilePromotor) ;

@@ -14,11 +14,35 @@ interface ITicketOrder {
   };
 }
 
+// export interface IOrder {
+//   status_order: "PENDING" | "SUCCESS" | "FAILED" | "CANCELLED";
+//   id: number
+//   expiresAt: string;
+//   total_price: number;
+//   final_price: number;
+//   OrderDetails: ITicketOrder[];
+// }
+
 export interface IOrder {
-  status_order: "PENDING" | "SUCCESS" | "FAILED" | "CANCELLED";
-  id: number
-  expiresAt: string;
-  total_price: number;
+  id: number;
   final_price: number;
-  OrderDetails: ITicketOrder[];
+  total_price: number;
+  status_order: string;
+  points_used?: number;
+  voucher_code?: string;
+  OrderDetails: Array<{
+    quantity: number;
+    ticket: {
+      id: number;
+      price: number;
+      seats: number;
+      event: {
+      title: string;
+      thumbnail: string;
+      datetime: string;
+      location: string;
+      venue: string;
+      }
+    }
+  }>;
 }

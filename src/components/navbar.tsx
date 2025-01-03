@@ -33,22 +33,20 @@ const Navbar = () => {
     "/dashboardCustomer",
     "/profileCustomer",
     "/events",
-    "/transactions",
-    "/bookingsCustomer",
-    "/transactionsCustomer",
     "/loading",
     "/profilePromotor",
     "/transactionsPromotor",
     "/listEvent",
     "/promotorManagement",
-
+    "/transaksiCustomer",
+    "/ticketCustomer",
     "/browse_events",
     "/Order",
-    "/ListEvents",
+
   ];
   const paths = usePathname();
   const onLogout = () => {
-    deleteCookie("token");
+    localStorage.removeItem("token");
     localStorage.removeItem("role");
     setIsAuth(false);
     router.push("/");
@@ -86,6 +84,7 @@ const Navbar = () => {
   if (pathName.includes(paths)) {
     return null;
   }
+
   return (
     <nav className="fixed top-0 left-0 right-0 bg-white z-50 px-4 md:px-6 py-4 shadow text-black">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -117,7 +116,7 @@ const Navbar = () => {
                 Login
               </button>
               {dropdownOpen && (
-                <div className="dropdown-menu absolute top-full mt-2 right-0 w-40 bg-white border border-gray-200 rounded-lg shadow-lg">
+                <div className="dropdown-menu absolute top-full mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
                   {loginOptions.map((option) => (
                     <Link
                       key={option.label}
@@ -158,22 +157,30 @@ const Navbar = () => {
 
       {menuOpen && (
         <div className="md:hidden mt-4">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:outline-none"
-          />
+          {/* Search bar for mobile */}
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search..."
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:outline-none"
+            />
+            {/* Search dropdown below the input */}
+            <div className="absolute top-full mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-lg z-20">
+              <ul className="mt-2">
+                {menuItems.map((item) => (
+                  <li key={item.label}>
+                    <Link
+                      href={item.href}
+                      className="block px-4 py-2 text-black hover:bg-gray-100"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
           <ul className="mt-4">
-            {menuItems.map((item) => (
-              <li key={item.label}>
-                <Link
-                  href={item.href}
-                  className="block px-4 py-2 text-black hover:bg-gray-100"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
             {isAuth && (isCustomer(user) || isPromotor(user)) ? (
               <li>
                 <AvatarMenu user={user} onLogout={onLogout} />
@@ -187,7 +194,7 @@ const Navbar = () => {
                   Login
                 </button>
                 {dropdownOpen && (
-                  <div className="dropdown-menu absolute top-full mt-2 right-0 w-40 bg-white border border-gray-200 rounded-lg shadow-lg">
+                  <div className="dropdown-menu absolute top-full mt-2 right-0 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
                     {loginOptions.map((option) => (
                       <Link
                         key={option.label}

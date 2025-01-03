@@ -20,7 +20,7 @@ const initialValues: IEvent = {
   category: ICategory.concert,
   thumbnail: "",
   description: "",
-  location: ILocation.jakarta,
+  location: ILocation.Jakarta,
   venue: "",
   datetime: "",
   slug: "",
@@ -243,10 +243,10 @@ export default function CreateEventPage() {
                   as="select"
                   className="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                 >
-                  <option value={ILocation.bandung}>{ILocation.bandung}</option>
-                  <option value={ILocation.jakarta}>{ILocation.jakarta}</option>
-                  <option value={ILocation.yogyakarta}>
-                    {ILocation.yogyakarta}
+                  <option value={ILocation.Bandung}>{ILocation.Bandung}</option>
+                  <option value={ILocation.Jakarta}>{ILocation.Jakarta}</option>
+                  <option value={ILocation.Yogyakarta}>
+                    {ILocation.Yogyakarta}
                   </option>
                 </Field>
                 <ErrorMessage
