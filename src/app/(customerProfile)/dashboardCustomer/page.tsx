@@ -5,6 +5,8 @@ import useSession from "@/hooks/useSession";
 import CustomerSidebar from "@/components/ui/sidebar";
 import Image from "next/image";
 import Link from "next/link";
+import dashCustGuard from "@/hoc/dashCustoGuard";
+
 
 const CustomerDashboard: React.FC = () => {
   const { user, loading, error } = useSession();
@@ -51,13 +53,13 @@ const CustomerDashboard: React.FC = () => {
             </p>
             <div className="mt-8 flex gap-4">
               <Link
-                href="/bookingsCustomer"
+                href="/ticketCustomer"
                 className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-full text-lg font-semibold shadow"
               >
                 Bookings
               </Link>
               <Link
-                href="/transactionsCustomer"
+                href="/transaksiCustomer"
                 className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-2 rounded-full text-lg font-semibold shadow"
               >
                 Transactions
@@ -71,20 +73,21 @@ const CustomerDashboard: React.FC = () => {
             </div>
           </div>
           <div className="flex-1 flex justify-center items-center relative">
-          <div className="absolute right-0 w-[350px] h-[400px] bg-blue-100 rounded-tl-full rounded-bl-full"></div>
-          <div className="relative z-10 w-64 h-64 md:w-72 md:h-72 rounded-full overflow-hidden shadow-xl">
-            <Image
-              src={user.avatar || "/user.png"}
-              alt="User Avatar"
-              fill
-              className="object-cover"
-            />
+            <div className="absolute right-0 w-[350px] h-[400px] bg-blue-100 rounded-tl-full rounded-bl-full"></div>
+            <div className="relative z-10 w-64 h-64 md:w-72 md:h-72 rounded-full overflow-hidden shadow-xl">
+              <Image
+                src={user.avatar || "/user.png"}
+                alt="User Avatar"
+                fill
+                className="object-cover"
+              />
+            </div>
           </div>
-        </div>
         </div>
       </main>
     </div>
   );
 };
 
-export default CustomerDashboard;
+// Wrap the CustomerDashboard with the dashCustomerGuard HOC
+export default dashCustGuard(CustomerDashboard);

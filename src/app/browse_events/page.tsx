@@ -1,7 +1,6 @@
 import Card from "@/components/card";
 import LinkCategory from "@/components/category";
-import EventNavbar from "@/components/event_navbar";
-import { getEvent } from "@/components/libs/event";
+import { getEvent } from "@/libs/event";
 import { formatDate } from "@/helpers/formatDate";
 import { IEvent } from "@/types/allInterface";
 
@@ -14,9 +13,8 @@ export default async function Events() {
 
   return (
     <div>
-      <EventNavbar />
-      <div className="bg-black md:px-44 px-4 mt-[76px] flex flex-col items-start">
-        {/* Music Container */}
+      <div className="bg-black md:px-44 px-4 py-28  flex flex-col items-start">
+        {/* Category */}
         <LinkCategory />
 
         {/* Card Grid */}
@@ -34,10 +32,16 @@ export default async function Events() {
               venue={item.venue}
               datetime={formatDate(item.datetime)}
               promotor={{
+                username: item.promotor.username,
                 name: item.promotor.name,
-                avatar: item.promotor.avatar,
+                avatar: item.promotor.avatar ?? undefined,
               }}
-              tickets={item.tickets ?? []}
+              tickets={
+                item.tickets?.map((ticket) => ({
+                  ...ticket,
+                  id: ticket.id || 0,
+                })) ?? []
+              }
             />
           ))}
         </div>

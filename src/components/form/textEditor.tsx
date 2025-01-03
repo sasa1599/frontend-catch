@@ -43,7 +43,7 @@ const RichTextEditor: React.FC<FieldRichTextProps> = ({ setFieldValue }) => {
 
   const handleChange = (e: string) => {
     setValue(e);
-    setFieldValue("content", e);
+    setFieldValue("description", e);
   };
 
   useEffect(() => {
