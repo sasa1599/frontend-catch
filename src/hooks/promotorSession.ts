@@ -13,7 +13,7 @@ const useProSession = () => {
     
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:8001/api/promotors/profile", {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL_BE}/promotors/profile`, {
         withCredentials: true,
         headers: {
           "Content-Type": "application/json",

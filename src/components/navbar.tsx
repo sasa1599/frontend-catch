@@ -2,10 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import AvatarMenu from "./avatarmenu";
-import { deleteCookie } from "../libs/action";
 import { IUser, IPromotor } from "@/types/user";
 import { useSession } from "@/context/useSession";
 import SearchBar from "@/helpers/searchBar";
@@ -18,9 +17,6 @@ const Navbar = () => {
   const menuItems = [
     { label: "Browse events", href: "/browse_events" },
     { label: "About", href: "/about" },
-    { label: "Careers", href: "/careers" },
-    { label: "Help Center", href: "/help" },
-    { label: "Blog", href: "/blog" },
   ];
 
   const loginOptions = [
@@ -44,6 +40,7 @@ const Navbar = () => {
     "/Order",
   ];
   const paths = usePathname();
+
   const onLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
@@ -51,7 +48,6 @@ const Navbar = () => {
     router.push("/");
   };
 
-  // Type guards to differentiate between IUser and IPromotor
   const isCustomer = (user: IUser | IPromotor | null): user is IUser => {
     return user !== null && "ref_code" in user && "isVerify" in user;
   };
@@ -60,25 +56,30 @@ const Navbar = () => {
     return user !== null && "company" in user && "events" in user;
   };
 
+  const mobileMenuRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
       if (
-        !target.closest(".dropdown-button") &&
+        mobileMenuRef.current && 
+        !mobileMenuRef.current.contains(target) && 
+        !target.closest(".dropdown-button") && 
         !target.closest(".dropdown-menu")
       ) {
+        setMenuOpen(false);
         setDropdownOpen(false);
       }
     };
 
-    if (dropdownOpen) {
+    if (menuOpen) {
       document.addEventListener("click", handleOutsideClick);
     } else {
       document.removeEventListener("click", handleOutsideClick);
     }
 
     return () => document.removeEventListener("click", handleOutsideClick);
-  }, [dropdownOpen]);
+  }, [menuOpen]);
 
   if (pathName.includes(paths)) {
     return null;
@@ -91,9 +92,11 @@ const Navbar = () => {
           <Image src="/logo.gif" alt="Logo" width={40} height={40} />
           <span className="text-lg md:text-2xl font-bold">CATch</span>
         </Link>
+
         <div className="hidden md:flex flex-1 mx-4">
           <SearchBar />
         </div>
+
         <div className="hidden md:flex items-center gap-6">
           {menuItems.map((item) => (
             <Link
@@ -121,6 +124,10 @@ const Navbar = () => {
                       key={option.label}
                       href={option.href}
                       className="block px-4 py-2 text-black hover:bg-gray-100"
+                      onClick={() => {
+                        setMenuOpen(false);
+                        setDropdownOpen(false);
+                      }}
                     >
                       {option.label}
                     </Link>
@@ -129,17 +136,15 @@ const Navbar = () => {
               )}
             </div>
           )}
-          <button className="px-4 py-2 bg-black text-white rounded-full hover:opacity-90">
-            GET THE APP
-          </button>
         </div>
+
         <button
-          className="block md:hidden text-black"
+          className="block md:hidden text-black focus:outline-none"
           onClick={() => setMenuOpen((prev) => !prev)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
+            className={`h-6 w-6 transition-transform duration-300 ${menuOpen ? "rotate-90" : "rotate-0"}`}
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -155,31 +160,29 @@ const Navbar = () => {
       </div>
 
       {menuOpen && (
-        <div className="md:hidden mt-4">
-          {/* Search bar for mobile */}
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:outline-none"
-            />
-            {/* Search dropdown below the input */}
-            <div className="absolute top-full mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-lg z-20">
-              <ul className="mt-2">
-                {menuItems.map((item) => (
-                  <li key={item.label}>
-                    <Link
-                      href={item.href}
-                      className="block px-4 py-2 text-black hover:bg-gray-100"
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
+        <div
+          ref={mobileMenuRef}
+          className="md:hidden mt-4 bg-white shadow-lg rounded-lg px-4 py-6"
+        >
+          <div className="mb-4">
+            <SearchBar />
           </div>
-          <ul className="mt-4">
+
+          <ul className="space-y-3">
+            {menuItems.map((item) => (
+              <li key={item.label}>
+                <Link
+                  href={item.href}
+                  className="block px-4 py-2 text-center text-black rounded-lg border border-gray-200 hover:shadow-md transition-shadow"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          <ul className="mt-4 space-y-3">
             {isAuth && (isCustomer(user) || isPromotor(user)) ? (
               <li>
                 <AvatarMenu user={user} onLogout={onLogout} />
@@ -187,18 +190,22 @@ const Navbar = () => {
             ) : (
               <li>
                 <button
-                  className="dropdown-button text-black hover:opacity-70 transition-opacity"
+                  className="block w-full px-4 py-2 text-center text-white bg-indigo-500 rounded-lg hover:bg-indigo-600 transition-colors"
                   onClick={() => setDropdownOpen((prev) => !prev)}
                 >
                   Login
                 </button>
                 {dropdownOpen && (
-                  <div className="dropdown-menu absolute top-full mt-2 right-0 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
+                  <div className="dropdown-menu mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg">
                     {loginOptions.map((option) => (
                       <Link
                         key={option.label}
                         href={option.href}
-                        className="block px-4 py-2 text-black hover:bg-gray-100"
+                        className="block px-4 py-2 text-center text-black hover:bg-gray-100"
+                        onClick={() => {
+                          setMenuOpen(false);
+                          setDropdownOpen(false);
+                        }}
                       >
                         {option.label}
                       </Link>
@@ -207,11 +214,6 @@ const Navbar = () => {
                 )}
               </li>
             )}
-            <li>
-              <button className="px-4 py-2 bg-black text-white rounded-full hover:opacity-90">
-                GET THE APP
-              </button>
-            </li>
           </ul>
         </div>
       )}

@@ -7,10 +7,12 @@ import Image from "next/image";
 import { toast } from "react-toastify";
 import PromotorSidebar from "@/components/ui/prosidebar";
 import dashPromoGuard from "@/hoc/dashPromoGuard";
+import ResetPasswordForm from "@/components/resetPassword/resetPassPromotor";
 
 const ProfilePromotor: React.FC = () => {
   const { user, isAuth, loading, error } = useProSession();
   const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
 
   // Function to upload a new avatar
   const editProAvatar = async (file: File) => {
@@ -23,7 +25,7 @@ const ProfilePromotor: React.FC = () => {
       formData.append("file", file);
 
       const res = await axios.patch(
-        "http://localhost:8001/api/proavatarcloud",
+        `${process.env.NEXT_PUBLIC_BASE_URL_BE}/proavatarcloud`,
         formData,
         {
           withCredentials: true,
@@ -69,11 +71,8 @@ const ProfilePromotor: React.FC = () => {
   }
 
   return (
-    <div className="flex h-screen">
-      {/* Sidebar */}
+    <div className="flex h-screen w-screen overflow-hidden bg-gray-50">
       <PromotorSidebar />
-
-      {/* Main Content */}
       <main className="flex-1 bg-gray-100 overflow-auto relative">
         <div className="absolute top-0 left-0 right-0 h-60 bg-gradient-to-b from-green-200 via-sky-200 to-blue-100" />
         <Image
@@ -86,7 +85,6 @@ const ProfilePromotor: React.FC = () => {
         <div className="relative px-8 py-6">
           <div className="bg-white shadow-xl rounded-lg max-w-2xl mx-auto mt-16">
             <div className="p-8">
-              {/* Avatar Section */}
               <div className="flex flex-col items-center">
                 <Image
                   src={user.avatar || "/user.png"}
@@ -119,8 +117,6 @@ const ProfilePromotor: React.FC = () => {
                   />
                 </div>
               </div>
-
-              {/* Profile Information */}
               <div className="mt-8 space-y-6">
                 <div>
                   <label className="block text-gray-600 text-sm mb-2">
@@ -148,13 +144,25 @@ const ProfilePromotor: React.FC = () => {
                     <span className="text-gray-700">*************</span>
                   </div>
                 </div>
+                <div>
+                  <label className="block text-black text-sm mb-2">Reset Password</label>
+                  <button
+                    className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
+                    onClick={() => setShowResetPasswordModal(true)}
+                  >
+                    Reset Password
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </main>
+      {showResetPasswordModal && (
+        <ResetPasswordForm onClose={() => setShowResetPasswordModal(false)} />
+      )}
     </div>
   );
 };
 
-export default  dashPromoGuard(ProfilePromotor) ;
+export default dashPromoGuard(ProfilePromotor);
