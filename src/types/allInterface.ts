@@ -8,9 +8,9 @@ export enum ICategory {
 }
 
 export enum ILocation {
-  jakarta = "jakarta",
-  bandung = "bandung",
-  yogyakarta = "yogyakarta",
+  Jakarta = "Jakarta",
+  Bandung = "Bandung",
+  Yogyakarta = "Yogyakarta",
 }
 
 export enum IStatusOrder {

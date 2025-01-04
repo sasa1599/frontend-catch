@@ -6,6 +6,7 @@ import axios from "axios";
 import CustomerSidebar from "@/components/ui/sidebar";
 import Image from "next/image";
 import { toast } from "react-toastify";
+import dashCustGuard from "@/hoc/dashCustoGuard";
 
 interface Coupon {
   id: number;
@@ -220,4 +221,5 @@ const ProfileCustomer: React.FC = () => {
   );
 };
 
-export default ProfileCustomer;
+export default dashCustGuard(ProfileCustomer)
+;

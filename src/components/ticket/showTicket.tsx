@@ -3,13 +3,11 @@
 import { createContext, useEffect, useState } from "react";
 import { formatPrice } from "@/helpers/formatPrice";
 import { useRouter } from "next/navigation";
-import { IEvent, ITicket } from "@/types/allInterface";
+import { ITicket } from "@/types/allInterface";
 import TicketOrder from "./ticketOrder";
 import useSession from "@/hooks/useSession";
-
-interface EventTicketsProps {
-  tickets: ITicket[];
-}
+import { toast } from "react-toastify";
+import { getTicket } from "@/libs/ticket";
 
 interface ITicketContext {
   ticket: ITicket;
@@ -23,7 +21,8 @@ export interface TicketContextValue {
 
 export const TicketContext = createContext<TicketContextValue | null>(null);
 
-export default function ShowTickets({ tickets }: EventTicketsProps) {
+export default function ShowTickets({ event_id }: { event_id: string }) {
+  const [tickets, setTickets] = useState<ITicket[]>([]);
   const router = useRouter();
   const { user } = useSession();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -36,6 +35,7 @@ export default function ShowTickets({ tickets }: EventTicketsProps) {
     if (!user) return;
     try {
       setIsLoading(true);
+      console.log(ticketCart);
       const orderData = {
         total_price: totalPrice,
         final_price: totalPrice,
@@ -46,14 +46,15 @@ export default function ShowTickets({ tickets }: EventTicketsProps) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify(orderData),
-        credentials: "include",
       });
 
       const data = await response.json();
+      toast.success("OrderCreated");
       console.log("Order created successfully:", data);
-      router.push("/Order");
+      router.push("/transaksiCustomer");
     } catch (error) {
       console.error("Failed to create order:", error);
       alert("Failed to create order. Please try again.");
@@ -70,6 +71,14 @@ export default function ShowTickets({ tickets }: EventTicketsProps) {
     }
   }, [ticketCart]);
 
+  useEffect(() => {
+    const getData = async () => {
+      const data = await getTicket(+event_id);
+      setTickets(data);
+    };
+    getData();
+  }, []);
+
   return (
     <main>
       <TicketContext.Provider value={{ ticketCart, setTicketCart }}>
@@ -77,9 +86,10 @@ export default function ShowTickets({ tickets }: EventTicketsProps) {
           <div className="desc-content">
             {/* isi kontent */}
             <div className="flex flex-col">
-              {tickets && tickets.map((item, idx) => {
-                return <TicketOrder key={idx} ticket={item} />;
-              })}
+              {tickets &&
+                tickets.map((item, idx) => {
+                  return <TicketOrder key={idx} ticket={item} />;
+                })}
             </div>
           </div>
         </div>

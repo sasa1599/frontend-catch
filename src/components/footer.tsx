@@ -10,7 +10,6 @@ export default function Footer() {
     "/profileCustomer",
     "/events",
     "/transactions",
-    "/bookingsCustomer",
     "/transactionsCustomer",
     "/loading",
     "/profilePromotor",

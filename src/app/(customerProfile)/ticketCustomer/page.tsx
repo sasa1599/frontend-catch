@@ -4,10 +4,11 @@ import React, { useEffect, useState } from "react";
 import CustomerSidebar from "@/components/ui/sidebar";
 import { IOrder } from "@/types/order";
 import BookingsCustomerClient from "@/components/order/BookingCustomer";
-import useSession from "@/hooks/useSession";
 import axios from "axios";
+import { useSession } from "@/context/useSession";
+import dashCustGuard from "@/hoc/dashCustoGuard";
 
-export default function BookingsCustomer({}) {
+const BookingsCustomer: React.FC = () => {
   const { user } = useSession();
   const [orderData, setOrderData] = useState<IOrder[]>([]);
 
@@ -19,7 +20,7 @@ export default function BookingsCustomer({}) {
         withCredentials: true,
         headers: { "Content-Type": "application/json" },
       });
-      
+
       const orders = res.data.result;
       setOrderData(orders);
     } catch (err) {
@@ -33,14 +34,20 @@ export default function BookingsCustomer({}) {
     }
   }, [user]);
 
-  if (user && orderData.length > 0) {
-    return (
-      <main className="flex h-screen">
-        <CustomerSidebar />
-        <BookingsCustomerClient orders={orderData} />
-      </main>
-    );
+  if (!user) {
+    return <div>Loading user data...</div>;
   }
 
-  return <div>Loading...</div>;
-}
+  if (orderData.length === 0) {
+    return <div>Loading orders...</div>;
+  }
+
+  return (
+    <main className="flex h-screen">
+      <CustomerSidebar />
+      <BookingsCustomerClient orders={orderData} />
+    </main>
+  );
+};
+
+export default dashCustGuard(BookingsCustomer);

@@ -43,15 +43,16 @@ const SignPromotor = () => {
         password: values.password,
       };
 
-      const res = await axios.post("http://localhost:8001/api/login", payload, {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL_BE}/login`, payload, {
         withCredentials: true,
       });
 
-      const { promotor, message } = res.data;
+      const { promotor, token, message } = res.data;
 
       setUser(promotor);
       setIsAuth(true);
       localStorage.setItem("role", "promotor");
+      localStorage.setItem("token", token);
 
       toast.success(message || "Login successful!");
       router.push("/dashboard");

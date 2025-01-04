@@ -14,8 +14,9 @@ import {
   UserCircle,
   LogOut,
 } from "lucide-react";
-import useSession from "@/hooks/useSession";
+
 import { IUser } from "@/types/user";
+import { useSession } from "@/context/useSession";
 
 const CustomerSidebar = () => {
   const { isAuth, user, setIsAuth } = useSession();
@@ -25,6 +26,8 @@ const CustomerSidebar = () => {
 
   const onLogout = () => {
     deleteCookie("token");
+    localStorage.removeItem("role");
+    localStorage.removeItem("token");
     setIsAuth(false);
     router.push("/");
   };
@@ -38,12 +41,12 @@ const CustomerSidebar = () => {
     {
       icon: <Calendar size={24} />,
       text: "Bookings",
-      href: "/bookingsCustomer",
+      href: "/ticketCustomer",
     },
     {
       icon: <Receipt size={24} />,
       text: "Transactions",
-      href: "/transactionsCustomer",
+      href: "/transaksiCustomer",
     },
     {
       icon: <UserCircle size={24} />,

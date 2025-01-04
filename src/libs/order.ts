@@ -4,8 +4,10 @@ const base_url = process.env.NEXT_PUBLIC_BASE_URL_BE;
 export async function getCustomerOrderDetail() {
   try {
     const res = await axios.get(`${base_url}/order/user/detail`, {
-      withCredentials: true,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
     });
 
     return res.data?.result || [];
@@ -36,7 +38,7 @@ export async function getSnapToken(order_id: number, final_price: number) {
     console.log("Token from localStorage:", token); // Pastikan token ada
 
     const { data } = await axios.post(
-      "/order/payment",
+      "http://localhost:8001/api/order/payment",
       {
         order_id,
         gross_amount: final_price,
