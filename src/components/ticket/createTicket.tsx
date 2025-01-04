@@ -36,9 +36,11 @@ export default function CreateTicketPage({
         `${base_url}/promotor/create-event/create-ticket/${+params.event_id}`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
           body: JSON.stringify(data),
-          credentials: "include",
         }
       );
 
@@ -66,7 +68,6 @@ export default function CreateTicketPage({
       }}
     >
       {(props) => {
-        console.log(props);
 
         return (
           <Form className="flex flex-col gap-3 pt-5 w-full items-center justify-center text-black">

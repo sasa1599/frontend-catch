@@ -11,11 +11,18 @@ export default async function Events() {
     return <div>No events found.</div>;
   }
 
-  const filteredEvents = data.filter((item) => {
-    const eventDate = new Date(item.datetime).getTime();
-    const now = new Date().getTime();
-    return eventDate > now;
-  });
+  // Filter and sort events by the closest event date to today
+  const filteredEvents = data
+    .filter((item) => {
+      const eventDate = new Date(item.datetime).getTime();
+      const now = new Date().getTime();
+      return eventDate > now; // Keep only future events
+    })
+    .sort((a, b) => {
+      const eventDateA = new Date(a.datetime).getTime();
+      const eventDateB = new Date(b.datetime).getTime();
+      return eventDateA - eventDateB; // Sort by closest event date
+    });
 
   if (filteredEvents.length === 0) {
     return <div>No upcoming events.</div>;

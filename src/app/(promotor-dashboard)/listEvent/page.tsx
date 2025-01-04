@@ -56,7 +56,7 @@ const ListEvents: React.FC = () => {
 
     // Define categories for rounding
     const categories = [20000, 100000, 500000, 1000000];
-    let roundedPrice = categories[0]; // Default to 20,000
+    let roundedPrice = categories[0]; 
 
     // Find the nearest price category
     for (let i = 0; i < categories.length; i++) {

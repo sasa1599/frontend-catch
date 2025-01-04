@@ -19,18 +19,15 @@ export default function TicketOrder({ ticket }: { ticket: ITicket }) {
     const ticketCartId = ticketCart?.findIndex(
       (item) => item.ticket.id === ticket.id
     );
-    console.log("ticketCartId",ticketCartId);
 
     if (ticketCartId! > -1 && ticketCart) {
       const newTicketCart = [...ticketCart];
       newTicketCart[ticketCartId!].quantity = order + 1;
-      console.log("newTicketCart",newTicketCart);
 
       setTicketCart(newTicketCart);
     } else {
       if (ticketCart?.length! > 0) {
         setTicketCart([...ticketCart!, { ticket, quantity: 1 }]);
-        console.log(ticketCart);
       } else {
         setTicketCart([{ ticket, quantity: 1 }]);
       }
