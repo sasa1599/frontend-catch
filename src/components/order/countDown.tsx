@@ -23,7 +23,7 @@ export default function CountDown({ date }: { date: string }) {
       });
     }, 1000);
 
-    return () => clearInterval(interval); // Cleanup interval on unmount
+    return () => clearInterval(interval);
   }, []);
 
   const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));

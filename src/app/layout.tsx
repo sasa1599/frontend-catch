@@ -3,10 +3,10 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
-
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { SessionProvider } from "@/context/useSession";
+import Script from "next/script";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -36,6 +36,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <Script
+          src="https://app.sandbox.midtrans.com/snap/snap.js"
+          data-client-key={process.env.NEXT_PUBLIC_MID_CLIENT_KEY}
+          strategy="beforeInteractive"
+        />
+      </head>
       <body
         className={`${geistFrankly.variable} ${geistMono.variable} antialiased`}
       >

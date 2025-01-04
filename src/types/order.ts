@@ -25,6 +25,7 @@ interface ITicketOrder {
 
 export interface IOrder {
   id: number;
+  expires_at: string;
   final_price: number;
   total_price: number;
   status_order: string;

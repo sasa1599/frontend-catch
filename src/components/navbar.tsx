@@ -42,7 +42,7 @@ const Navbar = () => {
     "/ticketCustomer",
     "/browse_events",
     "/Order",
-
+    "/ListEvents",
   ];
   const paths = usePathname();
   const onLogout = () => {
