@@ -10,13 +10,15 @@ export default function Footer() {
     "/profileCustomer",
     "/events",
     "/transactions",
-    "/bookingsCustomer",
     "/transactionsCustomer",
     "/loading",
     "/profilePromotor",
     "/transactionsPromotor",
     "/listEvent",
     "/promotorManagement",
+    "/ticketCustomer",
+    "/transaksiCustomer",
+    "/ListEvents",
   ];
   
   const paths = usePathname();

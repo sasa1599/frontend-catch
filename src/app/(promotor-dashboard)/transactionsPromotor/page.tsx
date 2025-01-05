@@ -2,6 +2,7 @@
 
 
 import PromotorSidebar from "@/components/ui/prosidebar";
+import dashPromoGuard from "@/hoc/dashPromoGuard";
 import React, { useState, useEffect } from "react";
 
 interface Transaction {
@@ -137,4 +138,4 @@ const PromotorTransaction: React.FC = () => {
   );
 };
 
-export default PromotorTransaction;
+export default dashPromoGuard(PromotorTransaction) ;

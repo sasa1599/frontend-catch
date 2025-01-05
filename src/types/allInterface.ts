@@ -126,12 +126,14 @@ export interface IEvent {
   venue: string;
   slug: string;
   datetime: string;
+  coupon_promotor: number
   promotor: {
     id: number;
     name: string;
     username: string;
     avatar: string | null;
   };
+  tickets: ITicket[]
 }
 
 export interface ITicket {

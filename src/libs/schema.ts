@@ -36,6 +36,9 @@ export const eventSchema = Yup.object({
     .typeError("Invalid date and time format")
     .required("Date and time are required")
     .min(new Date(), "Date and time must be in the future"),
+  coupon_promotor: Yup.number()
+    .min(0, "coupon_promotor cannot negative")
+    .optional(),
 });
 
 export const ticketSchema = Yup.object({
@@ -54,5 +57,13 @@ export const ticketSchema = Yup.object({
   price: Yup.number()
     .min(0, "Price must be at least 0")
     .required("Price is required")
-    .typeError("Price must be a valid number"), 
+    .typeError("Price must be a valid number"),
 });
+
+export const reviewScehma = Yup.object({
+  rating: Yup.number()
+    .oneOf([1, 2, 3, 4, 5], "Please provide a rating for this event.")
+    .required("Kindly set the rating before proceeding."),
+  comment: Yup.string().required("Share your genuine feedback about this event"),
+});
+

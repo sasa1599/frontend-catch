@@ -14,55 +14,60 @@ export default function TicketOrder({ ticket }: { ticket: ITicket }) {
 
   const { ticketCart, setTicketCart } = context;
 
-  const handleAddTicket = () => {
-    setOrder(order + 1);
-    const ticketCartId = ticketCart?.findIndex(
-      (item) => item.ticket.id == ticket.id
-    );
-    console.log(ticketCartId);
-    if (ticketCartId! > -1 && ticketCart) {
-      const newTicketCart = [...ticketCart];
-      newTicketCart[ticketCartId!].quantity = order + 1;
-      console.log(newTicketCart);
+  // Maximum tickets a user can purchase
+  const MAX_TICKETS = 5;
 
-      setTicketCart(newTicketCart);
-    } else {
-      if (ticketCart?.length! > 0) {
-        setTicketCart([...ticketCart!, { ticket, quantity: 1 }]);
+  const handleAddTicket = () => {
+    if (order < MAX_TICKETS) {
+      setOrder(order + 1);
+      const ticketCartId = ticketCart?.findIndex(
+        (item) => item.ticket.id === ticket.id
+      );
+
+      if (ticketCartId! > -1 && ticketCart) {
+        const newTicketCart = [...ticketCart];
+        newTicketCart[ticketCartId!].quantity = order + 1;
+
+        setTicketCart(newTicketCart);
       } else {
-        setTicketCart([{ ticket, quantity: 1 }]);
+        if (ticketCart?.length! > 0) {
+          setTicketCart([...ticketCart!, { ticket, quantity: 1 }]);
+        } else {
+          setTicketCart([{ ticket, quantity: 1 }]);
+        }
       }
+    } else {
+      alert("You can only buy up to 5 tickets.");
     }
   };
 
   const handleDecreaseTicket = () => {
-    setOrder(order - 1);
-    const ticketCartId = ticketCart?.findIndex(
-      (item) => item.ticket.id == ticket.id
-    );
-    console.log(ticketCart);
+    if (order > 0) {
+      setOrder(order - 1);
+      const ticketCartId = ticketCart?.findIndex(
+        (item) => item.ticket.id == ticket.id
+      );
+      console.log(ticketCart);
 
-    if (ticketCartId! > -1 && ticketCart) {
-      const newTicketCart = [...ticketCart];
-      newTicketCart[ticketCartId!].quantity = order - 1;
-      setTicketCart(newTicketCart);
-    }
-    if (order === 1 && ticketCart && ticketCartId! > -1) {
-      const newTicketCart = [...ticketCart];
-      newTicketCart.splice(ticketCartId as number, 1);
-      setTicketCart(newTicketCart);
+      if (ticketCartId! > -1 && ticketCart) {
+        const newTicketCart = [...ticketCart];
+        newTicketCart[ticketCartId!].quantity = order - 1;
+        setTicketCart(newTicketCart);
+      }
+      if (order === 1 && ticketCart && ticketCartId! > -1) {
+        const newTicketCart = [...ticketCart];
+        newTicketCart.splice(ticketCartId as number, 1);
+        setTicketCart(newTicketCart);
+      }
     }
   };
 
   return (
-    <div className="flex flex-col pt-4 gap-0 bg-gray-950 w-full">
-      {/* <div className="w-[40px] h-[40px] rounded-full bg-black absolute -right-5 bottom-9 border-l border-lightBlue"></div>
-      <div className="w-[40px] h-[40px] rounded-full black absolute -left-5 bottom-9 border-r border-lightBlue"></div> */}
-      <p className="font-semibold text-xl">{ticket.category}</p>
-      {/* <p dangerouslySetInnerHTML={{ __html: ticket.description }}></p> */}
+    <div className="flex flex-col bg-black w-full">
+      <p className="font-semibold text-xl pt-4">{ticket.category}</p>
 
       {/* Click to Order Ticket */}
-      <div className="py-4 border-t border-black flex items-center justify-between">
+      <div className="flex items-center justify-between">
         <span className="font-bold text-yellow-400">
           {formatPrice(ticket.price)}
         </span>
@@ -77,6 +82,7 @@ export default function TicketOrder({ ticket }: { ticket: ITicket }) {
           <div>{order}</div>
           <button
             onClick={handleAddTicket}
+            disabled={order >= MAX_TICKETS} // Disable if order reaches the max
             className="w-[25px] h-[25px] rounded-full font-semibold border-2 border-lightBlue flex items-center justify-center"
           >
             <Plus className="h-4 w-4" />
@@ -84,8 +90,7 @@ export default function TicketOrder({ ticket }: { ticket: ITicket }) {
         </div>
       </div>
 
-      <span>available seats: {ticket.seats} left</span>
+      <span className="text-xs">available seats: {ticket.seats} left</span>
     </div>
   );
 }
-

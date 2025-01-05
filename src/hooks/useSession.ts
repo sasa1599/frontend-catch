@@ -12,9 +12,9 @@ const useSession = () => {
     try {
       setLoading(true);
       const res = await axios.get("http://localhost:8001/api/customers/profile", {
-        withCredentials: true,
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`
         },
       });
 

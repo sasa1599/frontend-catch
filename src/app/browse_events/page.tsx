@@ -1,5 +1,5 @@
-import Card from "@/components/card";
-import LinkCategory from "@/components/category";
+import Card from "@/components/ticket/card";
+import LinkCategory from "@/components/ui/category";
 import { getEvent } from "@/libs/event";
 import { formatDate } from "@/helpers/formatDate";
 import { IEvent } from "@/types/allInterface";
@@ -11,15 +11,32 @@ export default async function Events() {
     return <div>No events found.</div>;
   }
 
+  // Filter and sort events by the closest event date to today
+  const filteredEvents = data
+    .filter((item) => {
+      const eventDate = new Date(item.datetime).getTime();
+      const now = new Date().getTime();
+      return eventDate > now; // Keep only future events
+    })
+    .sort((a, b) => {
+      const eventDateA = new Date(a.datetime).getTime();
+      const eventDateB = new Date(b.datetime).getTime();
+      return eventDateA - eventDateB; // Sort by closest event date
+    });
+
+  if (filteredEvents.length === 0) {
+    return <div>No upcoming events.</div>;
+  }
+
   return (
     <div>
-      <div className="bg-black md:px-44 px-4 py-28  flex flex-col items-start">
+      <div className="bg-black md:px-44 px-4 py-28 flex flex-col items-start">
         {/* Category */}
         <LinkCategory />
 
         {/* Card Grid */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-4 w-full">
-          {data.map((item, idx) => (
+          {filteredEvents.map((item, idx) => (
             <Card
               key={idx}
               slug={item.slug}

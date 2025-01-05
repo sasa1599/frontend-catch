@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Formik, Field, ErrorMessage, Form } from "formik";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { ICategory, IEvent, ILocation, IPromotor } from "@/types/allInterface";
+import { ICategory, IEvent, ILocation } from "@/types/allInterface";
 import RichTextEditor from "@/components/form/textEditor";
 import { FieldThumbnail } from "@/components/form/thumbnail";
 import { revalidate } from "../../libs/action";
@@ -15,7 +15,7 @@ import "react-calendar/dist/Calendar.css";
 import "react-clock/dist/Clock.css";
 
 const initialValues: IEvent = {
-  id: 0, // Default ID
+  id: 0,
   title: "",
   category: ICategory.concert,
   thumbnail: "",
@@ -23,14 +23,15 @@ const initialValues: IEvent = {
   location: ILocation.jakarta,
   venue: "",
   datetime: "",
-  slug: "", // Default slug
+  slug: "",
+  coupon_promotor: 0,
   promotor: {
     id: 0,
     name: "",
     username: "",
     avatar: null,
   },
-  tickets: [], // Default tickets (empty array)
+  tickets: [],
 };
 
 const base_url = process.env.NEXT_PUBLIC_BASE_URL_BE;
@@ -63,7 +64,9 @@ export default function CreateEventPage() {
       const res = await fetch(`${base_url}/promotor/create-event`, {
         method: "POST",
         body: formData,
-        credentials: "include",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
 
       const result = await res.json();
@@ -97,6 +100,8 @@ export default function CreateEventPage() {
       }}
     >
       {(props) => {
+        console.log(props);
+        
         return (
           <Form className="flex flex-col gap-3 w-full items-center justify-center text-black">
             {/* Thumbnail */}
@@ -124,6 +129,7 @@ export default function CreateEventPage() {
               <Field
                 name="title"
                 type="text"
+                placeholder="your event title"
                 className="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   const value = e.target.value;
@@ -144,6 +150,7 @@ export default function CreateEventPage() {
               <Field
                 name="venue"
                 type="text"
+                placeholder="your event place"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
               />
               <ErrorMessage
@@ -151,56 +158,6 @@ export default function CreateEventPage() {
                 component="span"
                 className="text-sm text-red-500"
               />
-            </div>
-            {/* DateTime Picker */}
-            <div>
-              <label
-                htmlFor="datetime"
-                className="block mb-2 text-sm font-medium"
-              >
-                Date & Time
-              </label>
-              <Field name="datetime">
-                {({ field, form }: { field: any; form: any }) => (
-                  <div>
-                    <DateTimePicker
-                      id="dateTimePicker"
-                      onChange={(value: Date | null) => {
-                        console.log("Selected DateTime:", value); // Debug
-                        form.setFieldValue(field.name, value);
-                      }}
-                      value={field.value}
-                      format="dd/MM/y h:mm a"
-                      className="custom-calendar"
-                      clearIcon={null}
-                    />
-                    {field.value ? (
-                      <p className="mt-3 text-sm text-gray-600">
-                        Selected Date & Time:{" "}
-                        <span className="font-semibold">
-                          {field.value.toLocaleString("ID-id", {
-                            day: "2-digit",
-                            month: "2-digit",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            hour12: true,
-                          })}
-                        </span>
-                      </p>
-                    ) : (
-                      <p className="mt-3 text-sm text-gray-400">
-                        Please select a date and time
-                      </p>
-                    )}
-                    <ErrorMessage
-                      name="datetime"
-                      component="span"
-                      className="text-sm text-red-500"
-                    />
-                  </div>
-                )}
-              </Field>
             </div>
 
             <div className="flex gap-5">
@@ -255,6 +212,83 @@ export default function CreateEventPage() {
                 />
               </div>
             </div>
+            {/* DateTime Picker */}
+            <div>
+              <label
+                htmlFor="datetime"
+                className="block mb-2 text-sm font-medium"
+              >
+                Date & Time
+              </label>
+              <Field name="datetime">
+                {({ field, form }: { field: any; form: any }) => (
+                  <div>
+                    <DateTimePicker
+                      id="dateTimePicker"
+                      onChange={(value: Date | null) => {
+                        console.log("Selected DateTime:", value); // Debug
+                        form.setFieldValue(field.name, value);
+                      }}
+                      value={field.value}
+                      format="dd/MM/y h:mm a"
+                      className="custom-calendar"
+                      clearIcon={null}
+                    />
+                    {field.value ? (
+                      <p className="mt-3 text-sm text-gray-600">
+                        Selected Date & Time:{" "}
+                        <span className="font-semibold">
+                          {field.value.toLocaleString("ID-id", {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: true,
+                          })}
+                        </span>
+                      </p>
+                    ) : (
+                      <p className="mt-3 text-sm text-gray-400">
+                        Please select a date and time
+                      </p>
+                    )}
+                    <ErrorMessage
+                      name="datetime"
+                      component="span"
+                      className="text-sm text-red-500"
+                    />
+                  </div>
+                )}
+              </Field>
+            </div>
+            {/* Discount Coupon */}
+            <div className="flex flex-col px-2 w-[230px]">
+              <label
+                htmlFor="coupon_promotor"
+                className="my-2 text-black font-[500]"
+              >
+                Coupon for customer
+              </label>
+              <Field
+                type="number"
+                name="coupon_promotor"
+                className="py-1 px-2 outline-none border rounded-md w-fit"
+                min={0}
+              />
+              <ErrorMessage
+                name="coupon_promotor"
+                component="div"
+                className="text-red-500 text-xs mt-1 ml-1"
+              />
+              {!props.errors.coupon_promotor && (
+                <div className="text-xs ml-2 text-blue-400">
+                  Set the max number of people who can use a coupon. If left
+                  blank, anyone can use a coupon.
+                </div>
+              )}
+            </div>
+
             {/* Description */}
             <div>
               <label

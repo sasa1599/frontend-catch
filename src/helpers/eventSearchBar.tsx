@@ -1,103 +1,113 @@
-"use client";
-
-import { useCallback, useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useDebounce } from "use-debounce";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { IEvent } from "@/types/allInterface";
 import Link from "next/link";
 import Image from "next/image";
 
 const base_url = process.env.NEXT_PUBLIC_BASE_URL_BE;
 
-export default function EventSearchBar() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const [event, setEvents] = useState<IEvent[]>([]);
-  const [value, setValue] = useState<string>(""); // Start with an empty string
-  const [text] = useDebounce(value, 500);
-  const [isLoading, setIsloading] = useState<boolean>(false);
+export default function SearchBar() {
+  const [value, setValue] = useState<string>("");
+  const [debouncedValue, setDebouncedValue] = useDebounce(value, 500);
+  const [events, setEvents] = useState<IEvent[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const getData = async () => {
+  // Function to fetch events with improved error handling
+  const fetchEvents = async () => {
+    if (!debouncedValue) {
+      setEvents([]);
+      return;
+    }
+
     try {
-      setIsloading(true);
-      const res = await fetch(`${base_url}/events?search=${text}`);
-      const result = await res.json();
-      setEvents(result.event);
-    } catch (err) {
-      console.log(err);
+      setIsLoading(true);
+      const response = await fetch(`${base_url}/events?search=${debouncedValue}`);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(`Error fetching events: ${response.statusText}`);
+      }
+
+      setEvents(data.event || []);
+    } catch (error) {
+      console.error("Error fetching events:", error);
     } finally {
-      setIsloading(false);
+      setIsLoading(false);
     }
   };
 
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set(name, value);
-      return params.toString();
-    },
-    [searchParams]
-  );
-
   useEffect(() => {
-    if (text) {
-      router.push(pathname + "?" + createQueryString("keyword", text));
-    } else {
-      router.push(pathname); // Reset search params when text is empty
+    fetchEvents();
+  }, [debouncedValue]);
+
+  // Function to format date for display in search results
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      return "Invalid date";
     }
-    getData();
-  }, [text]);
+
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: "short",
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
+    };
+
+    return new Intl.DateTimeFormat("en-US", options).format(date);
+  };
 
   return (
-    <div className="w-full">
-      <div className="flex w-full justify-end mb-5">
-        <input
-          type="search"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder="Search .."
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[250px] p-2.5"
-        />
-      </div>
-
-      {value.length > 0 && (
-        <>
+    <div className="relative w-full md:w-96">
+      <input
+        type="search"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder="Search events..."
+        className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+      {value && (
+        <div
+          className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg mt-2 z-10"
+          style={{
+            maxHeight: '300px', // Sesuaikan tinggi maksimum
+            overflowY: 'hidden', // Sembunyikan scrollbar
+            padding: '10px',
+          }}
+        >
           {isLoading ? (
-            <div>Loading...</div>
-          ) : event && event.length === 0 ? (
-            <div>Not found</div>
+            <div className="p-4 text-center text-gray-500">Loading...</div>
+          ) : events.length === 0 ? (
+            <div className="p-4 text-center text-gray-500">Tidak ada hasil</div>
           ) : (
-            <div className="absolute z-10 w-96 bg-black mt-32 opacity-70 rounded-md shadow-lg">
-              {event.map((item, idx) => (
+            <ul className="divide-y divide-gray-200">
+              {events.map((event, idx) => (
                 <li
                   key={idx}
-                  data-cy="event-item"
-                  className="p-2 hover:bg-gray-300"
+                  className="p-2 hover:bg-gray-100"
+                  style={{ whiteSpace: 'pre-wrap' }}
                 >
-                  <div className="flex items-center space-x-4">
-                    <div>
+                  <Link href={`/browse_events/${event.slug}`}>
+                    <div className="flex items-center space-x-4">
                       <Image
-                        src={item.thumbnail}
-                        fill
-                        alt={item.title}
-                        className="rounded-md"
+                        src={event.thumbnail}
+                        alt={event.title}
+                        width={50}
+                        height={50}
+                        className="rounded-md object-cover"
                       />
-                    </div>
-                    <div>
-                      <Link href={`/browse_events/${item.slug}`}>
-                        <div className="font-bold">{item.title}</div>
-                      </Link>
-                      <div className="text-sm text-gray-500">
-                        {item.datetime}
+                      <div>
+                        <p className="font-semibold text-gray-900">{event.title}</p>
+                        <p className="text-sm text-gray-500">{formatDate(event.datetime)}</p>
+                        <p className="text-sm text-gray-500">{event.location}</p>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 </li>
               ))}
-            </div>
+            </ul>
           )}
-        </>
+        </div>
       )}
     </div>
   );

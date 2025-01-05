@@ -1,43 +1,56 @@
-const base_url = process.env.NEXT_PUBLIC_BASE_URL_BE;
+import axios from "axios";
 
-export async function getTransactionDetail(transaction_id: string) {
+const base_url = process.env.NEXT_PUBLIC_BASE_URL_BE;
+export async function getCustomerOrderDetail() {
   try {
-    const res = await fetch(`${base_url}/order/${transaction_id}`, {
+    const res = await axios.get(`${base_url}/order/user/detail`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    return res.data?.result || [];
+  } catch (err) {
+    console.error("Error fetching order details:", err);
+    return [];
+  }
+}
+
+export async function getOrderDetail(order_id: string) {
+  try {
+    const res = await fetch(`${base_url}/order/${order_id}`, {
       next: { revalidate: 0 },
     });
+
     const data = await res.json();
+
     return data?.result;
   } catch (err) {
     console.log(err);
   }
 }
 
-export async function getSnapToken(final_price: number) {
-  const order_id = "";
-
+export async function getSnapToken(order_id: number, final_price: number) {
   try {
-    const res = await fetch(`${base_url}/order/payment`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        order_id: order_id,
+    const token = localStorage.getItem("token");
+    console.log("Token from localStorage:", token); // Pastikan token ada
+
+    const { data } = await axios.post(
+      "http://localhost:8001/api/order/payment",
+      {
+        order_id,
         gross_amount: final_price,
-      }),
-      next: { revalidate: 0 },
-    });
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-    if (!res.ok) {
-      throw new Error(`HTTP error! Status: ${res.status}`);
-    }
-
-    const data = await res.json();
     return data.result;
   } catch (err) {
-    console.error("Error fetching Snap Token:", err);
-    throw err;
+    console.log(err);
   }
 }
-
-

@@ -6,6 +6,7 @@ import axios from "axios";
 import CustomerSidebar from "@/components/ui/sidebar";
 import Image from "next/image";
 import { toast } from "react-toastify";
+import dashCustGuard from "@/hoc/dashCustoGuard";
 
 interface Coupon {
   id: number;
@@ -49,7 +50,7 @@ const ProfileCustomer: React.FC = () => {
       });
       const couponsData = res.data.items || [];
       const userCoupons = couponsData.filter(
-        (coupon: any) => coupon.user_id === user.id
+        (coupon: any) => coupon.customer_id === user.id //perhatiin ini untuk display discount
       );
       setCoupons(userCoupons);
     } catch (err) {
@@ -73,9 +74,11 @@ const ProfileCustomer: React.FC = () => {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
-      toast.success("Avatar updated successfully! Please refresh the page to update it.");
+      toast.success(
+        "Avatar updated successfully! Please refresh the page to update it."
+      );
       console.log(res.data.message);
-      //   window.location.reload(); 
+      //   window.location.reload();
     } catch (err) {
       toast.error("Failed to upload avatar. Please try again.");
       console.error("Error uploading avatar:", err);
@@ -127,7 +130,7 @@ const ProfileCustomer: React.FC = () => {
                 <img
                   src={user.avatar || "/user.png"}
                   alt="Avatar"
-                  className="w-20 h-20 rounded-full border-4 border-white shadow-md"
+                  className="w-20 h-20 rounded-full border-4 border-white shadow-md object-cover"
                 />
                 <h2 className="text-xl font-semibold text-gray-800 mt-4">
                   {user.name || user.username}
@@ -181,9 +184,7 @@ const ProfileCustomer: React.FC = () => {
                             </span>
                             <span className="text-gray-500 text-sm">
                               Expires:{" "}
-                              {new Date(
-                                coupon.expired_at
-                              ).toLocaleDateString()}
+                              {new Date(coupon.expired_at).toLocaleDateString()}
                             </span>
                           </div>
                         ))}
@@ -220,4 +221,5 @@ const ProfileCustomer: React.FC = () => {
   );
 };
 
-export default ProfileCustomer;
+export default dashCustGuard(ProfileCustomer)
+;
