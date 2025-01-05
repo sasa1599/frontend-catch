@@ -1,11 +1,10 @@
-import { IEvent, ITicket } from "@/types/allInterface";
+import { ITicket } from "@/types/allInterface";
 import Image from "next/image";
 import Link from "next/link";
 import { formatDateEvent, timeFormat } from "@/helpers/formatDate";
 import { getEventSlug } from "@/libs/event";
 import ShowTickets from "@/components/ticket/showTicket";
 import { FaLocationArrow, FaTag } from "react-icons/fa";
-import { getTicket } from "@/libs/ticket";
 
 export default async function EventDetail({
   params,
@@ -13,7 +12,6 @@ export default async function EventDetail({
   params: { slug: string };
 }) {
   const event = await getEventSlug(params.slug);
-  const ticket: ITicket[] = await getTicket(+event.id);
 
   if (!event) {
     return (
@@ -41,8 +39,8 @@ export default async function EventDetail({
         <Image
           src={`${event.thumbnail}`}
           alt={event.title}
-          width={500} // Explicit width
-          height={500} // Explicit height
+          width={500}
+          height={500}
           className="object-contain"
           priority
         />
@@ -87,7 +85,7 @@ export default async function EventDetail({
 
         <div className="flex flex-col gap-2">
           {/* Ticket */}
-          <ShowTickets tickets={ticket} />
+          <ShowTickets event_id={event.id} />
 
           <hr className=" border-t-2 border-gray-300 mt-5" />
           <div className="text-white text-sm font-semibold">About</div>

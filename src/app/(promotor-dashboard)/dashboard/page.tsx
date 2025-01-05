@@ -66,7 +66,11 @@ const DashboardPromotor: React.FC = () => {
       try {
         const base_url = process.env.NEXT_PUBLIC_BASE_URL_BE;
         const response = await axios.get(`${base_url}/events/promotor`, {
-          withCredentials: true,
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
         });
 
         if (response.data) {

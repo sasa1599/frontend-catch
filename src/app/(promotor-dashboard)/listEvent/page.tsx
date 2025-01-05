@@ -26,10 +26,11 @@ const ListEvents: React.FC = () => {
       try {
         setIsLoading(true);
         const response = await fetch(`${base_url}/events/promotor`, {
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
         });
 
         if (!response.ok) {

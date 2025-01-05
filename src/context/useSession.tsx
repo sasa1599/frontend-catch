@@ -3,7 +3,13 @@
 "use client";
 
 import { IPromotor, IUser } from "@/types/user";
-import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from "react";
 
 interface SessionContextProps {
   isAuth: boolean;
@@ -13,28 +19,32 @@ interface SessionContextProps {
   setUser: (user: IUser | IPromotor | null) => void;
 }
 
-const SessionContext = createContext<SessionContextProps | undefined>(undefined);
+const SessionContext = createContext<SessionContextProps | undefined>(
+  undefined
+);
 
-export const SessionProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const SessionProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [isAuth, setIsAuth] = useState<boolean>(false);
   const [user, setUser] = useState<IUser | IPromotor | null>(null);
   const [loading, setLoading] = useState<boolean>(true); // State loading
 
   const checkSession = async () => {
     try {
-      const token = await localStorage.getItem("token");
-      const role = await localStorage.getItem("role");
+      const token = localStorage.getItem("token");
+      const role = localStorage.getItem("role");
       let res: any = [];
 
       if (role === "customer") {
         res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_BE}/customers/profile`, {
           method: "GET",
-          credentials: "include",
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
       } else if (role === "promotor") {
         res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_BE}/promotors/profile`, {
           method: "GET",
-          credentials: "include",
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
       }
 
@@ -54,7 +64,9 @@ export const SessionProvider: React.FC<{ children: ReactNode }> = ({ children })
   }, []);
 
   return (
-    <SessionContext.Provider value={{ isAuth, user, loading, setIsAuth, setUser }}>
+    <SessionContext.Provider
+      value={{ isAuth, user, loading, setIsAuth, setUser }}
+    >
       {children}
     </SessionContext.Provider>
   );

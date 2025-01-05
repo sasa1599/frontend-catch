@@ -11,15 +11,25 @@ export default async function Events() {
     return <div>No events found.</div>;
   }
 
+  const filteredEvents = data.filter((item) => {
+    const eventDate = new Date(item.datetime).getTime();
+    const now = new Date().getTime();
+    return eventDate > now;
+  });
+
+  if (filteredEvents.length === 0) {
+    return <div>No upcoming events.</div>;
+  }
+
   return (
     <div>
-      <div className="bg-black md:px-44 px-4 py-28  flex flex-col items-start">
+      <div className="bg-black md:px-44 px-4 py-28 flex flex-col items-start">
         {/* Category */}
         <LinkCategory />
 
         {/* Card Grid */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-4 w-full">
-          {data.map((item, idx) => (
+          {filteredEvents.map((item, idx) => (
             <Card
               key={idx}
               slug={item.slug}
