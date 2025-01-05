@@ -7,6 +7,7 @@ import BookingsCustomerClient from "@/components/order/BookingCustomer";
 import axios from "axios";
 import { useSession } from "@/context/useSession";
 import dashCustGuard from "@/hoc/dashCustoGuard";
+
 import Loading from "../loading";
 
 const BookingsCustomer: React.FC = () => {
@@ -44,7 +45,7 @@ const BookingsCustomer: React.FC = () => {
   }
 
   if (orderData.length === 0) {
-    return <div><Loading/></div>;
+    return <div>You have no event!</div>;
   }
 
   return (

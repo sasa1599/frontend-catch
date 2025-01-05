@@ -87,7 +87,7 @@ export default function Footer() {
               </h2>
               <ul className="font-medium">
                 <li className="mb-4">
-                  <Link href="#" className="hover:underline">
+                  <Link href="/browse_events" className="hover:underline">
                     Our Event
                   </Link>
                 </li>

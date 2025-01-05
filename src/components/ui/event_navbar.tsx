@@ -97,7 +97,7 @@ const Navbar = () => {
                 Login
               </button>
               {dropdownOpen && (
-                <div className="dropdown-menu absolute top-full mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
+                <div className="dropdown-menu absolute top-full mt-2 w-40 bg-black border border-gray-200 rounded-lg shadow-lg z-20">
                   {loginOptions.map((option) => (
                     <Link
                       key={option.label}
@@ -146,7 +146,7 @@ const Navbar = () => {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:outline-none"
             />
             {/* Search dropdown below the input */}
-            <div className="absolute top-full mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-lg z-20">
+            <div className="absolute top-full mt-2 w-full bg-black border border-gray-300 rounded-lg shadow-lg z-20">
               <ul className="mt-2">
                 {menuItems.map((item) => (
                   <li key={item.label}>
@@ -175,7 +175,7 @@ const Navbar = () => {
                   Login
                 </button>
                 {dropdownOpen && (
-                  <div className="dropdown-menu absolute top-full mt-2 right-0 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
+                  <div className="dropdown-menu absolute top-full mt-2 right-0 w-40 bg-black border border-gray-200 rounded-lg shadow-lg z-20">
                     {loginOptions.map((option) => (
                       <Link
                         key={option.label}

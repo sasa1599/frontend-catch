@@ -40,6 +40,8 @@ const Navbar = () => {
     "/transaksiCustomer",
     "/ticketCustomer",
     "/browse_events",
+    "/browse_events/[slug]",
+    "/browse_events/category/[category]]",
     "/Order",
     "/ListEvents",
   ];

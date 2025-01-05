@@ -18,6 +18,12 @@ export default function BookingsCustomerClient({
     filter === "All" ? true : ticket.status_order === filter
   );
 
+  const isPastEvent = (datetime: string) => {
+    const eventDate = new Date(datetime).getTime();
+    const now = new Date().getTime();
+    return eventDate < now;
+  };
+
   return (
     <div className="flex-1 p-6 bg-gray-50">
       <div className="max-w-7xl mx-auto">
@@ -47,6 +53,7 @@ export default function BookingsCustomerClient({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
           {filteredTickets.length > 0 ? (
             filteredTickets.map((order, idx) => {
+              
               const ticketTransaction = order.OrderDetails[0];
               const ticketEvent = ticketTransaction?.ticket.event;
 
@@ -72,10 +79,10 @@ export default function BookingsCustomerClient({
                       </span>
                     </div>
                     <h2 className="text-lg font-semibold text-gray-800">
-                      {ticketEvent.title || "Unknown Event"}
+                      {ticketEvent?.title || "Unknown Event"}
                     </h2>
                     <p className="text-sm text-gray-600 mt-2">
-                      {ticketEvent.datetime
+                      {ticketEvent?.datetime
                         ? formatOrderDate(ticketEvent.datetime)
                         : "No date available"}
                     </p>
@@ -95,16 +102,34 @@ export default function BookingsCustomerClient({
                       </p>
                     </div>
                   </div>
-                  {/* Action Buttons */}
-                  <div className="mt-4 flex gap-2">
-                    {/* Remove Pay button */}
-                    <button className="flex-1 py-2 text-center text-blue-600 border border-blue-500 rounded hover:bg-blue-50">
-                      View Details
-                    </button>
-                    <button className="flex-1 py-2 text-center text-green-600 border border-green-500 rounded hover:bg-green-50">
-                      Download Ticket
-                    </button>
-                  </div>
+                  {order.status_order !== "CANCELLED" ? (
+                    <div className="mt-4 flex gap-2">
+                      <button className="flex-1 py-2 text-center text-blue-600 border border-blue-500 rounded hover:bg-blue-50">
+                        View Details
+                      </button>
+                      <button className="flex-1 py-2 text-center text-green-600 border border-green-500 rounded hover:bg-green-50">
+                        Download Ticket
+                      </button>
+                    </div>
+                  ) : (
+                    <p className="text-red-600 text-sm mt-4">
+                      This order has been cancelled.
+                    </p>
+                  )}
+                  {order.status_order === "SUCCESS" &&
+                    ticketEvent?.datetime &&
+                    isPastEvent(ticketEvent.datetime) && (
+                      <div className="mt-4">
+                        <button
+                          className="w-full py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 transition"
+                          onClick={() =>
+                            window.open(`/review/${order.OrderDetails[0].ticket.event}`, "_blank")
+                          }
+                        >
+                          Write a Review
+                        </button>
+                      </div>
+                    )}
                 </div>
               );
             })
