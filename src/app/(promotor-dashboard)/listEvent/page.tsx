@@ -8,7 +8,12 @@ import useProSession from "@/hooks/promotorSession";
 import dashPromoGuard from "@/hoc/dashPromoGuard";
 
 const ListEvents: React.FC = () => {
-  const { isAuth, user, loading: sessionLoading, error: sessionError } = useProSession();
+  const {
+    isAuth,
+    user,
+    loading: sessionLoading,
+    error: sessionError,
+  } = useProSession();
   const [events, setEvents] = useState<IEvent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -26,9 +31,9 @@ const ListEvents: React.FC = () => {
       try {
         setIsLoading(true);
         const response = await fetch(`${base_url}/events/promotor`, {
-          credentials: "include",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
 
@@ -56,7 +61,7 @@ const ListEvents: React.FC = () => {
 
     // Define categories for rounding
     const categories = [20000, 100000, 500000, 1000000];
-    let roundedPrice = categories[0]; 
+    let roundedPrice = categories[0];
 
     // Find the nearest price category
     for (let i = 0; i < categories.length; i++) {
@@ -102,8 +107,11 @@ const ListEvents: React.FC = () => {
     const paragraphs = Array.from(tempDiv.getElementsByTagName("p"));
 
     // Iterate through paragraphs and remove <p> tags
-    paragraphs.forEach(p => {
-      p.parentNode?.replaceChild(document.createTextNode(p.textContent || ""), p);
+    paragraphs.forEach((p) => {
+      p.parentNode?.replaceChild(
+        document.createTextNode(p.textContent || ""),
+        p
+      );
     });
 
     return tempDiv.innerHTML;
@@ -138,7 +146,15 @@ const ListEvents: React.FC = () => {
         <h1 className="text-2xl font-bold text-gray-800 mb-4">Your Events</h1>
         {events.length === 0 ? (
           <div className="text-center text-gray-600 mt-8">
-            No events found. Start by creating a new event!
+            <p className="mb-4">
+              You don't have any events yet. Start by creating a new one!
+            </p>
+            <a
+              href="/promotorManagement"
+              className="inline-block bg-blue-500 text-white font-semibold px-4 py-2 rounded hover:bg-blue-600 transition duration-200"
+            >
+              Create New Event
+            </a>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -189,21 +205,30 @@ const ListEvents: React.FC = () => {
       {selectedEvent && (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-10">
           <div className="bg-white p-6 rounded-lg w-1/2">
-            <h2 className="text-2xl font-bold text-gray-800">{selectedEvent.title}</h2>
-            <p className="text-gray-600 mt-4">Price starts from: {getLowestTicketPrice(selectedEvent.tickets)}</p>
+            <h2 className="text-2xl font-bold text-gray-800">
+              {selectedEvent.title}
+            </h2>
+            <p className="text-gray-600 mt-4">
+              Price starts from: {getLowestTicketPrice(selectedEvent.tickets)}
+            </p>
             <p className="text-gray-600 mt-4">Tickets:</p>
             <ul>
               {selectedEvent.tickets.map((ticket, index) => (
                 <li key={index} className="text-gray-500">
                   {ticket.price === 0
                     ? "Free"
-                    : getFormattedTicketPrice(ticket.price)} 
+                    : getFormattedTicketPrice(ticket.price)}
                 </li>
               ))}
             </ul>
             <div className="mt-4">
               <strong className="text-gray-600">Description:</strong>
-              <div className="text-gray-600 mt-2" dangerouslySetInnerHTML={{ __html: sanitizeDescription(selectedEvent.description) }} />
+              <div
+                className="text-gray-600 mt-2"
+                dangerouslySetInnerHTML={{
+                  __html: sanitizeDescription(selectedEvent.description),
+                }}
+              />
             </div>
             <p className="text-gray-600 mt-4">Slug: {selectedEvent.slug}</p>
             <button
@@ -219,4 +244,4 @@ const ListEvents: React.FC = () => {
   );
 };
 
-export default dashPromoGuard(ListEvents) ;
+export default dashPromoGuard(ListEvents);

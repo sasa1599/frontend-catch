@@ -66,3 +66,4 @@ export const reviewScehma = Yup.object({
     .required("Kindly set the rating before proceeding."),
   comment: Yup.string().required("Share your genuine feedback about this event"),
 });
+

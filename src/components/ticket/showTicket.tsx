@@ -73,11 +73,17 @@ export default function ShowTickets({ event_id }: { event_id: string }) {
 
   useEffect(() => {
     const getData = async () => {
-      const data = await getTicket(+event_id);
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("Token not found");
+        return;
+      }
+      const data = await getTicket(+event_id, token); // Kirim token di sini
       setTickets(data);
     };
     getData();
-  }, []);
+  }, [event_id]);
+  
 
   return (
     <main>

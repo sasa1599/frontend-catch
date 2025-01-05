@@ -1,27 +1,25 @@
 "use client";
 
 import { ErrorMessage, Form, Formik, FormikProps } from "formik";
-
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
 import { useState } from "react";
-import { reviewScehma } from "@/libs/schema";
-
+import type { FormReview } from "@/types/review";
 import { toast } from "react-toastify";
-import { IReview } from "@/types/review";
-import axios from "axios";
-import StartRating from "./starRating";
+import StarRating from "./starRating";
+import axios from "@/helpers/axios";
+import { reviewScehma } from "@/libs/schema";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 export default function FormReview({ event_id }: { event_id: string }) {
   const [isLoading, SetIsLoading] = useState<boolean>(false);
-  const initialValue: IReview = {
+  const initialValue: FormReview = {
     rating: 0,
     comment: "",
   };
 
-  const handleAdd = async (review: IReview) => {
+  const handleAdd = async (review: FormReview) => {
     try {
       SetIsLoading(true);
       const { data } = await axios.post(`/reviews/${event_id}`, review, {
@@ -47,7 +45,7 @@ export default function FormReview({ event_id }: { event_id: string }) {
           handleAdd(values);
         }}
       >
-        {({ setFieldValue, values }: FormikProps<IReview>) => {
+        {({ setFieldValue, values }: FormikProps<FormReview>) => {
           const commentChange = (e: string) => {
             setFieldValue("comment", e);
             // console.log(e);
@@ -55,7 +53,7 @@ export default function FormReview({ event_id }: { event_id: string }) {
           return (
             <Form className="flex flex-col gap-4">
               <div className="flex gap-2">
-                <StartRating
+                <StarRating
                   setFieldValue={setFieldValue}
                   values={values.rating}
                 />
@@ -86,7 +84,7 @@ export default function FormReview({ event_id }: { event_id: string }) {
                     : "hover:bg-lightBlue hover:text-white"
                 } py-2 mx-2 rounded-lg transition ease-linear font-semibold border-2 border-lightBlue`}
               >
-                {isLoading ? "Loading ..." : "Share Your Review"}
+                {isLoading ? "Loading ..." : "Submit Review"}
               </button>
             </Form>
           );

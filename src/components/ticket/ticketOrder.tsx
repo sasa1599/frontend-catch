@@ -14,49 +14,57 @@ export default function TicketOrder({ ticket }: { ticket: ITicket }) {
 
   const { ticketCart, setTicketCart } = context;
 
+  // Maximum tickets a user can purchase
+  const MAX_TICKETS = 5;
+
   const handleAddTicket = () => {
-    setOrder(order + 1);
-    const ticketCartId = ticketCart?.findIndex(
-      (item) => item.ticket.id === ticket.id
-    );
+    if (order < MAX_TICKETS) {
+      setOrder(order + 1);
+      const ticketCartId = ticketCart?.findIndex(
+        (item) => item.ticket.id === ticket.id
+      );
 
-    if (ticketCartId! > -1 && ticketCart) {
-      const newTicketCart = [...ticketCart];
-      newTicketCart[ticketCartId!].quantity = order + 1;
+      if (ticketCartId! > -1 && ticketCart) {
+        const newTicketCart = [...ticketCart];
+        newTicketCart[ticketCartId!].quantity = order + 1;
 
-      setTicketCart(newTicketCart);
-    } else {
-      if (ticketCart?.length! > 0) {
-        setTicketCart([...ticketCart!, { ticket, quantity: 1 }]);
+        setTicketCart(newTicketCart);
       } else {
-        setTicketCart([{ ticket, quantity: 1 }]);
+        if (ticketCart?.length! > 0) {
+          setTicketCart([...ticketCart!, { ticket, quantity: 1 }]);
+        } else {
+          setTicketCart([{ ticket, quantity: 1 }]);
+        }
       }
+    } else {
+      alert("You can only buy up to 5 tickets.");
     }
   };
 
   const handleDecreaseTicket = () => {
-    setOrder(order - 1);
-    const ticketCartId = ticketCart?.findIndex(
-      (item) => item.ticket.id == ticket.id
-    );
-    console.log(ticketCart);
+    if (order > 0) {
+      setOrder(order - 1);
+      const ticketCartId = ticketCart?.findIndex(
+        (item) => item.ticket.id == ticket.id
+      );
+      console.log(ticketCart);
 
-    if (ticketCartId! > -1 && ticketCart) {
-      const newTicketCart = [...ticketCart];
-      newTicketCart[ticketCartId!].quantity = order - 1;
-      setTicketCart(newTicketCart);
-    }
-    if (order === 1 && ticketCart && ticketCartId! > -1) {
-      const newTicketCart = [...ticketCart];
-      newTicketCart.splice(ticketCartId as number, 1);
-      setTicketCart(newTicketCart);
+      if (ticketCartId! > -1 && ticketCart) {
+        const newTicketCart = [...ticketCart];
+        newTicketCart[ticketCartId!].quantity = order - 1;
+        setTicketCart(newTicketCart);
+      }
+      if (order === 1 && ticketCart && ticketCartId! > -1) {
+        const newTicketCart = [...ticketCart];
+        newTicketCart.splice(ticketCartId as number, 1);
+        setTicketCart(newTicketCart);
+      }
     }
   };
 
   return (
     <div className="flex flex-col bg-black w-full">
       <p className="font-semibold text-xl pt-4">{ticket.category}</p>
-      {/* <p dangerouslySetInnerHTML={{ __html: ticket.description }}></p> */}
 
       {/* Click to Order Ticket */}
       <div className="flex items-center justify-between">
@@ -74,6 +82,7 @@ export default function TicketOrder({ ticket }: { ticket: ITicket }) {
           <div>{order}</div>
           <button
             onClick={handleAddTicket}
+            disabled={order >= MAX_TICKETS} // Disable if order reaches the max
             className="w-[25px] h-[25px] rounded-full font-semibold border-2 border-lightBlue flex items-center justify-center"
           >
             <Plus className="h-4 w-4" />

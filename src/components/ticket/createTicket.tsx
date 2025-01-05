@@ -49,7 +49,7 @@ export default function CreateTicketPage({
 
       revalidate("tickets");
       toast.success(result.message);
-      router.push("/dashboard");
+      router.push(`/promotorManagement/${+params.event_id}`);
     } catch (err) {
       console.error(err);
     } finally {

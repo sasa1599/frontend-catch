@@ -4,11 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import AvatarMenu from "./avatarmenu";
-import { deleteCookie } from "../libs/action";
 import { IUser, IPromotor } from "@/types/user";
 import { useSession } from "@/context/useSession";
 import SearchBar from "@/helpers/searchBar";
+import AvatarMenu from "./avatarmenu";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -100,7 +99,7 @@ const Navbar = () => {
             <Link
               key={item.label}
               href={item.href}
-              className="text-black hover:opacity-70 transition-opacity"
+              className=" hover:opacity-70 transition-opacity"
             >
               {item.label}
             </Link>
@@ -110,7 +109,7 @@ const Navbar = () => {
           ) : (
             <div className="relative">
               <button
-                className="dropdown-button text-black hover:opacity-70 transition-opacity"
+                className="dropdown-button  hover:opacity-70 transition-opacity"
                 onClick={() => setDropdownOpen((prev) => !prev)}
               >
                 Login
@@ -121,7 +120,7 @@ const Navbar = () => {
                     <Link
                       key={option.label}
                       href={option.href}
-                      className="block px-4 py-2 text-black hover:bg-gray-100"
+                      className="block px-4 py-2  hover:bg-gray-100"
                     >
                       {option.label}
                     </Link>
@@ -135,7 +134,7 @@ const Navbar = () => {
           </button>
         </div>
         <button
-          className="block md:hidden text-black"
+          className="block md:hidden "
           onClick={() => setMenuOpen((prev) => !prev)}
         >
           <svg
@@ -171,7 +170,7 @@ const Navbar = () => {
                   <li key={item.label}>
                     <Link
                       href={item.href}
-                      className="block px-4 py-2 text-black hover:bg-gray-100"
+                      className="block px-4 py-2  hover:bg-gray-100"
                     >
                       {item.label}
                     </Link>
@@ -188,7 +187,7 @@ const Navbar = () => {
             ) : (
               <li>
                 <button
-                  className="dropdown-button text-black hover:opacity-70 transition-opacity"
+                  className="dropdown-button  hover:opacity-70 transition-opacity"
                   onClick={() => setDropdownOpen((prev) => !prev)}
                 >
                   Login
@@ -199,7 +198,7 @@ const Navbar = () => {
                       <Link
                         key={option.label}
                         href={option.href}
-                        className="block px-4 py-2 text-black hover:bg-gray-100"
+                        className="block px-4 py-2  hover:bg-gray-100"
                       >
                         {option.label}
                       </Link>

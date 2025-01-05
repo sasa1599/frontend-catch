@@ -1,5 +1,5 @@
-import Card from "@/components/card";
-import LinkCategory from "@/components/category";
+import Card from "@/components/ticket/card";
+import LinkCategory from "@/components/ui/category";
 import { getEvent } from "@/libs/event";
 import { formatDate } from "@/helpers/formatDate";
 import { IEvent } from "@/types/allInterface";

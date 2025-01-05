@@ -24,7 +24,6 @@ export async function getOrderDetail(order_id: string) {
     });
 
     const data = await res.json();
-    console.log(data);
 
     return data?.result;
   } catch (err) {
