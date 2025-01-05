@@ -37,3 +37,17 @@ export const getCategory = async (category: string) => {
   const data = await res.json();
   return data?.event;
 };
+
+export const getEventDetail = async (id: string) => {
+  const res = await fetch(`${base_url}/events/detail/${id}`, {
+    next: { revalidate: 0 },
+  });
+
+  if (!res.ok) {
+    console.error(`Failed to fetch event with ${id}:`, res.statusText);
+    return [];
+  }
+  const data = await res.json();
+  
+  return data?.event;
+};

@@ -1,4 +1,3 @@
-import { ITicket } from "@/types/allInterface";
 import Image from "next/image";
 import Link from "next/link";
 import { formatDateEvent, timeFormat } from "@/helpers/formatDate";

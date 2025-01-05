@@ -1,4 +1,4 @@
-import EventNavbar from "@/components/event_navbar";
+import EventNavbar from "@/components/ui/event_navbar";
 import { ReactNode } from "react";
 
 export default function HomeLayout({ children }: { children: ReactNode }) {

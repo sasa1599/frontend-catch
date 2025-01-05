@@ -4,6 +4,7 @@ import { createContext, useEffect, useState } from "react";
 import { formatPrice } from "@/helpers/formatPrice";
 import { useRouter } from "next/navigation";
 import { ITicket } from "@/types/allInterface";
+
 import TicketOrder from "./ticketOrder";
 import useSession from "@/hooks/useSession";
 import { toast } from "react-toastify";
@@ -73,11 +74,17 @@ export default function ShowTickets({ event_id }: { event_id: string }) {
 
   useEffect(() => {
     const getData = async () => {
-      const data = await getTicket(+event_id);
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("Token not found");
+        return;
+      }
+      const data = await getTicket(+event_id, token); // Kirim token di sini
       setTickets(data);
     };
     getData();
-  }, []);
+  }, [event_id]);
+  
 
   return (
     <main>

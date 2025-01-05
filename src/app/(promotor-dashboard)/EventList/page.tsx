@@ -65,7 +65,6 @@ const events: Event[] = [
 ];
 
 const ListEvents: React.FC = async () => {
-  const events = await getCustomerOrderDetail();
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-gray-50">
       <PromotorSidebar />
