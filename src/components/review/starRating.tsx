@@ -8,7 +8,11 @@ interface IProps {
   values: number
 }
 
+<<<<<<< HEAD
 export default function StarRating({ setFieldValue, values }: IProps) {
+=======
+export default function StartRating({ setFieldValue, values }: IProps) {
+>>>>>>> 9b27e93d4900c053d4f0438f39118c8735a7ae0e
   const [rate, setRate] = useState<number>(0)
   const handleClick = (e: number) => {
     // console.log(e);

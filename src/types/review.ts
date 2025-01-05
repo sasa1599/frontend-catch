@@ -4,7 +4,7 @@ interface IUser {
 }
 
 export interface IReview {
-  id:number
+  id: number;
   rating: number;
   comment: string;
   createdAt: string;
