@@ -19,8 +19,8 @@ export interface IOrder {
   final_price: number;
   total_price: number;
   status_order: string;
-  points_used?: number;
-  voucher_code?: string;
+  point: number;
+  voucher: string;
   OrderDetails: Array<{
     quantity: number;
     ticket: {

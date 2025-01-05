@@ -18,7 +18,12 @@ export default function TicketOrder({ ticket }: { ticket: ITicket }) {
   const MAX_TICKETS = 5;
 
   const handleAddTicket = () => {
-    if (order < MAX_TICKETS) {
+    if (ticket.seats === 0) {
+      alert("This ticket is sold out.");
+      return;
+    }
+
+    if (order < MAX_TICKETS && order < ticket.seats) {
       setOrder(order + 1);
       const ticketCartId = ticketCart?.findIndex(
         (item) => item.ticket.id === ticket.id
@@ -36,6 +41,8 @@ export default function TicketOrder({ ticket }: { ticket: ITicket }) {
           setTicketCart([{ ticket, quantity: 1 }]);
         }
       }
+    } else if (order >= ticket.seats) {
+      alert("Not enough seats available.");
     } else {
       alert("You can only buy up to 5 tickets.");
     }
@@ -47,7 +54,6 @@ export default function TicketOrder({ ticket }: { ticket: ITicket }) {
       const ticketCartId = ticketCart?.findIndex(
         (item) => item.ticket.id == ticket.id
       );
-      console.log(ticketCart);
 
       if (ticketCartId! > -1 && ticketCart) {
         const newTicketCart = [...ticketCart];
@@ -82,8 +88,10 @@ export default function TicketOrder({ ticket }: { ticket: ITicket }) {
           <div>{order}</div>
           <button
             onClick={handleAddTicket}
-            disabled={order >= MAX_TICKETS}
-            className="w-[25px] h-[25px] rounded-full font-semibold border-2 border-lightBlue flex items-center justify-center"
+            disabled={order >= MAX_TICKETS || order >= ticket.seats || ticket.seats === 0}
+            className={`w-[25px] h-[25px] rounded-full font-semibold border-2 border-lightBlue flex items-center justify-center ${
+              ticket.seats === 0 ? "opacity-50 cursor-not-allowed" : ""
+            }`}
           >
             <Plus className="h-4 w-4" />
           </button>

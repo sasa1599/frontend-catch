@@ -11,19 +11,37 @@ export default async function Events({
 }) {
   const data: IEvent[] = await getCategory(params.category);
 
-  if (!data || data.length === 0) {
-    return <div>No events found.</div>;
+  // Filter events that are in the future or happening today
+  const filteredData = data
+    .filter((item) => {
+      const eventDate = new Date(item.datetime);
+      const today = new Date();
+      return eventDate >= today; // Keep events that are in the future
+    })
+    .sort((a, b) => {
+      const eventDateA = new Date(a.datetime).getTime();
+      const eventDateB = new Date(b.datetime).getTime();
+      return eventDateA - eventDateB;
+    });
+
+  if (!filteredData || filteredData.length === 0) {
+    return (
+      <div>
+        <LinkCategory/>
+        <div className="mt-20">No upcoming events found.</div>
+      </div>
+    );
   }
 
   return (
     <div>
       <div className="bg-black md:px-44 px-4 py-28 flex flex-col items-start">
-        {/* Cateogry */}
+        {/* Category */}
         <LinkCategory />
 
         {/* Card */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-4 w-full">
-          {data.map((item, idx) => (
+          {filteredData.map((item, idx) => (
             <div key={idx}>
               <Card
                 key={idx}

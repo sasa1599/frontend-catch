@@ -52,7 +52,6 @@ const ListEvents: React.FC = () => {
         setEvents(sortedEvents);
       } catch (error) {
         console.error("Failed to fetch events:", error);
-        setError("Failed to load events. Please try again later.");
       } finally {
         setIsLoading(false);
       }
@@ -141,6 +140,7 @@ const ListEvents: React.FC = () => {
         <PromotorSidebar />
         <div className="flex-1 p-6 flex items-center justify-center">
           <div className="text-xl text-red-600">{error || sessionError}</div>
+          <p>HALO</p>
         </div>
       </div>
     );
