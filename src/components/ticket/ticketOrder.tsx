@@ -82,7 +82,7 @@ export default function TicketOrder({ ticket }: { ticket: ITicket }) {
           <div>{order}</div>
           <button
             onClick={handleAddTicket}
-            disabled={order >= MAX_TICKETS} // Disable if order reaches the max
+            disabled={order >= MAX_TICKETS}
             className="w-[25px] h-[25px] rounded-full font-semibold border-2 border-lightBlue flex items-center justify-center"
           >
             <Plus className="h-4 w-4" />

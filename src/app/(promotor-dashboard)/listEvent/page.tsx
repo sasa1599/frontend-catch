@@ -6,6 +6,7 @@ import PromotorSidebar from "@/components/ui/prosidebar";
 import { IEvent } from "@/types/allInterface";
 import useProSession from "@/hooks/promotorSession";
 import dashPromoGuard from "@/hoc/dashPromoGuard";
+import Link from "next/link";
 
 const ListEvents: React.FC = () => {
   const {
@@ -42,7 +43,13 @@ const ListEvents: React.FC = () => {
         }
 
         const data = await response.json();
-        setEvents(data.events || []);
+
+        const sortedEvents = (data.events || []).sort(
+          (a: IEvent, b: IEvent) =>
+            new Date(b.datetime).getTime() - new Date(a.datetime).getTime()
+        );
+
+        setEvents(sortedEvents);
       } catch (error) {
         console.error("Failed to fetch events:", error);
         setError("Failed to load events. Please try again later.");
@@ -158,45 +165,65 @@ const ListEvents: React.FC = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {events.map((event) => (
-              <div
-                key={event.id}
-                className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer"
-                onClick={() => handleEventClick(event)}
-              >
-                <div className="relative">
-                  <Image
-                    src={event.thumbnail || "/placeholder-event.jpg"}
-                    alt={event.title}
-                    width={400}
-                    height={200}
-                    className="w-full h-44 object-cover"
-                  />
-                  <div className="absolute top-2 left-2 bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded">
-                    {getLowestTicketPrice(event.tickets)}
+            {events.map((event) => {
+              const isEventPast = new Date(event.datetime) < new Date(); // Check if the event is in the past
+
+              return (
+                <div
+                  key={event.id}
+                  className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+                  onClick={() => handleEventClick(event)}
+                >
+                  <div className="relative">
+                    <Image
+                      src={event.thumbnail || "/placeholder-event.jpg"}
+                      alt={event.title}
+                      width={400}
+                      height={200}
+                      className="w-full h-44 object-cover"
+                    />
+                    <div className="absolute top-2 left-2 bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded">
+                      {getLowestTicketPrice(event.tickets)}
+                    </div>
+                    {isEventPast && (
+                      <div className="absolute bottom-2 right-2 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded">
+                        Event Sudah Selesai
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-semibold text-gray-800">
+                      {event.title}
+                    </h3>
+                    <p className="text-sm text-gray-500 mt-1">
+                      {event.location}
+                    </p>
+                    <p className="text-sm text-gray-500 mt-1">{event.venue}</p>
+                    <p className="text-xs text-gray-400 mt-1">
+                      {new Date(event.datetime).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </p>
+                    <div className="flex w-full mt-2 px-3 py-1 gap-6">
+                      <div className="inline-block bg-gray-200 rounded-full text-xs font-semibold text-gray-700">
+                        {event.category}
+                      </div>
+                      {isEventPast && (
+                        <Link href={`/review/${event.id}`}>
+                          <button className="inline-block bg-blue-500 rounded-full text-xs font-semibold text-gray-700">
+                            See Review
+                          </button>
+                        </Link>
+                      )}
+                    </div>
                   </div>
                 </div>
-                <div className="p-4">
-                  <h3 className="font-semibold text-gray-800">{event.title}</h3>
-                  <p className="text-sm text-gray-500 mt-1">{event.location}</p>
-                  <p className="text-sm text-gray-500 mt-1">{event.venue}</p>
-                  <p className="text-xs text-gray-400 mt-1">
-                    {new Date(event.datetime).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "short",
-                      day: "2-digit",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </p>
-                  <div className="mt-2">
-                    <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-xs font-semibold text-gray-700">
-                      {event.category}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

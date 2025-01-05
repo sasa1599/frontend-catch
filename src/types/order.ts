@@ -13,16 +13,6 @@ interface ITicketOrder {
     };
   };
 }
-
-// export interface IOrder {
-//   status_order: "PENDING" | "SUCCESS" | "FAILED" | "CANCELLED";
-//   id: number
-//   expiresAt: string;
-//   total_price: number;
-//   final_price: number;
-//   OrderDetails: ITicketOrder[];
-// }
-
 export interface IOrder {
   id: number;
   expires_at: string;
@@ -38,12 +28,13 @@ export interface IOrder {
       price: number;
       seats: number;
       event: {
-      title: string;
-      thumbnail: string;
-      datetime: string;
-      location: string;
-      venue: string;
-      }
-    }
+        id: number,
+        title: string;
+        thumbnail: string;
+        datetime: string;
+        location: string;
+        venue: string;
+      };
+    };
   }>;
 }

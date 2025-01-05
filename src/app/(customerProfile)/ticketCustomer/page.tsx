@@ -44,7 +44,11 @@ const BookingsCustomer: React.FC = () => {
   }
 
   if (orderData.length === 0) {
-    return <div><Loading/></div>;
+    return (
+      <div>
+        Anda belum membooking event
+      </div>
+    );
   }
 
   return (

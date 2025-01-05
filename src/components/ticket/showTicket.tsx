@@ -79,7 +79,9 @@ export default function ShowTickets({ event_id }: { event_id: string }) {
         toast.error("Token not found");
         return;
       }
-      const data = await getTicket(+event_id, token); // Kirim token di sini
+      const data = await getTicket(+event_id, token);
+      console.log("data",data);
+      
       setTickets(data);
     };
     getData();
@@ -119,7 +121,7 @@ export default function ShowTickets({ event_id }: { event_id: string }) {
                             {item.quantity} Ticket
                           </span>
                           <span className="font-semibold text-yellow-400">
-                            {formatPrice(item.quantity * item.ticket.price)}
+                            {formatPrice(item.quantity * item.ticket.price )}
                           </span>
                         </div>
                       </div>
