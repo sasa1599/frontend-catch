@@ -26,9 +26,9 @@ export default async function ReviewPage({
   const datetime = formatDate(event.datetime);
 
   // Check the user's role in localStorage
-  const userRole = typeof window !== "undefined" ? localStorage.getItem("role") : null;
-  console.log("role",userRole);
-  
+  const userRole =
+    typeof window !== "undefined" ? localStorage.getItem("role") : null;
+  console.log("role", userRole);
 
   return (
     <main className="pt-32">
