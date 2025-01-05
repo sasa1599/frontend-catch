@@ -226,7 +226,7 @@ export default function CreateEventPage() {
                     <DateTimePicker
                       id="dateTimePicker"
                       onChange={(value: Date | null) => {
-                        console.log("Selected DateTime:", value); // Debug
+                        console.log("Selected DateTime:", value);
                         form.setFieldValue(field.name, value);
                       }}
                       value={field.value}
