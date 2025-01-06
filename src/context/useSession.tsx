@@ -32,24 +32,36 @@ export const SessionProvider: React.FC<{ children: ReactNode }> = ({
 
   const checkSession = async () => {
     try {
-      const token = localStorage.getItem("token");
       const role = localStorage.getItem("role");
-      let res: any = [];
+      let res: Response;
 
       if (role === "customer") {
-        res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_BE}/customers/profile`, {
-          method: "GET",
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        });
+        res = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL_BE}/customers/profile`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
       } else if (role === "promotor") {
-        res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_BE}/promotors/profile`, {
-          method: "GET",
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        });
+        res = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL_BE}/promotors/profile`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+      } else {
+        throw new Error("Invalid role");
       }
 
-      const result = await res.json();
+      const result: { user: IUser | IPromotor } = await res.json(); // Tambahkan tipe hasil respons sesuai data API
       if (!res.ok) throw result;
+
       setUser(result.user);
       setIsAuth(true);
     } catch (err) {

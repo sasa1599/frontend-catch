@@ -4,38 +4,32 @@ import { ErrorMessage, Form, Formik, FormikProps } from "formik";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
 import { useState } from "react";
-import type { FormReview } from "@/types/review";
 import { toast } from "react-toastify";
 import StarRating from "./starRating";
 import axios from "@/helpers/axios";
 import { reviewScehma } from "@/libs/schema";
-import { useRouter } from "next/navigation";
+import type { FormReview } from "@/types/review";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 export default function FormReview({ event_id }: { event_id: string }) {
   const [isLoading, SetIsLoading] = useState<boolean>(false);
-  const router = useRouter();
   const initialValue: FormReview = {
     rating: 0,
     comment: "",
   };
-  
 
   const handleAdd = async (review: FormReview) => {
     try {
       SetIsLoading(true);
-      const { data } = await axios.post(
-        `/review/${event_id}`, 
-        review, {
+      const { data } = await axios.post(`/reviews/${event_id}`, review, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 
       toast.success(data.message);
-      router.push(`/review/${event_id}}`);
-    } catch (err: any) {
+    } catch (err) {
       console.log(err);
-      toast.error(err.response.data.message);
+      toast.error("Review Error");
     } finally {
       SetIsLoading(false);
     }
@@ -54,9 +48,8 @@ export default function FormReview({ event_id }: { event_id: string }) {
         {({ setFieldValue, values }: FormikProps<FormReview>) => {
           const commentChange = (e: string) => {
             setFieldValue("comment", e);
+            // console.log(e);
           };
-          console.log(values);
-          
           return (
             <Form className="flex flex-col gap-4">
               <div className="flex gap-2">

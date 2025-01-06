@@ -29,10 +29,10 @@ export default function VerifyPage({ params }: { params: { token: string } }) {
       const result = res.data;
       toast.success(result.message);
       router.push("/");
-    } catch (err: any) {
+    } catch (err) {
       console.error("Error during verification:", err);
       toast.error(
-        err.response?.data?.message || "An error occurred during verification"
+        "An error occurred during verification"
       );
     }
   };

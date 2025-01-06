@@ -144,3 +144,16 @@ export interface ITicket {
   maxSeats: number;
   price: number;
 }
+
+export interface Event1 {
+  id: string;
+  title: string;
+  datetime: string;
+  category: string;
+  venue: string;
+}
+
+export interface FormValues {
+  datetime: Date | null;
+
+}

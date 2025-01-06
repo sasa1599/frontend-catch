@@ -1,5 +1,4 @@
 "use client";
-import dashPromoGuard from "@/hoc/dashPromoGuard"; // Import the guard
 import React, { useEffect, useState } from "react";
 import CreateTicketPage from "@/components/ticket/createTicket";
 import LinkCheck from "@/components/ticket/linkCheck";
@@ -21,9 +20,9 @@ export default function TicketPage({ params }: { params: { event_id: string } })
 
         const tickets = await getTicket(+params.event_id, token); // Pass token ke fungsi
         setResult(tickets);
-      } catch (err: any) {
+      } catch (err) {
         console.error(err);
-        setError(err.message || "Failed to load tickets");
+        setError("Failed to load tickets");
       }
     };
 

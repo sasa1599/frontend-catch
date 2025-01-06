@@ -8,6 +8,7 @@ import Image from "next/image";
 import { toast } from "react-toastify";
 import dashCustGuard from "@/hoc/dashCustoGuard";
 import ResetPasswordForm from "@/components/resetPassword/resetPassCustomer";
+import { CouponData } from "@/types/coupon";
 
 interface Coupon {
   id: number;
@@ -24,35 +25,60 @@ const ProfileCustomer: React.FC = () => {
 
   const fetchPoints = async () => {
     if (!user) return;
+
     try {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL_BE}/userpoints`, {
-        withCredentials: true,
-        headers: { "Content-Type": "application/json" },
-      });
-      const pointsData = res.data.items || [];
-      const userPoints = pointsData.filter(
-        (point: any) => point.customer_id === user.id
+      // Fetch data dari API
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL_BE}/userpoints`,
+        {
+          withCredentials: true,
+          headers: { "Content-Type": "application/json" },
+        }
       );
+
+      // Mendefinisikan tipe data points
+      interface Point {
+        customer_id: string;
+        point: number;
+      }
+
+      const pointsData: Point[] = res.data.items || [];
+      const userPoints = pointsData.filter(
+        (point) => +point.customer_id === user.id
+      );
+
       const totalPoints = userPoints.reduce(
-        (acc: number, point: any) => acc + point.point,
+        (acc, point) => acc + point.point,
         0
       );
       setPoints(totalPoints);
-    } catch (err) {
-      console.error("Error fetching points:", err);
+    } catch (err: unknown) {
+      // Validasi apakah error berasal dari Axios
+      if (axios.isAxiosError(err)) {
+        console.error(
+          "Error fetching points (Axios):",
+          err.response?.data || err.message
+        );
+      } else {
+        // Error tidak diketahui
+        console.error("Unexpected error fetching points:", err);
+      }
     }
   };
 
   const fetchCoupons = async () => {
     if (!user) return;
     try {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL_BE}/usercoupons`, {
-        withCredentials: true,
-        headers: { "Content-Type": "application/json" },
-      });
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL_BE}/usercoupons`,
+        {
+          withCredentials: true,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
       const couponsData = res.data.items || [];
       const userCoupons = couponsData.filter(
-        (coupon: any) => coupon.customer_id === user.id
+        (coupon: CouponData) => coupon.customer_id === user.id
       );
       setCoupons(userCoupons);
     } catch (err) {
@@ -60,25 +86,45 @@ const ProfileCustomer: React.FC = () => {
     }
   };
 
+
+
   const editAvatar = async (file: File) => {
     if (!file || !user) return;
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Authorization token is missing. Please log in again.");
+      return;
+    }
+
     try {
       setIsUploading(true);
+
       const formData = new FormData();
       formData.append("file", file);
+
       const res = await axios.patch(
         `${process.env.NEXT_PUBLIC_BASE_URL_BE}/avatarcloud`,
         formData,
         {
-          withCredentials: true,
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
-      toast.success(
-        "Avatar updated successfully! Please refresh the page to update it."
-      );
-    } catch (err) {
-      toast.error("Failed to upload avatar. Please try again.");
+      if (res.status === 200) {
+        toast.success(
+          "Avatar updated successfully! Please refresh the page to see the changes."
+        );
+      } else {
+        toast.error("Failed to update avatar.");
+      }
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        toast.error("Failed to upload avatar. Please try again.");
+      } else {
+        console.error("Unexpected error:", err);
+      }
     } finally {
       setIsUploading(false);
     }
@@ -159,13 +205,19 @@ const ProfileCustomer: React.FC = () => {
             </div>
             <div className="mt-8 space-y-6">
               <div>
-                <label className="block text-gray-600 text-sm mb-2">Referral Code</label>
+                <label className="block text-gray-600 text-sm mb-2">
+                  Referral Code
+                </label>
                 <div className="bg-gray-50 rounded p-3 border border-gray-100">
-                  <span className="text-gray-700">{user.ref_code || "N/A"}</span>
+                  <span className="text-gray-700">
+                    {user.ref_code || "N/A"}
+                  </span>
                 </div>
               </div>
               <div>
-                <label className="block text-gray-600 text-sm mb-2">My Coupons</label>
+                <label className="block text-gray-600 text-sm mb-2">
+                  My Coupons
+                </label>
                 <div className="bg-gray-50 rounded p-3 border border-gray-100">
                   {coupons.length > 0 ? (
                     <div className="space-y-2">
@@ -190,7 +242,9 @@ const ProfileCustomer: React.FC = () => {
                 </div>
               </div>
               <div>
-                <label className="block text-gray-600 text-sm mb-2">My Points</label>
+                <label className="block text-gray-600 text-sm mb-2">
+                  My Points
+                </label>
                 <div className="bg-gray-50 rounded p-3 border border-gray-100">
                   <span className="text-gray-700">
                     Rp {points.toLocaleString("id-ID")}
@@ -198,7 +252,9 @@ const ProfileCustomer: React.FC = () => {
                 </div>
               </div>
               <div>
-                <label className="block text-gray-600 text-sm mb-2">Reset Password</label>
+                <label className="block text-gray-600 text-sm mb-2">
+                  Reset Password
+                </label>
                 <button
                   className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
                   onClick={() => setShowResetPasswordModal(true)}

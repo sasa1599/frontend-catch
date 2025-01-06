@@ -39,30 +39,6 @@ const CustomerTransaction: React.FC = () => {
     }
   };
 
-  const getToken = async (
-    orderId: number,
-    finalPrice: number
-  ): Promise<string | undefined> => {
-    try {
-      const { data } = await axios.post(
-        `${base_url}/order/payment`,
-        {
-          order_id: orderId,
-          gross_amount: finalPrice,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      return data.result;
-    } catch (err) {
-      console.error("Error fetching Snap Token:", err);
-      setError("Failed to get payment token. Please try again.");
-      return undefined;
-    }
-  };
 
   useEffect(() => {
     setHydrated(true);
@@ -166,15 +142,6 @@ const CustomerTransaction: React.FC = () => {
               <tbody className="divide-y divide-gray-200">
                 {filteredTransactions.length > 0 ? (
                   filteredTransactions.map((order) => {
-                    const ticketCart = order.OrderDetails.map((detail) => ({
-                      quantity: detail.quantity,
-                      ticket: {
-                        id: detail.ticket.id,
-                        price: detail.ticket.price,
-                        seats: detail.ticket.seats,
-                      },
-                    }));
-
                     return (
                       <tr key={order.id} className="hover:bg-gray-50">
                         <td className="px-6 py-4">

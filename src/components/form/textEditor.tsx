@@ -35,7 +35,7 @@ const formats = [
 ];
 
 interface FieldRichTextProps {
-  setFieldValue: (a: any, b: any) => void
+  setFieldValue: (field: string, value: string) => void;
 }
 
 const RichTextEditor: React.FC<FieldRichTextProps> = ({ setFieldValue }) => {
@@ -43,7 +43,7 @@ const RichTextEditor: React.FC<FieldRichTextProps> = ({ setFieldValue }) => {
 
   const handleChange = (e: string) => {
     setValue(e);
-    setFieldValue("description", e);
+    setFieldValue("description", e); 
   };
 
   useEffect(() => {

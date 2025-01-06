@@ -9,7 +9,7 @@ export interface IReview {
   comment: string;
   createdAt: string;
   user: IUser;
-  user_id:string
+  user_id: string;
 }
 
 export interface FormReview {

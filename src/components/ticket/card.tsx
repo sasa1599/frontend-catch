@@ -41,15 +41,21 @@ export default function Card({
 
   const formattedDate = formatDate(datetime);
 
+  // Cari harga minimum
   const minPrice =
     tickets.length > 0
       ? Math.min(...tickets.map((ticket) => ticket.price))
       : null;
 
+  // Periksa apakah tiket pertama gratis
+  const isFreeEntry = tickets.length > 0 && tickets[0].price === 0;
+
   return (
     <Link href={`/browse_events/${slug}`}>
-      <div className="w-full  mx-auto flex flex-row items-center rounded-lg p-4 
-        md:flex-col hover:scale-105">
+      <div
+        className="w-full mx-auto flex flex-row items-center rounded-lg p-4 
+        md:flex-col hover:scale-105"
+      >
         {/* Thumbnail */}
         {thumbnail && (
           <div className="flex-shrink-0">
@@ -71,10 +77,14 @@ export default function Card({
             {formattedDate}{" "}
           </h4>
           <p className="text-sm text-gray-200">By {name}</p>
-          {minPrice !== null ? (
-            <p className="text-sm text-gray-200">
-              Starting from: Rp{minPrice.toLocaleString()}
-            </p>
+          {tickets.length > 0 ? (
+            isFreeEntry ? (
+              <p className="text-sm text-green-400">Free entry</p>
+            ) : (
+              <p className="text-sm text-gray-200">
+                Starting from: Rp{minPrice?.toLocaleString()}
+              </p>
+            )
           ) : (
             <p className="text-sm text-gray-400">No tickets available</p>
           )}

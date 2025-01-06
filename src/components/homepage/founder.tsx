@@ -35,9 +35,9 @@ const FounderSection = () => {
             </blockquote>
 
             <blockquote className="text-base md:text-lg font-bold text-gray-900 leading-relaxed">
-              "You're encouraged to take your time to produce the best work you
-              possibly can. It's about doing everything with intention rather
-              than just doing."
+            &quot;You&apos;re encouraged to take your time to produce the best work you
+              possibly can. It&apos;s about doing everything with intention rather
+              than just doing.&quot;
             </blockquote>
 
             <div className="space-y-1">

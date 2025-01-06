@@ -5,6 +5,7 @@ import {
   FaBasketballBall,
   FaTheaterMasks,
   FaBookOpen,
+  FaAngellist,
 } from "react-icons/fa";
 
 export default function LinkCategory() {
@@ -12,6 +13,12 @@ export default function LinkCategory() {
     <div>
       <div className="w-full mb-4 ml-4">
         <div className="flex items-center justify-start space-x-4">
+          <Link
+            href={"/browse_event"}
+            className="flex flex-col items-center justify-center font-semibold text-white bg-gray-800 rounded-md w-[70px] h-[50px] hover:bg-gray-700 transition"
+          >
+            <FaAngellist className="mb-1" /> <span className="text-xs">All Events</span>
+          </Link>
           <Link
             href={"/browse_events/category/concert"}
             className="flex flex-col items-center justify-center font-semibold text-white bg-gray-800 rounded-md w-[70px] h-[50px] hover:bg-gray-700 transition"

@@ -3,7 +3,6 @@
 import React from "react";
 import Image from "next/image";
 import PromotorSidebar from "@/components/ui/prosidebar";
-import { getCustomerOrderDetail } from "@/libs/order";
 
 interface Event {
   id: number;

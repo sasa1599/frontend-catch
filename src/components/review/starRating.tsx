@@ -1,26 +1,23 @@
-'use client'
+"use client";
 
-import { useState } from "react";
 import { FaStar } from "react-icons/fa6";
 
 interface IProps {
-  setFieldValue: (a: string, b: number) => void
-  values: number
+  setFieldValue: (a: string, b: number) => void;
+  values: number;
 }
 
-export default function StarRating({ setFieldValue, values }: IProps) {
-  const [rate, setRate] = useState<number>(0)
+export default function StartRating({ setFieldValue, values }: IProps) {
   const handleClick = (e: number) => {
-    // console.log(e);
-    setRate(e)
-    setFieldValue('rating', e)
-  }
+    setFieldValue("rating", e);
+  };
+
   return (
     <>
       {Array.from({ length: 5 }).map((_, idx) => {
         const pointRate = idx + 1;
         return (
-          <label>
+          <label key={pointRate}>
             <input
               type="radio"
               name="rating"
@@ -28,10 +25,14 @@ export default function StarRating({ setFieldValue, values }: IProps) {
               onClick={() => handleClick(pointRate)}
               className="hidden"
             />
-            <FaStar className={`text-3xl cursor-pointer ${pointRate <= values ? 'text-yellow-300' : 'text-slate-400'}`} />
+            <FaStar
+              className={`text-3xl cursor-pointer ${
+                pointRate <= values ? "text-yellow-300" : "text-slate-400"
+              }`}
+            />
           </label>
-        )
+        );
       })}
     </>
-  )
+  );
 }

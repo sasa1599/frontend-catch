@@ -50,11 +50,9 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ onClose }) => {
         // Display success message
         toast.success(response.data.message || "Password reset successfully!");
         onClose();
-      } catch (error: any) {
-        const errorMessage =
-          error.response?.data?.message || "Failed to reset password. Please try again.";
-        toast.error(errorMessage);
-        console.error("Error resetting password:", error);
+      } catch (err) {
+        toast.error("Failed to reset password. Please try again.");
+        console.error(err);
       }
     },
   });
