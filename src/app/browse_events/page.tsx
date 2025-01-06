@@ -6,6 +6,7 @@ import { IEvent } from "@/types/allInterface";
 
 export default async function Events() {
   const data: IEvent[] = await getEvent();
+  
 
   if (!data || data.length === 0) {
     return <div>No events found.</div>;
