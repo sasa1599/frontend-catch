@@ -12,7 +12,6 @@ export default function PromotorSignUpPage() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  // Form values type
   interface FormValues {
     name: string;
     username: string;
@@ -21,7 +20,6 @@ export default function PromotorSignUpPage() {
     confirmPassword: string;
   }
 
-  // Initial form values
   const initialValues: FormValues = {
     name: "",
     username: "",
@@ -30,7 +28,6 @@ export default function PromotorSignUpPage() {
     confirmPassword: "",
   };
 
-  // Validation schema using Yup
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Organization Name is required"),
     username: Yup.string().required("Username is required"),
@@ -43,15 +40,13 @@ export default function PromotorSignUpPage() {
       .required("Confirm password is required"),
   });
 
-  // Form submission handler
   const handleSubmit = async (values: FormValues) => {
     try {
       setIsLoading(true);
-      const res = await axios.post("http://localhost:8001/api/register/promotor", values, {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL_BE}/register/promotor`, values, {
         withCredentials: true,
       });
 
-      // Backend response processing
       const result = res.data.promotor;
       toast.success(res.data.message || "Registration successful!");
       setIsLoading(false);
@@ -61,11 +56,10 @@ export default function PromotorSignUpPage() {
       setIsLoading(false);
       console.error("Error during registration:", err);
 
-      // Safely extract the error message
       const errorMessage =
-        err.response?.data?.message || // Backend error message
-        err.message ||                 // Axios error message
-        "An error occurred during registration"; // Fallback message
+        err.response?.data?.message ||
+        err.message ||
+        "An error occurred during registration";
 
       toast.error(errorMessage);
     } finally {
@@ -79,28 +73,24 @@ export default function PromotorSignUpPage() {
         <img
           src="/cinema.jpeg"
           alt="Cinema venue"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover rounded-xl"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black to-transparent rounded-xl" />
         <div className="absolute inset-0 flex flex-col justify-center p-6 lg:p-12 text-white">
           <h1 className="text-2xl lg:text-4xl font-bold mb-4 leading-snug">
             Organize events with ease, while keeping your budget in check!
           </h1>
           <p className="text-lg">
-            Create an account to access special tools, manage multiple events,
-            and unlock exclusive benefits for your promotions.
+            Create an account to access special tools, manage multiple events, and unlock exclusive benefits for your promotions.
           </p>
         </div>
       </div>
-      <div className="w-full lg:w-1/2 bg-gray-900 flex flex-col justify-center p-6 lg:p-12">
+      <div className="w-full lg:w-1/2 bg-gray-900 flex flex-col justify-center p-6 lg:p-12 rounded-xl">
         <ToggleTabs currentPath="/sign-up/promotor" />
         <div className="mb-6">
-          <h2 className="text-2xl lg:text-3xl font-bold mb-2 text-white">
-            Promotor
-          </h2>
+          <h2 className="text-2xl lg:text-3xl font-bold mb-2 text-white">Promotor</h2>
           <p className="text-gray-400">
-            As a promotor, you can manage events, transactions, and gather
-            feedback from customers.
+            As a promotor, you can manage events, transactions, and gather feedback from customers.
           </p>
         </div>
         <Formik
@@ -109,17 +99,17 @@ export default function PromotorSignUpPage() {
           onSubmit={handleSubmit}
         >
           {({ isSubmitting }) => (
-            <Form className="space-y-4">
+            <Form className="space-y-6">
               <div>
                 <label htmlFor="name" className="block text-gray-300">
-                  Name
+                  Organization Name
                 </label>
                 <Field
                   id="name"
                   type="text"
                   name="name"
-                  placeholder="Enter your name"
-                  className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md"
+                  placeholder="Enter your organization name"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <ErrorMessage name="name" component="div" className="text-red-500 text-sm mt-1" />
               </div>
@@ -133,7 +123,7 @@ export default function PromotorSignUpPage() {
                   type="text"
                   name="username"
                   placeholder="Enter your username"
-                  className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <ErrorMessage name="username" component="div" className="text-red-500 text-sm mt-1" />
               </div>
@@ -147,7 +137,7 @@ export default function PromotorSignUpPage() {
                   type="email"
                   name="email"
                   placeholder="Enter your email"
-                  className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
               </div>
@@ -161,7 +151,7 @@ export default function PromotorSignUpPage() {
                   type="password"
                   name="password"
                   placeholder="Enter your password"
-                  className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <ErrorMessage name="password" component="div" className="text-red-500 text-sm mt-1" />
               </div>
@@ -175,18 +165,14 @@ export default function PromotorSignUpPage() {
                   type="password"
                   name="confirmPassword"
                   placeholder="Confirm your password"
-                  className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
-                <ErrorMessage
-                  name="confirmPassword"
-                  component="div"
-                  className="text-red-500 text-sm mt-1"
-                />
+                <ErrorMessage name="confirmPassword" component="div" className="text-red-500 text-sm mt-1" />
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-blue-500 text-white py-3 px-4 rounded-md hover:bg-blue-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={isSubmitting || isLoading}
               >
                 {isSubmitting || isLoading ? "Submitting..." : "Sign Up"}

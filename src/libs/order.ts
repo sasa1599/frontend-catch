@@ -37,7 +37,7 @@ export async function getSnapToken(order_id: number, final_price: number) {
     console.log("Token from localStorage:", token); // Pastikan token ada
 
     const { data } = await axios.post(
-      "http://localhost:8001/api/order/payment",
+      `${process.env.NEXT_PUBLIC_BASE_URL_BE}/order/payment`,
       {
         order_id,
         gross_amount: final_price,

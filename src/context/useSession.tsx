@@ -37,12 +37,12 @@ export const SessionProvider: React.FC<{ children: ReactNode }> = ({
       let res: any = [];
 
       if (role === "customer") {
-        res = await fetch("http://localhost:8001/api/customers/profile", {
+        res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_BE}/customers/profile`, {
           method: "GET",
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
       } else if (role === "promotor") {
-        res = await fetch("http://localhost:8001/api/promotors/profile", {
+        res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_BE}/promotors/profile`, {
           method: "GET",
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
