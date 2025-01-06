@@ -185,9 +185,9 @@ const DashboardPromotor: React.FC = () => {
         const groupedData = groupRevenueData(revenueData, filter);
         
         const now = new Date();
-        let startDate = new Date();
-        let labels: string[] = [];
-        let data: number[] = [];
+        const startDate = new Date();
+        const labels: string[] = [];
+        const data: number[] = [];
 
         switch (filter) {
           case "day":

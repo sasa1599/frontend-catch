@@ -18,7 +18,7 @@ import { IUser } from "@/types/user";
 import { useSession } from "@/context/useSession";
 
 const CustomerSidebar = () => {
-  const { isAuth, user, setIsAuth } = useSession();
+  const { user, setIsAuth } = useSession();
   const router = useRouter();
   const pathname = usePathname(); // Get the current path
   const [isCollapsed, setIsCollapsed] = useState(false);

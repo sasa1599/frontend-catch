@@ -141,7 +141,7 @@ const ListEvents: React.FC = () => {
         {events.length === 0 ? (
           <div className="text-center text-gray-600 mt-8">
             <p className="mb-4">
-              You don't have any events yet. Start by creating a new one!
+              You don&apos;t have any events yet. Start by creating a new one!
             </p>
             <a
               href="/promotorManagement"

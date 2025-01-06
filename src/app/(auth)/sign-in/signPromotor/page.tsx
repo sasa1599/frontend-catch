@@ -34,7 +34,7 @@ const SignPromotor = () => {
   const handleLogin = async (values: FormValues) => {
     try {
       setIsLoading(true);
-
+  
       const payload = {
         data: {
           username: values.username,
@@ -42,28 +42,39 @@ const SignPromotor = () => {
         },
         password: values.password,
       };
-
+  
+      // Request ke API login
       const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL_BE}/login`, payload, {
         withCredentials: true,
       });
-
+  
+      // Extract data dari response
       const { promotor, token, message } = res.data;
-
+  
+      // Update state session
       setUser(promotor);
       setIsAuth(true);
       localStorage.setItem("role", "promotor");
       localStorage.setItem("token", token);
-
+  
+      // Tampilkan pesan sukses dan redirect ke dashboard
       toast.success(message || "Login successful!");
       router.push("/dashboard");
-    } catch (err: any) {
-      const errorMessage =
-        err.response?.data?.message || err.message || "Login failed.";
-      toast.error(errorMessage);
+    } catch (err: unknown) {
+      // Validasi apakah err berasal dari Axios
+      if (axios.isAxiosError(err)) {
+        const errorMessage =
+          err.response?.data?.message || err.message || "Login failed.";
+        toast.error(errorMessage);
+      } else {
+        // Default error handling jika error bukan berasal dari Axios
+        toast.error("An unexpected error occurred.");
+      }
     } finally {
       setIsLoading(false);
     }
   };
+  
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row bg-gray-50 text-black">

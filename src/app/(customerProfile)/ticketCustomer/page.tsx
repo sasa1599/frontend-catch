@@ -8,8 +8,6 @@ import axios from "axios";
 import { useSession } from "@/context/useSession";
 import dashCustGuard from "@/hoc/dashCustoGuard";
 
-import Loading from "../loading";
-
 const BookingsCustomer: React.FC = () => {
   const { user } = useSession();
   const [orderData, setOrderData] = useState<IOrder[]>([]);

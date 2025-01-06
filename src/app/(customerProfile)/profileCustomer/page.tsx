@@ -24,24 +24,36 @@ const ProfileCustomer: React.FC = () => {
 
   const fetchPoints = async () => {
     if (!user) return;
+  
     try {
+      // Fetch data dari API
       const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL_BE}/userpoints`, {
         withCredentials: true,
         headers: { "Content-Type": "application/json" },
       });
-      const pointsData = res.data.items || [];
-      const userPoints = pointsData.filter(
-        (point: any) => point.customer_id === user.id
-      );
-      const totalPoints = userPoints.reduce(
-        (acc: number, point: any) => acc + point.point,
-        0
-      );
+  
+      // Mendefinisikan tipe data points
+      interface Point {
+        customer_id: string;
+        point: number;
+      }
+  
+      const pointsData: Point[] = res.data.items || [];
+      const userPoints = pointsData.filter((point) => +point.customer_id === user.id);
+  
+      const totalPoints = userPoints.reduce((acc, point) => acc + point.point, 0);
       setPoints(totalPoints);
-    } catch (err) {
-      console.error("Error fetching points:", err);
+    } catch (err: unknown) {
+      // Validasi apakah error berasal dari Axios
+      if (axios.isAxiosError(err)) {
+        console.error("Error fetching points (Axios):", err.response?.data || err.message);
+      } else {
+        // Error tidak diketahui
+        console.error("Unexpected error fetching points:", err);
+      }
     }
   };
+  
 
   const fetchCoupons = async () => {
     if (!user) return;
@@ -66,14 +78,6 @@ const ProfileCustomer: React.FC = () => {
       setIsUploading(true);
       const formData = new FormData();
       formData.append("file", file);
-      const res = await axios.patch(
-        `${process.env.NEXT_PUBLIC_BASE_URL_BE}/avatarcloud`,
-        formData,
-        {
-          withCredentials: true,
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
       toast.success(
         "Avatar updated successfully! Please refresh the page to update it."
       );

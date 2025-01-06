@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { IUser, IPromotor } from "@/types/user";
 import { useSession } from "@/context/useSession";
 import SearchBar from "@/helpers/searchBar";

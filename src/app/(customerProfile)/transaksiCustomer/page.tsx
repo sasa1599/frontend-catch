@@ -39,30 +39,6 @@ const CustomerTransaction: React.FC = () => {
     }
   };
 
-  const getToken = async (
-    orderId: number,
-    finalPrice: number
-  ): Promise<string | undefined> => {
-    try {
-      const { data } = await axios.post(
-        `${base_url}/order/payment`,
-        {
-          order_id: orderId,
-          gross_amount: finalPrice,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      return data.result;
-    } catch (err) {
-      console.error("Error fetching Snap Token:", err);
-      setError("Failed to get payment token. Please try again.");
-      return undefined;
-    }
-  };
 
   useEffect(() => {
     setHydrated(true);

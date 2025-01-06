@@ -31,7 +31,9 @@ export default function PromotorSignUpPage() {
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Organization Name is required"),
     username: Yup.string().required("Username is required"),
-    email: Yup.string().email("Invalid email format").required("Email is required"),
+    email: Yup.string()
+      .email("Invalid email format")
+      .required("Email is required"),
     password: Yup.string()
       .min(8, "Password must be at least 8 characters")
       .required("Password is required"),
@@ -43,26 +45,34 @@ export default function PromotorSignUpPage() {
   const handleSubmit = async (values: FormValues) => {
     try {
       setIsLoading(true);
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL_BE}/register/promotor`, values, {
-        withCredentials: true,
-      });
 
-      const result = res.data.promotor;
+      // Kirim request registrasi untuk promotor
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL_BE}/register/promotor`,
+        values,
+        {
+          withCredentials: true,
+        }
+      );
+
+      // Sukses registrasi
       toast.success(res.data.message || "Registration successful!");
-      setIsLoading(false);
-
       router.push("/");
-    } catch (err: any) {
-      setIsLoading(false);
-      console.error("Error during registration:", err);
-
-      const errorMessage =
-        err.response?.data?.message ||
-        err.message ||
-        "An error occurred during registration";
-
-      toast.error(errorMessage);
+    } catch (err: unknown) {
+      // Validasi apakah err berasal dari Axios
+      if (axios.isAxiosError(err)) {
+        const errorMessage =
+          err.response?.data?.message ||
+          err.message ||
+          "An error occurred during registration";
+        toast.error(errorMessage);
+      } else {
+        // Error tidak diketahui
+        console.error("Unexpected error during registration:", err);
+        toast.error("An unexpected error occurred.");
+      }
     } finally {
+      // Pastikan loading state diatur ke false
       setIsLoading(false);
     }
   };
@@ -81,16 +91,20 @@ export default function PromotorSignUpPage() {
             Organize events with ease, while keeping your budget in check!
           </h1>
           <p className="text-lg">
-            Create an account to access special tools, manage multiple events, and unlock exclusive benefits for your promotions.
+            Create an account to access special tools, manage multiple events,
+            and unlock exclusive benefits for your promotions.
           </p>
         </div>
       </div>
       <div className="w-full lg:w-1/2 bg-gray-900 flex flex-col justify-center p-6 lg:p-12 rounded-xl">
         <ToggleTabs currentPath="/sign-up/promotor" />
         <div className="mb-6">
-          <h2 className="text-2xl lg:text-3xl font-bold mb-2 text-white">Promotor</h2>
+          <h2 className="text-2xl lg:text-3xl font-bold mb-2 text-white">
+            Promotor
+          </h2>
           <p className="text-gray-400">
-            As a promotor, you can manage events, transactions, and gather feedback from customers.
+            As a promotor, you can manage events, transactions, and gather
+            feedback from customers.
           </p>
         </div>
         <Formik
@@ -111,7 +125,11 @@ export default function PromotorSignUpPage() {
                   placeholder="Enter your organization name"
                   className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
-                <ErrorMessage name="name" component="div" className="text-red-500 text-sm mt-1" />
+                <ErrorMessage
+                  name="name"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
               </div>
 
               <div>
@@ -125,7 +143,11 @@ export default function PromotorSignUpPage() {
                   placeholder="Enter your username"
                   className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
-                <ErrorMessage name="username" component="div" className="text-red-500 text-sm mt-1" />
+                <ErrorMessage
+                  name="username"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
               </div>
 
               <div>
@@ -139,7 +161,11 @@ export default function PromotorSignUpPage() {
                   placeholder="Enter your email"
                   className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
-                <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
+                <ErrorMessage
+                  name="email"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
               </div>
 
               <div>
@@ -153,11 +179,18 @@ export default function PromotorSignUpPage() {
                   placeholder="Enter your password"
                   className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
-                <ErrorMessage name="password" component="div" className="text-red-500 text-sm mt-1" />
+                <ErrorMessage
+                  name="password"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
               </div>
 
               <div>
-                <label htmlFor="confirmPassword" className="block text-gray-300">
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-gray-300"
+                >
                   Confirm Password
                 </label>
                 <Field
@@ -167,7 +200,11 @@ export default function PromotorSignUpPage() {
                   placeholder="Confirm your password"
                   className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
-                <ErrorMessage name="confirmPassword" component="div" className="text-red-500 text-sm mt-1" />
+                <ErrorMessage
+                  name="confirmPassword"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
               </div>
 
               <button

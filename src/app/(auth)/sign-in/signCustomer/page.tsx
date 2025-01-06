@@ -65,14 +65,17 @@ const SignCustomer = () => {
       // Display success message and redirect
       toast.success(message || "Login successful!");
       router.push("/dashboardCustomer");
-      setIsAuth(true);
-    } catch (err: any) {
-      // Extract error message safely
-      const errorMessage =
-        err.response?.data?.message ||
-        err.message ||
-        "An error occurred during login.";
-      toast.error(errorMessage);
+    } catch (err: unknown) {
+      // Type guard for Axios error
+      if (axios.isAxiosError(err)) {
+        const errorMessage =
+          err.response?.data?.message ||
+          err.message ||
+          "An error occurred during login.";
+        toast.error(errorMessage);
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -169,7 +172,7 @@ const SignCustomer = () => {
           </Formik>
           <div className="mt-6 text-center">
             <p className="text-gray-600">
-              Don't have an account?{" "}
+              Don&apos;t have an account?{" "}
               <a
                 href="/sign-up/customer"
                 className="text-blue-500 hover:underline"

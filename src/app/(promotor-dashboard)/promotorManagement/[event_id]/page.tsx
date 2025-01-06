@@ -1,5 +1,4 @@
 "use client";
-import dashPromoGuard from "@/hoc/dashPromoGuard"; // Import the guard
 import React, { useEffect, useState } from "react";
 import CreateTicketPage from "@/components/ticket/createTicket";
 import LinkCheck from "@/components/ticket/linkCheck";
