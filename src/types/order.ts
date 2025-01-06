@@ -14,6 +14,8 @@ interface ITicketOrder {
   };
 }
 export interface IOrder {
+  voucher_code: string;
+  points_used: string;
   id: number;
   expires_at: string;
   final_price: number;

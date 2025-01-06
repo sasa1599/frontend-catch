@@ -14,7 +14,6 @@ import {
   UserCircle,
   LogOut,
 } from "lucide-react";
-
 import { IUser } from "@/types/user";
 import { useSession } from "@/context/useSession";
 
@@ -61,7 +60,7 @@ const CustomerSidebar = () => {
     <div className="flex h-screen bg-gray-100">
       <aside
         className={`${
-          isCollapsed ? "w-20" : "w-64"
+          isCollapsed ? "w-16" : "w-64"
         } bg-white shadow-lg transition-all duration-300 relative flex flex-col`}
       >
         <div className="flex items-center p-4 border-b">

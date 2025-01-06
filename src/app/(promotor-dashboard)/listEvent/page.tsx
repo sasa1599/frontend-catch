@@ -32,6 +32,7 @@ const ListEvents: React.FC = () => {
       try {
         setIsLoading(true);
         const response = await fetch(`${base_url}/events/promotor`, {
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -62,38 +63,24 @@ const ListEvents: React.FC = () => {
     }
   }, [isAuth, user]);
 
-  const roundToNearestCategory = (price: number) => {
+  // Function to format ticket price as IDR
+  const getFormattedTicketPrice = (price: number) => {
     if (price === 0) return "Free";
-
-    // Define categories for rounding
-    const categories = [20000, 100000, 500000, 1000000];
-    let roundedPrice = categories[0]; 
-
-    // Find the nearest price category
-    for (let i = 0; i < categories.length; i++) {
-      if (price <= categories[i]) {
-        roundedPrice = categories[i];
-        break;
-      }
-    }
 
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
       currency: "IDR",
-      minimumFractionDigits: 0, // Remove decimals
-    }).format(roundedPrice);
+      minimumFractionDigits: 0, // No decimals
+    }).format(price);
   };
 
+  // Function to get the lowest ticket price
   const getLowestTicketPrice = (tickets: IEvent["tickets"]) => {
     if (!tickets || tickets.length === 0) return "Free";
 
     const lowestPrice = Math.min(...tickets.map((ticket) => ticket.price));
 
-    return roundToNearestCategory(lowestPrice);
-  };
-
-  const getFormattedTicketPrice = (price: number) => {
-    return roundToNearestCategory(price);
+    return getFormattedTicketPrice(lowestPrice);
   };
 
   const handleEventClick = (event: IEvent) => {

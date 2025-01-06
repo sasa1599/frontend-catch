@@ -66,17 +66,17 @@ const SignPromotor = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row bg-gray-100 text-black">
+    <div className="min-h-screen flex flex-col lg:flex-row bg-gray-50 text-black">
       <div className="lg:w-1/2 w-full relative">
         <img
           src="/signPro.png"
           alt="Promotor login background"
-          className="w-full h-[100vh] object-cover"
+          className="w-full h-full object-cover"
         />
       </div>
-      <div className="lg:w-1/2 w-full flex flex-col items-center justify-center p-8 mt-20 lg:p-12">
+      <div className="lg:w-1/2 w-full flex flex-col items-center justify-center p-6 sm:p-8 lg:p-12">
         <div className="mb-8 text-center w-full max-w-lg">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
             Welcome Back, Promotor!
           </h1>
           <p className="text-lg text-gray-600 mx-auto">
@@ -84,7 +84,7 @@ const SignPromotor = () => {
             below.
           </p>
         </div>
-        <div className="bg-white w-full max-w-lg p-8 rounded-lg shadow-lg">
+        <div className="bg-white w-full max-w-lg p-8 rounded-lg shadow-md">
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}

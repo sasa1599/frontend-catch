@@ -19,6 +19,7 @@ const BookingsCustomer: React.FC = () => {
   const getOrderDataDetail = async () => {
     try {
       const res = await axios.get(`${base_url}/order/user/detail`, {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
