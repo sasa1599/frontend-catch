@@ -13,24 +13,16 @@ interface ITicketOrder {
     };
   };
 }
-
-// export interface IOrder {
-//   status_order: "PENDING" | "SUCCESS" | "FAILED" | "CANCELLED";
-//   id: number
-//   expiresAt: string;
-//   total_price: number;
-//   final_price: number;
-//   OrderDetails: ITicketOrder[];
-// }
-
 export interface IOrder {
+  voucher_code: string;
+  points_used: string;
   id: number;
   expires_at: string;
   final_price: number;
   total_price: number;
   status_order: string;
-  points_used?: number;
-  voucher_code?: string;
+  point: number;
+  voucher: string;
   OrderDetails: Array<{
     quantity: number;
     ticket: {
@@ -38,12 +30,13 @@ export interface IOrder {
       price: number;
       seats: number;
       event: {
-      title: string;
-      thumbnail: string;
-      datetime: string;
-      location: string;
-      venue: string;
-      }
-    }
+        id: number,
+        title: string;
+        thumbnail: string;
+        datetime: string;
+        location: string;
+        venue: string;
+      };
+    };
   }>;
 }

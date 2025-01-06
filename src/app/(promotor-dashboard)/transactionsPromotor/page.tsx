@@ -6,7 +6,6 @@ import PromotorSidebar from "@/components/ui/prosidebar";
 import dashPromoGuard from "@/hoc/dashPromoGuard";
 import useProSession from "@/hooks/promotorSession";
 
-
 import { IOrder } from "@/types/order";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
@@ -24,12 +23,12 @@ const PromotorTransaction: React.FC = () => {
   const getOrderDataDetail = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`${base_url}/order/user/detail`, {
+      const res = await axios.get(`${base_url}/admin/orders/${user?.id}`, {
         method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
 
       const orders = res.data.result;
@@ -41,8 +40,6 @@ const PromotorTransaction: React.FC = () => {
       setLoading(false);
     }
   };
-
-
 
   useEffect(() => {
     setHydrated(true);
@@ -67,9 +64,9 @@ const PromotorTransaction: React.FC = () => {
   };
 
   const formatPrice = (price: number): string => {
-    return new Intl.NumberFormat('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(price);
@@ -106,7 +103,9 @@ const PromotorTransaction: React.FC = () => {
       <PromotorSidebar />
       <div className="flex-1 p-6 bg-gray-50 min-h-screen text-black overflow-auto">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-800">Customer Transactions</h1>
+          <h1 className="text-2xl font-bold text-gray-800">
+            Customer Transactions
+          </h1>
           <p className="text-gray-600 mt-1">View event bookings</p>
         </div>
 
@@ -126,25 +125,34 @@ const PromotorTransaction: React.FC = () => {
               <thead className="bg-gray-50 text-gray-700 uppercase text-xs">
                 <tr>
                   <th className="px-6 py-3 text-left tracking-wider">Event</th>
-                  <th className="px-6 py-3 text-left tracking-wider">Price To Pay</th>
-                  <th className="px-6 py-3 text-left tracking-wider">Original Amount</th>
-                  <th className="px-6 py-3 text-left tracking-wider">Points Used</th>
-                  <th className="px-6 py-3 text-left tracking-wider">Voucher</th>
+                  <th className="px-6 py-3 text-left tracking-wider">
+                    Price To Pay
+                  </th>
+                  <th className="px-6 py-3 text-left tracking-wider">
+                    Original Amount
+                  </th>
+                  <th className="px-6 py-3 text-left tracking-wider">
+                    Points Used
+                  </th>
+                  <th className="px-6 py-3 text-left tracking-wider">
+                    Voucher
+                  </th>
                   <th className="px-6 py-3 text-left tracking-wider">Status</th>
-                  <th className="px-6 py-3 text-left tracking-wider">Event Date</th>
-                  
+                  <th className="px-6 py-3 text-left tracking-wider">
+                    Event Date
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {filteredTransactions.length > 0 ? (
                   filteredTransactions.map((order) => {
-                    const ticketCart = order.OrderDetails.map(detail => ({
+                    const ticketCart = order.OrderDetails.map((detail) => ({
                       quantity: detail.quantity,
                       ticket: {
                         id: detail.ticket.id,
                         price: detail.ticket.price,
-                        seats: detail.ticket.seats
-                      }
+                        seats: detail.ticket.seats,
+                      },
                     }));
 
                     return (
@@ -164,22 +172,26 @@ const PromotorTransaction: React.FC = () => {
                           {formatPrice(order.total_price)}
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-500">
-                          {order.points_used || '-'}
+                          {order.point || "-"}
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-500">
-                          {order.voucher_code || '-'}
+                          {order.voucher || "-"}
                         </td>
                         <td className="px-6 py-4">
-                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                            order.status_order === "PENDING"
-                              ? "bg-yellow-100 text-yellow-800"
-                              : "bg-green-100 text-green-800"
-                          }`}>
+                          <span
+                            className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                              order.status_order === "PENDING"
+                                ? "bg-yellow-100 text-yellow-800"
+                                : "bg-green-100 text-green-800"
+                            }`}
+                          >
                             {order.status_order}
                           </span>
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-900">
-                          {formatDate(order.OrderDetails[0]?.ticket?.event?.datetime)}
+                          {formatDate(
+                            order.OrderDetails[0]?.ticket?.event?.datetime
+                          )}
                         </td>
                       </tr>
                     );
@@ -188,7 +200,9 @@ const PromotorTransaction: React.FC = () => {
                   <tr>
                     <td colSpan={8} className="px-6 py-8 text-center">
                       <div className="text-gray-500 font-medium">
-                        {search ? "No transactions match your search." : "No transactions found."}
+                        {search
+                          ? "No transactions match your search."
+                          : "No transactions found."}
                       </div>
                       {search && (
                         <button
@@ -210,4 +224,4 @@ const PromotorTransaction: React.FC = () => {
   );
 };
 
-export default dashPromoGuard(PromotorTransaction) ;
+export default dashPromoGuard(PromotorTransaction);

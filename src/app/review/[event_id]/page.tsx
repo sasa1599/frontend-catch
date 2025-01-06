@@ -23,18 +23,25 @@ export default async function ReviewPage({
   // Fetch reviews
   const dataReviews = await getReviews(params.event_id);
 
-  const reviews = Array.isArray(dataReviews?.result) ? dataReviews.result : [];
-
-  // Format date for display
   const datetime = formatDate(event.datetime);
 
+  // Check the user's role in localStorage
+  const userRole =
+    typeof window !== "undefined" ? localStorage.getItem("role") : null;
+  console.log("role", userRole);
 
   return (
     <main className="pt-32">
       <div className="sm:mx-20 md:mx-40 tablet:mx-60">
-        <div className="flex flex-col gap-6 rounded-b-xl">
-          <div className="relative overflow-hidden aspect-[16/9] min-h-[15rem] flex-1">
-            <Image src={event.thumbnail} alt={event.title} fill />
+        <div className="flex flex-col gap-6 rounded-b-xl items-center text-start">
+          <div className="relative h-[400px] w-[400px]">
+            <Image
+              src={event.thumbnail}
+              alt={event.title}
+              layout="fill"
+              objectFit="cover"
+              className="rounded-t-xl"
+            />
           </div>
           <div className="shadow-2xl flex flex-col gap-2 rounded-b-xl">
             <div className="flex flex-col gap-2 px-6 py-4">
@@ -52,25 +59,19 @@ export default async function ReviewPage({
         </div>
         <div className="my-6 px-4">
           <h1 className="font-semibold text-4xl">Comment Section</h1>
-          {reviews.length > 0 ? (
-            reviews.map((item: IReview) => (
+          {dataReviews.length > 0 ? (
+            dataReviews.map((item: IReview) => (
               <div
                 key={item.id}
-                className="flex flex-col my-2 border-b py-4 gap-2"
+                className="flex flex-col my-2 border-b py-4 gap-2 text-white"
               >
-                {" "}
-                {/* Gunakan item.id sebagai key */}
                 <div className="flex items-center gap-4">
                   <div className="relative w-[35px] h-[35px] rounded-full overflow-hidden">
-                    <Image
-                      src={item.user.avatar}
-                      alt={item.user.full_name}
-                      fill
-                    />
+                    <Image src={item.user.avatar} alt={item.user.name} fill />
                   </div>
                   <div className="flex flex-col">
-                    <span className="font-semibold">{item.user.full_name}</span>
-                    <span className="text-xs font-semibold text-black/50">
+                    <span className="font-semibold">{item.user.name}</span>
+                    <span className="text-xs font-semibold">
                       {formatDate(item.createdAt)}
                     </span>
                   </div>
@@ -85,15 +86,18 @@ export default async function ReviewPage({
               </div>
             ))
           ) : (
-            <div>BELUM ADA REVIEW</div> // Menampilkan pesan jika tidak ada review
+            <div>BELUM ADA REVIEW</div>
           )}
         </div>
-        <div className="shadow-xl rounded-md my-4 p-4">
-          <h1 className="font-semibold text-2xl mb-4 text-center">
-            Rate and drop your comment here
-          </h1>
-          <FormReview event_id={params.event_id} />
-        </div>
+        {/* Only show this section if user is not a promotor */}
+        {userRole !== "promotor" && (
+          <div className="shadow-xl rounded-md my-4 p-4">
+            <h1 className="font-semibold text-2xl mb-4 text-center">
+              Rate and drop your comment here
+            </h1>
+            <FormReview event_id={params.event_id} />
+          </div>
+        )}
       </div>
     </main>
   );

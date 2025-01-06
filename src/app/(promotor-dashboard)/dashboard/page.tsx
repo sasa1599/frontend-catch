@@ -33,7 +33,6 @@ const DashboardPromotor: React.FC = () => {
   const { user, loading, error } = useProSession();
   const [filter, setFilter] = useState<"day" | "month" | "year">("month");
   const [events, setEvents] = useState<any[]>([]);
-  const [orders, setOrders] = useState<any[]>([]);
   const [dashboardStats, setDashboardStats] = useState({
     totalEvents: 0,
     totalRevenue: 0,
@@ -43,7 +42,6 @@ const DashboardPromotor: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL_BE;
 
-  // API Calls
   const fetchEvents = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/events/promotor`, {
@@ -78,39 +76,53 @@ const DashboardPromotor: React.FC = () => {
   const fetchTotalRevenue = async () => {
     try {
       const response = await axios.get(
-        `${BASE_URL}/admin/revenue/promotor/${user?.id}`,
+        `${BASE_URL}/admin/revenue/${user?.id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
-      return response.data.data.totalRevenue || 0;
+      
+      const revenueData = response.data.data || response.data || [];
+      
+      if (!Array.isArray(revenueData)) {
+        console.error("Revenue data is not an array:", revenueData);
+        return [];
+      }
+  
+      const total = revenueData.reduce((sum: number, order: any) => 
+        sum + (Number(order.final_price) || 0), 0
+      );
+  
+      setDashboardStats(prev => ({
+        ...prev,
+        totalRevenue: total
+      }));
+  
+      return revenueData;
     } catch (error) {
       console.error("Error fetching total revenue:", error);
-      return 0;
+      return [];
     }
   };
 
   const fetchDashboardStats = async () => {
+    if (!user?.id) return;
+    
     try {
-      const [eventsData, orderCount, totalRevenue] = await Promise.all([
+      const [eventsData, orderCount] = await Promise.all([
         fetchEvents(),
         fetchOrderCount(),
-        fetchTotalRevenue(),
       ]);
 
       setEvents(eventsData);
-      setOrders([]); // We don't need order data now, it's just for counting transactions
-
-      setDashboardStats({
+      setDashboardStats(prev => ({
+        ...prev,
         totalEvents: eventsData.length,
-        totalRevenue,
         totalTransactions: orderCount,
-      });
+      }));
 
-      // Update revenue chart data
-      updateRevenueChart(eventsData);
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching dashboard stats:", error);
@@ -118,54 +130,35 @@ const DashboardPromotor: React.FC = () => {
     }
   };
 
-  // Utility Functions
-  const formatRupiah = (value: number | null | undefined): string => {
-    if (value == null || isNaN(value)) {
-      return "Rp 0";
-    }
+  const formatRupiah = (value: number): string => {
+    if (value == null || isNaN(value)) return "Rp 0";
     return `Rp ${value.toLocaleString("id-ID")}`;
   };
 
-  const formatEventDate = (dateString: string) => {
+  const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    if (isNaN(date.getTime())) {
-      return "Invalid Date"; // Handle invalid date
-    }
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "2-digit",
-    });
+    if (isNaN(date.getTime())) return "Invalid Date";
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
   };
 
-  const getLowestTicketPrice = (tickets: any[]) => {
-    if (!tickets || tickets.length === 0) return 0;
-    return Math.min(...tickets.map((ticket) => ticket.price));
-  };
-
-  // Chart Data Processing
-  const groupRevenueData = (
-    orders: any[],
-    filterType: "day" | "month" | "year"
-  ) => {
-    const grouped = orders.reduce((acc: any, order: any) => {
-      const date = new Date(order.createdAt);
-      if (isNaN(date.getTime())) return acc; // Skip invalid dates
+  const groupRevenueData = (revenueData: any[], filterType: "day" | "month" | "year") => {
+    return revenueData.reduce((acc: any, order: any) => {
+      const date = new Date(order.created_at);
+      if (isNaN(date.getTime())) return acc;
 
       let key;
-
       switch (filterType) {
         case "day":
-          key = date.toISOString().split("T")[0]; // format to YYYY-MM-DD
+          key = formatDate(date.toISOString());
           break;
         case "month":
-          key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
-            2,
-            "0"
-          )}`; // format to YYYY-MM
+          key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
           break;
         case "year":
-          key = `${date.getFullYear()}`; // format to YYYY
+          key = `${date.getFullYear()}`;
           break;
         default:
           return acc;
@@ -174,120 +167,117 @@ const DashboardPromotor: React.FC = () => {
       if (!acc[key]) {
         acc[key] = 0;
       }
-      acc[key] += order.final_price || 0;
+      acc[key] += Number(order.final_price) || 0;
       return acc;
     }, {});
-
-    return grouped;
   };
 
-  const updateRevenueChart = (eventsData: any[]) => {
-    const groupedData = groupRevenueData(eventsData, filter);
-    const now = new Date();
-    let startDate = new Date();
-    let labels: string[] = [];
-    let data: number[] = [];
-
-    switch (filter) {
-      case "day":
-        startDate.setDate(now.getDate() - 7); // 7 days ago
-        while (startDate <= now) {
-          const key = startDate.toISOString().split("T")[0];
-          labels.push(
-            startDate.toLocaleDateString("en-US", { weekday: "short" })
-          );
-          data.push(groupedData[key] || 0); // Ensure fallback to 0 if no data for the day
-          startDate.setDate(startDate.getDate() + 1);
-        }
-        break;
-
-      case "month":
-        startDate.setMonth(now.getMonth() - 11); // 11 months ago
-        while (startDate <= now) {
-          const key = `${startDate.getFullYear()}-${String(
-            startDate.getMonth() + 1
-          ).padStart(2, "0")}`;
-          labels.push(
-            startDate.toLocaleDateString("en-US", { month: "short" })
-          );
-          data.push(groupedData[key] || 0); // Ensure fallback to 0 if no data for the month
-          startDate.setMonth(startDate.getMonth() + 1);
-        }
-        break;
-
-      case "year":
-        startDate.setFullYear(now.getFullYear() - 4); // 4 years ago
-        while (startDate <= now) {
-          const key = `${startDate.getFullYear()}`;
-          labels.push(key);
-          data.push(groupedData[key] || 0); // Ensure fallback to 0 if no data for the year
-          startDate.setFullYear(startDate.getFullYear() + 1);
-        }
-        break;
-    }
-
-    setRevenueData({
-      labels,
-      datasets: [
-        {
-          label: "Revenue",
-          data,
-          borderColor: "rgb(75, 192, 192)",
-          backgroundColor: "rgba(75, 192, 192, 0.2)",
-          tension: 0.4,
-        },
-      ],
-    });
-  };
-
-  // Effects
   useEffect(() => {
-    fetchDashboardStats();
-  }, []);
+    if (user?.id) {
+      fetchDashboardStats();
+    }
+  }, [user?.id]);
 
   useEffect(() => {
-    if (events.length > 0) {
-      updateRevenueChart(events);
-    }
-  }, [filter, events]);
+    const updateChart = async () => {
+      if (user?.id) {
+        const revenueData = await fetchTotalRevenue();
+        const groupedData = groupRevenueData(revenueData, filter);
+        
+        const now = new Date();
+        let startDate = new Date();
+        let labels: string[] = [];
+        let data: number[] = [];
+
+        switch (filter) {
+          case "day":
+            startDate.setDate(now.getDate() - 7);
+            while (startDate <= now) {
+              const key = formatDate(startDate.toISOString());
+              labels.push(formatDate(startDate.toISOString()));
+              data.push(groupedData[key] || 0);
+              startDate.setDate(startDate.getDate() + 1);
+            }
+            break;
+
+          case "month":
+            startDate.setMonth(now.getMonth() - 11);
+            while (startDate <= now) {
+              const key = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, "0")}`;
+              labels.push(startDate.toLocaleDateString("id-ID", { month: "long", year: "numeric" }));
+              data.push(groupedData[key] || 0);
+              startDate.setMonth(startDate.getMonth() + 1);
+            }
+            break;
+
+          case "year":
+            startDate.setFullYear(now.getFullYear() - 4);
+            while (startDate <= now) {
+              const key = `${startDate.getFullYear()}`;
+              labels.push(key);
+              data.push(groupedData[key] || 0);
+              startDate.setFullYear(startDate.getFullYear() + 1);
+            }
+            break;
+        }
+
+        setRevenueData({
+          labels,
+          datasets: [{
+            label: "Revenue",
+            data,
+            borderColor: "rgb(75, 192, 192)",
+            backgroundColor: "rgba(75, 192, 192, 0.2)",
+            tension: 0.4,
+          }],
+        });
+      }
+    };
+
+    updateChart();
+  }, [filter, user?.id]);
 
   const chartOptions = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: "top" as const,
         labels: {
-          font: {
-            size: 12,
-          },
-        },
+          font: { size: 12 }
+        }
       },
       title: {
         display: true,
         text: "Revenue Statistics",
         font: {
           size: 16,
-          weight: "bold" as const,
-        },
+          weight: "bold" as const
+        }
       },
       tooltip: {
         callbacks: {
-          label: function (context: any) {
+          label: function(context: any) {
             return `Revenue: ${formatRupiah(context.parsed.y)}`;
-          },
-        },
-      },
+          }
+        }
+      }
     },
     scales: {
       y: {
         beginAtZero: true,
         ticks: {
-          callback: function (value: any) {
+          callback: function(value: any) {
             return formatRupiah(value);
-          },
-        },
+          }
+        }
       },
-    },
+      x: {
+        grid: {
+          display: false
+        }
+      }
+    }
   };
 
   if (loading || isLoading) {
@@ -330,15 +320,12 @@ const DashboardPromotor: React.FC = () => {
         </header>
 
         <div className="grid grid-cols-3 gap-6 mb-6">
-          <Link
-            href="/transactionsPromotor"
-            className="bg-white shadow rounded-lg p-6 flex flex-col items-center hover:shadow-md transition"
-          >
+          <div className="bg-white shadow rounded-lg p-6 flex flex-col items-center hover:shadow-md transition">
             <p className="text-3xl font-bold text-blue-500">
               {formatRupiah(dashboardStats.totalRevenue)}
             </p>
             <p className="text-gray-600">Total Revenue</p>
-          </Link>
+          </div>
           <Link
             href="/transactionsPromotor"
             className="bg-white shadow rounded-lg p-6 flex flex-col items-center hover:shadow-md transition"
@@ -378,7 +365,9 @@ const DashboardPromotor: React.FC = () => {
               ))}
             </div>
           </div>
-          {revenueData && <Line data={revenueData} options={chartOptions} />}
+          <div className="h-[400px]">
+            {revenueData && <Line data={revenueData} options={chartOptions} />}
+          </div>
         </div>
 
         <div className="bg-white shadow rounded-lg p-6 mb-6">
@@ -395,13 +384,7 @@ const DashboardPromotor: React.FC = () => {
                   <div className="flex-1">
                     <p className="text-gray-800 font-medium">{event.title}</p>
                     <p className="text-gray-500 text-sm">
-                      Date: {formatEventDate(event.datetime)} | Category:{" "}
-                      {event.category} | Venue: {event.venue}
-                    </p>
-                  </div>
-                  <div className="flex flex-col items-end min-w-[150px]">
-                    <p className="text-gray-700">
-                      {formatRupiah(getLowestTicketPrice(event.tickets))}
+                      Date: {formatDate(event.datetime)} | Category: {event.category} | Venue: {event.venue}
                     </p>
                   </div>
                 </li>

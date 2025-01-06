@@ -1,6 +1,6 @@
 interface IUser {
   avatar: string;
-  full_name: string;
+  name: string;
 }
 
 export interface IReview {
@@ -9,6 +9,7 @@ export interface IReview {
   comment: string;
   createdAt: string;
   user: IUser;
+  user_id:string
 }
 
 export interface FormReview {
