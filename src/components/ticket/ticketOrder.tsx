@@ -14,49 +14,63 @@ export default function TicketOrder({ ticket }: { ticket: ITicket }) {
 
   const { ticketCart, setTicketCart } = context;
 
+  // Maximum tickets a user can purchase
+  const MAX_TICKETS = 5;
+
   const handleAddTicket = () => {
-    setOrder(order + 1);
-    const ticketCartId = ticketCart?.findIndex(
-      (item) => item.ticket.id === ticket.id
-    );
+    if (ticket.seats === 0) {
+      alert("This ticket is sold out.");
+      return;
+    }
 
-    if (ticketCartId! > -1 && ticketCart) {
-      const newTicketCart = [...ticketCart];
-      newTicketCart[ticketCartId!].quantity = order + 1;
+    if (order < MAX_TICKETS && order < ticket.seats) {
+      setOrder(order + 1);
+      const ticketCartId = ticketCart?.findIndex(
+        (item) => item.ticket.id === ticket.id
+      );
 
-      setTicketCart(newTicketCart);
-    } else {
-      if (ticketCart?.length! > 0) {
-        setTicketCart([...ticketCart!, { ticket, quantity: 1 }]);
+      if (ticketCartId! > -1 && ticketCart) {
+        const newTicketCart = [...ticketCart];
+        newTicketCart[ticketCartId!].quantity = order + 1;
+
+        setTicketCart(newTicketCart);
       } else {
-        setTicketCart([{ ticket, quantity: 1 }]);
+        if (ticketCart?.length! > 0) {
+          setTicketCart([...ticketCart!, { ticket, quantity: 1 }]);
+        } else {
+          setTicketCart([{ ticket, quantity: 1 }]);
+        }
       }
+    } else if (order >= ticket.seats) {
+      alert("Not enough seats available.");
+    } else {
+      alert("You can only buy up to 5 tickets.");
     }
   };
 
   const handleDecreaseTicket = () => {
-    setOrder(order - 1);
-    const ticketCartId = ticketCart?.findIndex(
-      (item) => item.ticket.id == ticket.id
-    );
-    console.log(ticketCart);
+    if (order > 0) {
+      setOrder(order - 1);
+      const ticketCartId = ticketCart?.findIndex(
+        (item) => item.ticket.id == ticket.id
+      );
 
-    if (ticketCartId! > -1 && ticketCart) {
-      const newTicketCart = [...ticketCart];
-      newTicketCart[ticketCartId!].quantity = order - 1;
-      setTicketCart(newTicketCart);
-    }
-    if (order === 1 && ticketCart && ticketCartId! > -1) {
-      const newTicketCart = [...ticketCart];
-      newTicketCart.splice(ticketCartId as number, 1);
-      setTicketCart(newTicketCart);
+      if (ticketCartId! > -1 && ticketCart) {
+        const newTicketCart = [...ticketCart];
+        newTicketCart[ticketCartId!].quantity = order - 1;
+        setTicketCart(newTicketCart);
+      }
+      if (order === 1 && ticketCart && ticketCartId! > -1) {
+        const newTicketCart = [...ticketCart];
+        newTicketCart.splice(ticketCartId as number, 1);
+        setTicketCart(newTicketCart);
+      }
     }
   };
 
   return (
     <div className="flex flex-col bg-black w-full">
       <p className="font-semibold text-xl pt-4">{ticket.category}</p>
-      {/* <p dangerouslySetInnerHTML={{ __html: ticket.description }}></p> */}
 
       {/* Click to Order Ticket */}
       <div className="flex items-center justify-between">
@@ -74,14 +88,24 @@ export default function TicketOrder({ ticket }: { ticket: ITicket }) {
           <div>{order}</div>
           <button
             onClick={handleAddTicket}
-            className="w-[25px] h-[25px] rounded-full font-semibold border-2 border-lightBlue flex items-center justify-center"
+            disabled={order >= MAX_TICKETS || order >= ticket.seats || ticket.seats === 0}
+            className={`w-[25px] h-[25px] rounded-full font-semibold border-2 border-lightBlue flex items-center justify-center ${
+              ticket.seats === 0 ? "opacity-50 cursor-not-allowed" : ""
+            }`}
           >
             <Plus className="h-4 w-4" />
           </button>
         </div>
       </div>
 
-      <span className="text-xs">available seats: {ticket.seats} left</span>
+      {/* Available seats */}
+      <span className="text-xs">
+        {ticket.seats === 0 ? (
+          <span className="text-red-500">No available seats</span>
+        ) : (
+          `Available seats: ${ticket.seats} left`
+        )}
+      </span>
     </div>
   );
 }

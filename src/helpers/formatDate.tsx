@@ -60,7 +60,6 @@ export function formatOrderDate(dateString: string): string {
     return "Invalid date";
   }
 
-  // Create an options object for the DateTimeFormat
   const options: Intl.DateTimeFormatOptions = {
     weekday: "short", // 'Thu'
     year: "numeric", // '2025'
@@ -75,4 +74,18 @@ export function formatOrderDate(dateString: string): string {
   const formattedDate = new Intl.DateTimeFormat("en-US", options).format(date);
 
   return formattedDate;
+}
+
+export function displayDate(start_date: string, end_date: string) {
+  
+  if (start_date == end_date) return `${start_date}`;
+
+  const start = start_date.split(" ");
+  const end = end_date.split(" ");
+
+  if (start[2] !== end[2]) {
+    return `${start} - ${end}`;
+  } else {
+    return `${start[0]} ${start[1]} - ${end.join(" ")}`;
+  }
 }

@@ -3,6 +3,7 @@
 import PayButton from "@/components/midtrans/payButton";
 import CountDown from "@/components/order/countDown";
 import CustomerSidebar from "@/components/ui/sidebar";
+import { formatPrice } from "@/helpers/formatPrice";
 import useSession from "@/hooks/useSession";
 import { IOrder } from "@/types/order";
 import axios from "axios";
@@ -76,6 +77,8 @@ const CustomerTransaction: React.FC = () => {
       ?.includes(search.toLowerCase())
   );
 
+  
+
   const formatDate = (date: string): string => {
     const options: Intl.DateTimeFormatOptions = {
       year: "numeric",
@@ -85,14 +88,6 @@ const CustomerTransaction: React.FC = () => {
     return new Date(date).toLocaleDateString("en-US", options);
   };
 
-  const formatPrice = (price: number): string => {
-    return new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(price);
-  };
 
   if (!hydrated) {
     return null;
@@ -197,10 +192,10 @@ const CustomerTransaction: React.FC = () => {
                           {formatPrice(order.total_price)}
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-500">
-                          {order.points_used || "-"}
+                          {formatPrice(order.point) || "-"}
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-500">
-                          {order.voucher_code || "-"}
+                          {order.voucher || "-"}
                         </td>
                         <td className="px-6 py-4">
                           <span

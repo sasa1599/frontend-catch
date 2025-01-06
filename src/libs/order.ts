@@ -24,7 +24,6 @@ export async function getOrderDetail(order_id: string) {
     });
 
     const data = await res.json();
-    console.log(data);
 
     return data?.result;
   } catch (err) {
@@ -32,7 +31,7 @@ export async function getOrderDetail(order_id: string) {
   }
 }
 
-export async function getSnapToken(order_id: number, final_price: number) {
+export async function getSnapToken(order_id: number, total_price: number) {
   try {
     const token = localStorage.getItem("token");
     console.log("Token from localStorage:", token); // Pastikan token ada
@@ -41,7 +40,8 @@ export async function getSnapToken(order_id: number, final_price: number) {
       "http://localhost:8001/api/order/payment",
       {
         order_id,
-        gross_amount: final_price,
+        gross_amount: total_price,
+        total_price: total_price
       },
       {
         headers: {

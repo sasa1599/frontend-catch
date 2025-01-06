@@ -173,7 +173,7 @@ export default function PayButton({ order }: { order: IOrder }) {
   
   const handleClick = async () => {
     // const snapToken = await token();
-    const snapToken = await getSnapToken(order.id, order.final_price);
+    const snapToken = await getSnapToken(order.id, order.total_price);
     if (snapToken) {
       window.snap.pay(snapToken);
     } else {

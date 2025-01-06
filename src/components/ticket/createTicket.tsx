@@ -49,7 +49,8 @@ export default function CreateTicketPage({
 
       revalidate("tickets");
       toast.success(result.message);
-      router.push("/dashboard");
+      router.push(`/promotorManagement/${+params.event_id}`);
+      router.refresh()
     } catch (err) {
       console.error(err);
     } finally {
@@ -164,7 +165,7 @@ export default function CreateTicketPage({
                 name="maxSeats"
                 type="text"
                 className="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
-                value={props.values.maxSeats === 1 ? "" : props.values.maxSeats}
+                value={props.values.maxSeats === 0 ? "" : props.values.maxSeats}
                 placeholder="Enter max seats"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   const rawValue = e.target.value.replace(/[^\d]/g, "");

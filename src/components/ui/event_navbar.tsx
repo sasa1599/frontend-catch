@@ -3,12 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import AvatarMenu from "./avatarmenu";
-import { deleteCookie } from "../libs/action";
+import { useRouter } from "next/navigation";
 import { IUser, IPromotor } from "@/types/user";
 import { useSession } from "@/context/useSession";
 import SearchBar from "@/helpers/searchBar";
+import EventAvatarMenu from "./event_avatar";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -28,23 +27,7 @@ const Navbar = () => {
     { label: "Promotor", href: "/sign-in/signPromotor" },
   ];
 
-  const pathName = [
-    "/dashboard",
-    "/dashboardCustomer",
-    "/profileCustomer",
-    "/events",
-    "/loading",
-    "/profilePromotor",
-    "/transactionsPromotor",
-    "/listEvent",
-    "/promotorManagement",
-    "/transaksiCustomer",
-    "/ticketCustomer",
-    "/browse_events",
-    "/Order",
-    "/ListEvents",
-  ];
-  const paths = usePathname();
+
   const onLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
@@ -81,12 +64,10 @@ const Navbar = () => {
     return () => document.removeEventListener("click", handleOutsideClick);
   }, [dropdownOpen]);
 
-  if (pathName.includes(paths)) {
-    return null;
-  }
+
 
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-white z-50 px-4 md:px-6 py-4 shadow text-black">
+    <nav className="fixed top-0 left-0 right-0 bg-black z-50 px-4 md:px-6 py-4 shadow text-white">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <Image src="/logo.gif" alt="Logo" width={40} height={40} />
@@ -100,28 +81,28 @@ const Navbar = () => {
             <Link
               key={item.label}
               href={item.href}
-              className="text-black hover:opacity-70 transition-opacity"
+              className=" hover:opacity-70 transition-opacity"
             >
               {item.label}
             </Link>
           ))}
           {isAuth && user ? (
-            <AvatarMenu user={user} onLogout={onLogout} />
+            <EventAvatarMenu user={user} onLogout={onLogout} />
           ) : (
             <div className="relative">
               <button
-                className="dropdown-button text-black hover:opacity-70 transition-opacity"
+                className="dropdown-button  hover:opacity-70 transition-opacity"
                 onClick={() => setDropdownOpen((prev) => !prev)}
               >
                 Login
               </button>
               {dropdownOpen && (
-                <div className="dropdown-menu absolute top-full mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
+                <div className="dropdown-menu absolute top-full mt-2 w-40 bg-black border border-gray-200 rounded-lg shadow-lg z-20">
                   {loginOptions.map((option) => (
                     <Link
                       key={option.label}
                       href={option.href}
-                      className="block px-4 py-2 text-black hover:bg-gray-100"
+                      className="block px-4 py-2  hover:bg-gray-100"
                     >
                       {option.label}
                     </Link>
@@ -135,7 +116,7 @@ const Navbar = () => {
           </button>
         </div>
         <button
-          className="block md:hidden text-black"
+          className="block md:hidden "
           onClick={() => setMenuOpen((prev) => !prev)}
         >
           <svg
@@ -165,13 +146,13 @@ const Navbar = () => {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:outline-none"
             />
             {/* Search dropdown below the input */}
-            <div className="absolute top-full mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-lg z-20">
+            <div className="absolute top-full mt-2 w-full bg-black border border-gray-300 rounded-lg shadow-lg z-20">
               <ul className="mt-2">
                 {menuItems.map((item) => (
                   <li key={item.label}>
                     <Link
                       href={item.href}
-                      className="block px-4 py-2 text-black hover:bg-gray-100"
+                      className="block px-4 py-2  hover:bg-gray-100"
                     >
                       {item.label}
                     </Link>
@@ -183,23 +164,23 @@ const Navbar = () => {
           <ul className="mt-4">
             {isAuth && (isCustomer(user) || isPromotor(user)) ? (
               <li>
-                <AvatarMenu user={user} onLogout={onLogout} />
+                <EventAvatarMenu user={user} onLogout={onLogout} />
               </li>
             ) : (
               <li>
                 <button
-                  className="dropdown-button text-black hover:opacity-70 transition-opacity"
+                  className="dropdown-button  hover:opacity-70 transition-opacity"
                   onClick={() => setDropdownOpen((prev) => !prev)}
                 >
                   Login
                 </button>
                 {dropdownOpen && (
-                  <div className="dropdown-menu absolute top-full mt-2 right-0 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
+                  <div className="dropdown-menu absolute top-full mt-2 right-0 w-40 bg-black border border-gray-200 rounded-lg shadow-lg z-20">
                     {loginOptions.map((option) => (
                       <Link
                         key={option.label}
                         href={option.href}
-                        className="block px-4 py-2 text-black hover:bg-gray-100"
+                        className="block px-4 py-2  hover:bg-gray-100"
                       >
                         {option.label}
                       </Link>

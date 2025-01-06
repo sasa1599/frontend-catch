@@ -45,9 +45,13 @@ const SignCustomer = () => {
       };
 
       // API call for login
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL_BE}/login`, payload, {
-        withCredentials: true,
-      });
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL_BE}/login`,
+        payload,
+        {
+          withCredentials: true,
+        }
+      );
 
       // Extract response data
       const { customer, token, message } = res.data;
@@ -55,7 +59,7 @@ const SignCustomer = () => {
       // Update session state
       setUser(customer);
       setIsAuth(true);
-      localStorage.setItem("role", "customer")
+      localStorage.setItem("role", "customer");
       localStorage.setItem("token", token);
 
       // Display success message and redirect

@@ -1,28 +1,27 @@
-import Card from "@/components/card";
-import LinkCategory from "@/components/category";
+import Card from "@/components/ticket/card";
+import LinkCategory from "@/components/ui/category";
 import { getEvent } from "@/libs/event";
 import { formatDate } from "@/helpers/formatDate";
 import { IEvent } from "@/types/allInterface";
 
 export default async function Events() {
   const data: IEvent[] = await getEvent();
-  
 
   if (!data || data.length === 0) {
     return <div>No events found.</div>;
   }
 
-  // Filter and sort events by the closest event date to today
+
   const filteredEvents = data
     .filter((item) => {
       const eventDate = new Date(item.datetime).getTime();
       const now = new Date().getTime();
-      return eventDate > now; // Keep only future events
+      return eventDate > now; 
     })
     .sort((a, b) => {
       const eventDateA = new Date(a.datetime).getTime();
       const eventDateB = new Date(b.datetime).getTime();
-      return eventDateA - eventDateB; // Sort by closest event date
+      return eventDateA - eventDateB;
     });
 
   if (filteredEvents.length === 0) {
