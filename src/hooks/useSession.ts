@@ -11,7 +11,7 @@ const useSession = () => {
   const checkSession = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:8001/api/customers/profile", {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL_BE}/customers/profile`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`

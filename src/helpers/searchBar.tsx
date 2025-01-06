@@ -6,7 +6,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { IEvent } from "@/types/allInterface";
 import Link from "next/link";
 import { formatDateEvent } from "./formatDate";
-import { Search, Loader2, Calendar, MapPin } from "lucide-react";
+import { Loader2, Calendar, MapPin } from "lucide-react";
 
 const base_url = process.env.NEXT_PUBLIC_BASE_URL_BE;
 

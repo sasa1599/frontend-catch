@@ -7,79 +7,95 @@ import Image from "next/image";
 import Link from "next/link";
 import dashCustGuard from "@/hoc/dashCustoGuard";
 
-
 const CustomerDashboard: React.FC = () => {
   const { user, loading, error } = useSession();
 
-  if (loading)
+  if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-gray-100">
-        <p>Loading...</p>
+      <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
       </div>
     );
+  }
 
-  if (error)
+  if (error) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-gray-100">
-        <p className="text-red-500">{error}</p>
+      <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+        <div className="bg-white p-8 rounded-lg shadow-lg">
+          <p className="text-red-500 text-lg font-medium">{error}</p>
+        </div>
       </div>
     );
+  }
 
-  if (!user)
+  if (!user) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-gray-100">
-        <p>No user session found. Please log in.</p>
+      <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+        <div className="bg-white p-8 rounded-lg shadow-lg text-center">
+          <p className="text-gray-700 text-lg mb-4">No user session found.</p>
+          <Link
+            href="/login"
+            className="inline-block bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+          >
+            Please log in
+          </Link>
+        </div>
       </div>
     );
+  }
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <CustomerSidebar />
-      <main className="flex-1 flex items-center justify-center bg-white">
-        <div className="grid grid-cols-1 md:grid-cols-2 max-w-7xl w-full p-8">
-          <div className="flex flex-col justify-center">
-            <div className="mb-6">
-              <p className="inline-block px-4 py-2 bg-blue-200 text-blue-800 rounded-full text-sm font-semibold">
-                It’s me
-              </p>
+      <main className="flex-1 flex flex-col lg:flex-row lg:items-center lg:justify-center p-4 lg:p-8 mt-12 lg:mt-0 overflow-hidden min-h-screen">
+        <div className="max-w-7xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col lg:flex-row w-full lg:w-auto">
+          <div className="flex flex-col justify-center p-6 lg:p-12 w-full lg:w-1/2 space-y-6">
+            <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-blue-100 to-blue-50 px-4 py-2 rounded-full">
+              <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
+              <p className="text-blue-800 font-medium">Welcome back!</p>
             </div>
-            <h1 className="text-5xl font-bold text-gray-900">
-              Welcome, {user.name || user.username}!
+            <h1 className="text-3xl lg:text-5xl font-bold text-gray-900 tracking-tight">
+              Hello, {user.name || user.username}! 👋
             </h1>
-            <p className="text-lg text-gray-600 mt-4">
-              Here you can manage your <span className="text-red-500">Bookings</span>, view{" "}
-              <span className="text-blue-500">Transactions</span>, and update your{" "}
-              <span className="text-blue-500">Profile</span>.
+            <p className="text-base lg:text-lg text-gray-600 leading-relaxed">
+              Ready to explore? You can manage your{" "}
+              <span className="text-red-500 font-semibold">Bookings</span>,
+              check your{" "}
+              <span className="text-blue-500 font-semibold">Transactions</span>,
+              and update your{" "}
+              <span className="text-green-500 font-semibold">Profile</span>{" "}
+              here.
             </p>
-            <div className="mt-8 flex gap-4">
+            <div className="flex flex-wrap gap-4 mt-8">
               <Link
                 href="/ticketCustomer"
-                className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-full text-lg font-semibold shadow"
+                className="flex-1 lg:flex-none text-center bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-8 py-3 rounded-xl text-sm lg:text-base font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
               >
-                Bookings
+                My Bookings
               </Link>
               <Link
                 href="/transaksiCustomer"
-                className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-2 rounded-full text-lg font-semibold shadow"
+                className="flex-1 lg:flex-none text-center bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-8 py-3 rounded-xl text-sm lg:text-base font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
               >
                 Transactions
               </Link>
               <Link
                 href="/profileCustomer"
-                className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full text-lg font-semibold shadow"
+                className="flex-1 lg:flex-none text-center bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-8 py-3 rounded-xl text-sm lg:text-base font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
               >
                 My Profile
               </Link>
             </div>
           </div>
-          <div className="flex-1 flex justify-center items-center relative">
-            <div className="absolute right-0 w-[350px] h-[400px] bg-blue-100 rounded-tl-full rounded-bl-full"></div>
-            <div className="relative z-10 w-64 h-64 md:w-72 md:h-72 rounded-full overflow-hidden shadow-xl">
+          <div className="relative flex items-center justify-center p-6 lg:p-12 bg-gradient-to-br from-blue-50 to-blue-100 w-full lg:w-1/2">
+            <div className="absolute right-0 top-1/2 transform -translate-y-1/2 w-48 h-48 lg:w-72 lg:h-72 bg-blue-200 rounded-full blur-3xl opacity-50"></div>
+            <div className="relative z-10 w-32 h-32 lg:w-64 lg:h-64 rounded-full overflow-hidden ring-4 ring-white shadow-2xl transform hover:scale-105 transition-transform duration-300">
               <Image
                 src={user.avatar || "/user.png"}
                 alt="User Avatar"
                 fill
                 className="object-cover"
+                priority
               />
             </div>
           </div>
@@ -89,5 +105,4 @@ const CustomerDashboard: React.FC = () => {
   );
 };
 
-// Wrap the CustomerDashboard with the dashCustomerGuard HOC
 export default dashCustGuard(CustomerDashboard);

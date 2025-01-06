@@ -10,6 +10,8 @@ export async function getCoupon() {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
+    console.log("res",res);
+    
     return res.data?.result
   } catch (err) {
     console.error("Error fetching order details:", err);
@@ -31,4 +33,3 @@ export async function getPoint() {
     console.error("Error fetching order details:", err);
   }
 }
-

@@ -8,7 +8,6 @@ import axios from "axios";
 import { useSession } from "@/context/useSession";
 import dashCustGuard from "@/hoc/dashCustoGuard";
 
-import Loading from "../loading";
 
 const BookingsCustomer: React.FC = () => {
   const { user } = useSession();
@@ -19,6 +18,7 @@ const BookingsCustomer: React.FC = () => {
   const getOrderDataDetail = async () => {
     try {
       const res = await axios.get(`${base_url}/order/user/detail`, {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,

@@ -31,16 +31,17 @@ export async function getOrderDetail(order_id: string) {
   }
 }
 
-export async function getSnapToken(order_id: number, final_price: number) {
+export async function getSnapToken(order_id: number, total_price: number) {
   try {
     const token = localStorage.getItem("token");
     console.log("Token from localStorage:", token); // Pastikan token ada
 
     const { data } = await axios.post(
-      "http://localhost:8001/api/order/payment",
+      `${process.env.NEXT_PUBLIC_BASE_URL_BE}/order/payment`,
       {
         order_id,
-        gross_amount: final_price,
+        gross_amount: total_price,
+        total_price: total_price
       },
       {
         headers: {

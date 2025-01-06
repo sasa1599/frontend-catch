@@ -8,7 +8,7 @@ const base_url = process.env.NEXT_PUBLIC_BASE_URL_BE;
 
 export default function SearchBar() {
   const [value, setValue] = useState<string>("");
-  const [debouncedValue, setDebouncedValue] = useDebounce(value, 500);
+  const [debouncedValue] = useDebounce(value, 500);
   const [events, setEvents] = useState<IEvent[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
