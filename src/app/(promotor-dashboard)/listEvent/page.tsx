@@ -15,6 +15,12 @@ const ListEvents: React.FC = () => {
     loading: sessionLoading,
     error: sessionError,
   } = useProSession();
+  const {
+    isAuth,
+    user,
+    loading: sessionLoading,
+    error: sessionError,
+  } = useProSession();
   const [events, setEvents] = useState<IEvent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -35,6 +41,7 @@ const ListEvents: React.FC = () => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
@@ -100,6 +107,11 @@ const ListEvents: React.FC = () => {
     const paragraphs = Array.from(tempDiv.getElementsByTagName("p"));
 
     // Iterate through paragraphs and remove <p> tags
+    paragraphs.forEach((p) => {
+      p.parentNode?.replaceChild(
+        document.createTextNode(p.textContent || ""),
+        p
+      );
     paragraphs.forEach((p) => {
       p.parentNode?.replaceChild(
         document.createTextNode(p.textContent || ""),

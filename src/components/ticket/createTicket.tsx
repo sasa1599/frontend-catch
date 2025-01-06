@@ -50,7 +50,7 @@ export default function CreateTicketPage({
       revalidate("tickets");
       toast.success(result.message);
       router.push(`/promotorManagement/${+params.event_id}`);
-      router.refresh()
+      router.refresh();
     } catch (err) {
       console.error(err);
     } finally {
@@ -69,7 +69,6 @@ export default function CreateTicketPage({
       }}
     >
       {(props) => {
-
         return (
           <Form className="flex flex-col gap-3 pt-5 w-full items-center justify-center text-black">
             <p>Ticket Detail</p>
