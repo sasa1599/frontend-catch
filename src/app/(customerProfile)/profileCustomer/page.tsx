@@ -25,7 +25,7 @@ const ProfileCustomer: React.FC = () => {
   const fetchPoints = async () => {
     if (!user) return;
     try {
-      const res = await axios.get("http://localhost:8001/api/userpoints", {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL_BE}/userpoints`, {
         withCredentials: true,
         headers: { "Content-Type": "application/json" },
       });
@@ -46,7 +46,7 @@ const ProfileCustomer: React.FC = () => {
   const fetchCoupons = async () => {
     if (!user) return;
     try {
-      const res = await axios.get("http://localhost:8001/api/usercoupons", {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL_BE}/usercoupons`, {
         withCredentials: true,
         headers: { "Content-Type": "application/json" },
       });
@@ -67,7 +67,7 @@ const ProfileCustomer: React.FC = () => {
       const formData = new FormData();
       formData.append("file", file);
       const res = await axios.patch(
-        "http://localhost:8001/api/avatarcloud",
+        `${process.env.NEXT_PUBLIC_BASE_URL_BE}/avatarcloud`,
         formData,
         {
           withCredentials: true,

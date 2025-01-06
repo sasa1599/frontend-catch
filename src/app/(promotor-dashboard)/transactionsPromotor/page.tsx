@@ -2,15 +2,17 @@
 
 import PayButton from "@/components/midtrans/payButton";
 import PromotorSidebar from "@/components/ui/prosidebar";
-import dashPromoGuard from "@/hoc/dashPromoGuard";
 
-import useSession from "@/hooks/useSession";
+import dashPromoGuard from "@/hoc/dashPromoGuard";
+import useProSession from "@/hooks/promotorSession";
+
+
 import { IOrder } from "@/types/order";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 
 const PromotorTransaction: React.FC = () => {
-  const { user } = useSession();
+  const { user } = useProSession();
   const [search, setSearch] = useState("");
   const [hydrated, setHydrated] = useState(false);
   const [orderData, setOrderData] = useState<IOrder[]>([]);
@@ -23,8 +25,11 @@ const PromotorTransaction: React.FC = () => {
     try {
       setLoading(true);
       const res = await axios.get(`${base_url}/order/user/detail`, {
-        withCredentials: true,
-        headers: { "Content-Type": "application/json" },
+        method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
       });
 
       const orders = res.data.result;
@@ -37,30 +42,7 @@ const PromotorTransaction: React.FC = () => {
     }
   };
 
-  const getToken = async (
-    orderId: number,
-    finalPrice: number
-  ): Promise<string | undefined> => {
-    try {
-      const { data } = await axios.post(
-        `${base_url}/order/payment`,
-        {
-          order_id: orderId,
-          gross_amount: finalPrice,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      return data.result;
-    } catch (err) {
-      console.error("Error fetching Snap Token:", err);
-      setError("Failed to get payment token. Please try again.");
-      return undefined;
-    }
-  };
+
 
   useEffect(() => {
     setHydrated(true);
@@ -150,7 +132,7 @@ const PromotorTransaction: React.FC = () => {
                   <th className="px-6 py-3 text-left tracking-wider">Voucher</th>
                   <th className="px-6 py-3 text-left tracking-wider">Status</th>
                   <th className="px-6 py-3 text-left tracking-wider">Event Date</th>
-                  <th className="px-6 py-3 text-left tracking-wider">Actions</th>
+                  
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
@@ -198,22 +180,6 @@ const PromotorTransaction: React.FC = () => {
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-900">
                           {formatDate(order.OrderDetails[0]?.ticket?.event?.datetime)}
-                        </td>
-                        <td className="px-6 py-4">
-                          {order.status_order === "PENDING" && (
-                            <PayButton
-                              token={async () => {
-                                const token = await getToken(
-                                  order.id,
-                                  order.final_price
-                                );
-                                return token;
-                              }}
-                              ticketCart={ticketCart}
-                              priceToPay={order.final_price}
-                              originalAmount={order.total_price}
-                            />
-                          )}
                         </td>
                       </tr>
                     );

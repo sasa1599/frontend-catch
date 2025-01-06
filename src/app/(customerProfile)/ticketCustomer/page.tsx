@@ -7,6 +7,7 @@ import BookingsCustomerClient from "@/components/order/BookingCustomer";
 import axios from "axios";
 import { useSession } from "@/context/useSession";
 import dashCustGuard from "@/hoc/dashCustoGuard";
+import Loading from "../loading";
 
 const BookingsCustomer: React.FC = () => {
   const { user } = useSession();
@@ -25,6 +26,8 @@ const BookingsCustomer: React.FC = () => {
       });
 
       const orders = res.data.result;
+      console.log(orders);
+
       setOrderData(orders);
     } catch (err) {
       console.error("Error fetching order details:", err);
@@ -42,7 +45,7 @@ const BookingsCustomer: React.FC = () => {
   }
 
   if (orderData.length === 0) {
-    return <div>Loading orders...</div>;
+    return <div><Loading/></div>;
   }
 
   return (

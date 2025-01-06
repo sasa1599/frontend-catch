@@ -16,11 +16,11 @@ export default function VerifyPage({ params }: { params: { token: string } }) {
       let res;
       if (role === "promotor") {
         res = await axios.patch(
-          `http://localhost:8001/api/verify/promotors/${token}`
+          `${process.env.NEXT_PUBLIC_BASE_URL_BE}/verify/promotors/${token}`
         );
       } else if (role === "customer") {
         res = await axios.patch(
-          `http://localhost:8001/api/verify/customers/${token}`
+          `${process.env.NEXT_PUBLIC_BASE_URL_BE}/verify/customers/${token}`
         );
       } else {
         throw new Error("Invalid role specified");

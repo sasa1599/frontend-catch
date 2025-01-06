@@ -28,8 +28,10 @@ const ProfilePromotor: React.FC = () => {
         `${process.env.NEXT_PUBLIC_BASE_URL_BE}/proavatarcloud`,
         formData,
         {
-          withCredentials: true,
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
       );
 
@@ -123,23 +125,31 @@ const ProfilePromotor: React.FC = () => {
                     Organize Name
                   </label>
                   <div className="bg-gray-50 rounded p-3 border border-gray-100">
-                    <span className="text-gray-700">{user.name || "Not specified"}</span>
+                    <span className="text-gray-700">
+                      {user.name || "Not specified"}
+                    </span>
                   </div>
                 </div>
                 <div>
-                  <label className="block text-gray-600 text-sm mb-2">Username</label>
+                  <label className="block text-gray-600 text-sm mb-2">
+                    Username
+                  </label>
                   <div className="bg-gray-50 rounded p-3 border border-gray-100">
                     <span className="text-gray-700">{user.username}</span>
                   </div>
                 </div>
                 <div>
-                  <label className="block text-gray-600 text-sm mb-2">Email</label>
+                  <label className="block text-gray-600 text-sm mb-2">
+                    Email
+                  </label>
                   <div className="bg-gray-50 rounded p-3 border border-gray-100">
                     <span className="text-gray-700">{user.email}</span>
                   </div>
                 </div>
                 <div>
-                  <label className="block text-gray-600 text-sm mb-2">Password</label>
+                  <label className="block text-gray-600 text-sm mb-2">
+                    Password
+                  </label>
                   <div className="bg-gray-50 rounded p-3 border border-gray-100">
                     <span className="text-gray-700">*************</span>
                   </div>

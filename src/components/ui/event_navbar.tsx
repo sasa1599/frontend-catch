@@ -3,16 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import AvatarMenu from "./avatarmenu";
-import { deleteCookie } from "../libs/action";
+import { useRouter } from "next/navigation";
 import { IUser, IPromotor } from "@/types/user";
 import { useSession } from "@/context/useSession";
-import EventAvatarMenu from "./event_avatar";
 import SearchBar from "@/helpers/searchBar";
-import EventSearchBar from "@/helpers/eventSearchBar";
+import EventAvatarMenu from "./event_avatar";
 
-const EventNavbar = () => {
+const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { user, isAuth, setIsAuth } = useSession();
@@ -30,9 +27,9 @@ const EventNavbar = () => {
     { label: "Promotor", href: "/sign-in/signPromotor" },
   ];
 
-  const paths = usePathname();
+
   const onLogout = () => {
-    deleteCookie("token");
+    localStorage.removeItem("token");
     localStorage.removeItem("role");
     setIsAuth(false);
     router.push("/");
@@ -67,24 +64,24 @@ const EventNavbar = () => {
     return () => document.removeEventListener("click", handleOutsideClick);
   }, [dropdownOpen]);
 
+
+
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-black z-50 px-4 md:px-6 py-4 shadow text-black">
+    <nav className="fixed top-0 left-0 right-0 bg-black z-50 px-4 md:px-6 py-4 shadow text-white">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <Image src="/logo.gif" alt="Logo" width={40} height={40} />
-          <span className="text-lg md:text-2xl font-bold text-white">
-            CATch
-          </span>
+          <span className="text-lg md:text-2xl font-bold">CATch</span>
         </Link>
         <div className="hidden md:flex flex-1 mx-4">
-          <EventSearchBar />
+          <SearchBar />
         </div>
         <div className="hidden md:flex items-center gap-6">
           {menuItems.map((item) => (
             <Link
               key={item.label}
               href={item.href}
-              className="text-white hover:opacity-70 transition-opacity"
+              className=" hover:opacity-70 transition-opacity"
             >
               {item.label}
             </Link>
@@ -94,18 +91,18 @@ const EventNavbar = () => {
           ) : (
             <div className="relative">
               <button
-                className="dropdown-button text-white hover:opacity-70 transition-opacity"
+                className="dropdown-button  hover:opacity-70 transition-opacity"
                 onClick={() => setDropdownOpen((prev) => !prev)}
               >
                 Login
               </button>
               {dropdownOpen && (
-                <div className="dropdown-menu absolute top-full mt-2 right-0 w-40 bg-white border border-gray-200 rounded-lg shadow-lg">
+                <div className="dropdown-menu absolute top-full mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
                   {loginOptions.map((option) => (
                     <Link
                       key={option.label}
                       href={option.href}
-                      className="block px-4 py-2 text-white hover:bg-gray-100"
+                      className="block px-4 py-2  hover:bg-gray-100"
                     >
                       {option.label}
                     </Link>
@@ -119,7 +116,7 @@ const EventNavbar = () => {
           </button>
         </div>
         <button
-          className="block md:hidden text-white"
+          className="block md:hidden "
           onClick={() => setMenuOpen((prev) => !prev)}
         >
           <svg
@@ -141,41 +138,49 @@ const EventNavbar = () => {
 
       {menuOpen && (
         <div className="md:hidden mt-4">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:outline-none"
-          />
+          {/* Search bar for mobile */}
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search..."
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:outline-none"
+            />
+            {/* Search dropdown below the input */}
+            <div className="absolute top-full mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-lg z-20">
+              <ul className="mt-2">
+                {menuItems.map((item) => (
+                  <li key={item.label}>
+                    <Link
+                      href={item.href}
+                      className="block px-4 py-2  hover:bg-gray-100"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
           <ul className="mt-4">
-            {menuItems.map((item) => (
-              <li key={item.label}>
-                <Link
-                  href={item.href}
-                  className="block px-4 py-2 text-white hover:bg-gray-100"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
             {isAuth && (isCustomer(user) || isPromotor(user)) ? (
               <li>
-                <AvatarMenu user={user} onLogout={onLogout} />
+                <EventAvatarMenu user={user} onLogout={onLogout} />
               </li>
             ) : (
               <li>
                 <button
-                  className="dropdown-button text-white hover:opacity-70 transition-opacity"
+                  className="dropdown-button  hover:opacity-70 transition-opacity"
                   onClick={() => setDropdownOpen((prev) => !prev)}
                 >
                   Login
                 </button>
                 {dropdownOpen && (
-                  <div className="dropdown-menu absolute top-full mt-2 right-0 w-40 bg-white border border-gray-200 rounded-lg shadow-lg">
+                  <div className="dropdown-menu absolute top-full mt-2 right-0 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
                     {loginOptions.map((option) => (
                       <Link
                         key={option.label}
                         href={option.href}
-                        className="block px-4 py-2 text-white hover:bg-gray-100"
+                        className="block px-4 py-2  hover:bg-gray-100"
                       >
                         {option.label}
                       </Link>
@@ -196,4 +201,4 @@ const EventNavbar = () => {
   );
 };
 
-export default EventNavbar;
+export default Navbar;
