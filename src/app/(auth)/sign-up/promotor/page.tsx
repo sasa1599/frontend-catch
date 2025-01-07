@@ -61,18 +61,15 @@ export default function PromotorSignUpPage() {
       console.error("Error during registration:", err);
       toast.error("An error occurred during registration");
     } finally {
-      // Pastikan loading state diatur ke false
       setIsLoading(false);
     }
   };
 
   return (
-    <div
-      className="flex flex-col md:flex-row h-screen
-    md:h-screen bg-black text-gray-300 md:mt-16"
-    >
-      <div className="w-full md:w-1/2 relative">
-        <div className="md:block">
+    <div className="flex flex-col md:flex-row h-screen bg-black text-gray-300 md:mt-16">
+      {/* Left side with image */}
+      <div className="w-full lg:w-1/2 relative">
+        <div>
           <Image
             src="/cinema.jpeg"
             alt="Cinema venue"
@@ -89,14 +86,19 @@ export default function PromotorSignUpPage() {
           </p>
         </div>
       </div>
-      <div className="w-full md:w-1/2 bg-gray-900 flex flex-col justify-center p-6 lg:p-12 rounded-xl">
+
+      {/* Right side with form */}
+      <div className="w-full lg:w-1/2 bg-gray-900 flex flex-col justify-start p-6 lg:p-12 rounded-xl overflow-y-auto">
         <ToggleTabs currentPath="/sign-up/promotor" />
         <div className="mb-6">
-          <h2 className="text-2xl lg:text-3xl font-bold mb-2 text-white">Promotor</h2>
+          <h2 className="text-2xl lg:text-3xl font-bold mb-2 text-white">
+            Promotor
+          </h2>
           <p className="text-gray-400">
             As a promotor, you can manage events, transactions, and gather feedback from customers.
           </p>
         </div>
+
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
@@ -190,7 +192,11 @@ export default function PromotorSignUpPage() {
                   placeholder="Confirm your password"
                   className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
-                <ErrorMessage name="confirmPassword" component="div" className="text-red-500 text-sm mt-1" />
+                <ErrorMessage
+                  name="confirmPassword"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
               </div>
 
               <button
