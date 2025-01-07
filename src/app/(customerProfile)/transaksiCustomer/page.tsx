@@ -77,8 +77,6 @@ const CustomerTransaction: React.FC = () => {
       ?.includes(search.toLowerCase())
   );
 
-  
-
   const formatDate = (date: string): string => {
     const options: Intl.DateTimeFormatOptions = {
       year: "numeric",
@@ -87,7 +85,6 @@ const CustomerTransaction: React.FC = () => {
     };
     return new Date(date).toLocaleDateString("en-US", options);
   };
-
 
   if (!hydrated) {
     return null;
@@ -121,9 +118,7 @@ const CustomerTransaction: React.FC = () => {
       <div className="flex-1 p-6 bg-gray-50 min-h-screen text-black overflow-auto">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-gray-800">My Transactions</h1>
-          <p className="text-gray-600 mt-1">
-            View and manage your event bookings
-          </p>
+          <p className="text-gray-600 mt-1">View and manage your event bookings</p>
         </div>
 
         <div className="mb-6">
@@ -142,25 +137,13 @@ const CustomerTransaction: React.FC = () => {
               <thead className="bg-gray-50 text-gray-700 uppercase text-xs">
                 <tr>
                   <th className="px-6 py-3 text-left tracking-wider">Event</th>
-                  <th className="px-6 py-3 text-left tracking-wider">
-                    Price To Pay
-                  </th>
-                  <th className="px-6 py-3 text-left tracking-wider">
-                    Original Amount
-                  </th>
-                  <th className="px-6 py-3 text-left tracking-wider">
-                    Points Used
-                  </th>
-                  <th className="px-6 py-3 text-left tracking-wider">
-                    Voucher
-                  </th>
+                  <th className="px-6 py-3 text-left tracking-wider">Price To Pay</th>
+                  <th className="px-6 py-3 text-left tracking-wider">Original Amount</th>
+                  <th className="px-6 py-3 text-left tracking-wider">Points Used</th>
+                  <th className="px-6 py-3 text-left tracking-wider">Voucher</th>
                   <th className="px-6 py-3 text-left tracking-wider">Status</th>
-                  <th className="px-6 py-3 text-left tracking-wider">
-                    Event Date
-                  </th>
-                  <th className="px-6 py-3 text-left tracking-wider">
-                    Actions
-                  </th>
+                  <th className="px-6 py-3 text-left tracking-wider">Event Date</th>
+                  <th className="px-6 py-3 text-left tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
@@ -195,7 +178,11 @@ const CustomerTransaction: React.FC = () => {
                           {formatPrice(order.point) || "-"}
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-500">
-                          {order.voucher || "-"}
+                          {order.coupon ? (
+                            <span className="text-green-600 ">✔</span> // Checkmark icon for vouchers
+                          ) : (
+                            "-"
+                          )}
                         </td>
                         <td className="px-6 py-4">
                           <span
@@ -221,19 +208,6 @@ const CustomerTransaction: React.FC = () => {
                                 <CountDown date={order.expires_at} />
                               </div>
                             </div>
-
-                            // <PayButton
-                            //   token={async () => {
-                            //     const token = await getToken(
-                            //       order.id,
-                            //       order.final_price
-                            //     );
-                            //     return token;
-                            //   }}
-                            //   ticketCart={ticketCart}
-                            //   priceToPay={order.final_price}
-                            //   originalAmount={order.total_price}
-                            // />
                           )}
                         </td>
                       </tr>

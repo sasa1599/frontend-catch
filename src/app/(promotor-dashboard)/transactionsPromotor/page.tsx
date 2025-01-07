@@ -175,7 +175,11 @@ const PromotorTransaction: React.FC = () => {
                           {order.point || "-"}
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-500">
-                          {order.voucher || "-"}
+                        {order.coupon ? (
+                            <span className="text-green-600 ">✔</span> // Checkmark icon for vouchers
+                          ) : (
+                            "-"
+                          )}
                         </td>
                         <td className="px-6 py-4">
                           <span

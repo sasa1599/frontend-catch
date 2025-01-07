@@ -59,19 +59,22 @@ const DashboardPromotor: React.FC = () => {
   const fetchOrderCount = async () => {
     try {
       const response = await axios.get(
-        `${BASE_URL}/admin/orders/promotor/${user?.id}/count`,
+        `${BASE_URL}/admin/orders/${user?.id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
-      return response.data.data.orderCount || 0;
+      
+      const orders = response.data.result || [];
+      return orders.length || 0;
+   
     } catch (error) {
       console.error("Error fetching order count:", error);
       return 0;
     }
-  };
+   };
 
   const fetchTotalRevenue = async () => {
     try {

@@ -70,8 +70,10 @@ const ProfileCustomer: React.FC = () => {
         `${process.env.NEXT_PUBLIC_BASE_URL_BE}/avatarcloud`,
         formData,
         {
-          withCredentials: true,
-          headers: { "Content-Type": "multipart/form-data" },
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
         }
       );
       toast.success(

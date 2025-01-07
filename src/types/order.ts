@@ -22,7 +22,7 @@ export interface IOrder {
   total_price: number;
   status_order: string;
   point: number;
-  voucher: string;
+  coupon: boolean;
   OrderDetails: Array<{
     quantity: number;
     ticket: {
