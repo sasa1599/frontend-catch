@@ -86,20 +86,16 @@ export default function PromotorSignUpPage() {
             Organize events with ease, while keeping your budget in check!
           </h1>
           <p className="text-lg">
-            Create an account to access special tools, manage multiple events,
-            and unlock exclusive benefits for your promotions.
+            Create an account to access special tools, manage multiple events, and unlock exclusive benefits for your promotions.
           </p>
         </div>
       </div>
       <div className="w-full md:w-1/2 bg-gray-900 flex flex-col justify-center p-6 lg:p-12 rounded-xl">
         <ToggleTabs currentPath="/sign-up/promotor" />
         <div className="mb-6">
-          <h2 className="text-2xl lg:text-3xl font-bold mb-2 text-white">
-            Promotor
-          </h2>
+          <h2 className="text-2xl lg:text-3xl font-bold mb-2 text-white">Promotor</h2>
           <p className="text-gray-400">
-            As a promotor, you can manage events, transactions, and gather
-            feedback from customers.
+            As a promotor, you can manage events, transactions, and gather feedback from customers.
           </p>
         </div>
         <Formik
@@ -195,11 +191,7 @@ export default function PromotorSignUpPage() {
                   placeholder="Confirm your password"
                   className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
-                <ErrorMessage
-                  name="confirmPassword"
-                  component="div"
-                  className="text-red-500 text-sm mt-1"
-                />
+                <ErrorMessage name="confirmPassword" component="div" className="text-red-500 text-sm mt-1" />
               </div>
 
               <button

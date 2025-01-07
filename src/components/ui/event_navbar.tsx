@@ -106,7 +106,7 @@ const Navbar = () => {
                 Login
               </button>
               {dropdownOpen && (
-                <div className="dropdown-menu absolute top-full mt-2 w-40 bg-black border border-gray-200 rounded-lg shadow-lg z-20">
+                <div className="dropdown-menu absolute top-full mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
                   {loginOptions.map((option) => (
                     <Link
                       key={option.label}

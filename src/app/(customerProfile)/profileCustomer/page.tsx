@@ -97,10 +97,8 @@ const ProfileCustomer: React.FC = () => {
 
     try {
       setIsUploading(true);
-
       const formData = new FormData();
       formData.append("file", file);
-
       const res = await axios.patch(
         `${process.env.NEXT_PUBLIC_BASE_URL_BE}/avatarcloud`,
         formData,

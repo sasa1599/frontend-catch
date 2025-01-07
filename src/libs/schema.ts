@@ -59,14 +59,3 @@ export const ticketSchema = Yup.object({
     .required("Price is required")
     .typeError("Price must be a valid number"),
 });
-<<<<<<< HEAD
-=======
-
-export const reviewScehma = Yup.object({
-  rating: Yup.number()
-    .oneOf([1, 2, 3, 4, 5], "Please provide a rating for this event.")
-    .required("Kindly set the rating before proceeding."),
-  comment: Yup.string().required("Share your genuine feedback about this event"),
-});
-
->>>>>>> 072a04e0e1b01a70088d080bdddd5fcfa0854c76
