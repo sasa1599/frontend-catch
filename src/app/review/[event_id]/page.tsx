@@ -86,7 +86,7 @@ export default async function ReviewPage({
               </div>
             ))
           ) : (
-            <div>BELUM ADA REVIEW</div>
+            <div>There is no review yet</div>
           )}
         </div>
         {/* Only show this section if user is not a promotor */}
