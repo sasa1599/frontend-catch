@@ -22,7 +22,7 @@ export default function FormReview({ event_id }: { event_id: string }) {
   const handleAdd = async (review: FormReview) => {
     try {
       SetIsLoading(true);
-      const { data } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL_BE}/reviews/${event_id}`, review, {
+      const { data } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL_BE}/review/${event_id}`, review, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 
