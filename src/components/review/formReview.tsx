@@ -6,7 +6,7 @@ import "react-quill/dist/quill.snow.css";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import StarRating from "./starRating";
-import axios from "@/helpers/axios";
+import axios from "axios";
 import { reviewScehma } from "@/libs/schema";
 import type { FormReview } from "@/types/review";
 
@@ -22,7 +22,7 @@ export default function FormReview({ event_id }: { event_id: string }) {
   const handleAdd = async (review: FormReview) => {
     try {
       SetIsLoading(true);
-      const { data } = await axios.post(`/reviews/${event_id}`, review, {
+      const { data } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL_BE}/reviews/${event_id}`, review, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 
