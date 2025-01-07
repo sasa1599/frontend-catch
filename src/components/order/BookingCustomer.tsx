@@ -53,7 +53,6 @@ export default function BookingsCustomerClient({
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
           {filteredTickets.length > 0 ? (
             filteredTickets.map((order, idx) => {
-              
               const ticketTransaction = order.OrderDetails[0];
               const ticketEvent = ticketTransaction?.ticket.event;
 
@@ -103,14 +102,7 @@ export default function BookingsCustomerClient({
                     </div>
                   </div>
                   {order.status_order !== "CANCELLED" ? (
-                    <div className="mt-4 flex gap-2">
-                      <button className="flex-1 py-2 text-center text-blue-600 border border-blue-500 rounded hover:bg-blue-50">
-                        View Details
-                      </button>
-                      <button className="flex-1 py-2 text-center text-green-600 border border-green-500 rounded hover:bg-green-50">
-                        Download Ticket
-                      </button>
-                    </div>
+                    <div className="mt-4 flex gap-2"></div>
                   ) : (
                     <p className="text-red-600 text-sm mt-4">
                       This order has been cancelled.
@@ -123,7 +115,10 @@ export default function BookingsCustomerClient({
                         <button
                           className="w-full py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 transition"
                           onClick={() =>
-                            window.open(`/review/${order.OrderDetails[0].ticket.event.id}`, "_blank")
+                            window.open(
+                              `/review/${order.OrderDetails[0].ticket.event.id}`,
+                              "_blank"
+                            )
                           }
                         >
                           Write a Review

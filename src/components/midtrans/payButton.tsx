@@ -7,7 +7,7 @@ import { IOrder } from "@/types/order";
 export default function PayButton({ order }: { order: IOrder }) {
 
   const handleClick = async () => {
-    const snapToken = await getSnapToken(order.id, order.total_price);
+    const snapToken = await getSnapToken(order.id, order.total_price, order.final_price);
     if (snapToken) {
       window.snap.pay(snapToken);
     } else {

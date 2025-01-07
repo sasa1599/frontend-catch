@@ -52,6 +52,8 @@ const CustomerTransaction: React.FC = () => {
       ?.toLowerCase()
       ?.includes(search.toLowerCase())
   );
+  console.log("filetered", filteredTransactions);
+  
 
   const formatDate = (date: string): string => {
     const options: Intl.DateTimeFormatOptions = {
