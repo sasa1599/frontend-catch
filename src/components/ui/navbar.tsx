@@ -11,12 +11,14 @@ import AvatarMenu from "./avatarmenu";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [desktopDropdownOpen, setDesktopDropdownOpen] = useState(false);
+  const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
   const { user, isAuth, setIsAuth } = useSession();
   const router = useRouter();
 
-  const menuRef = useRef<HTMLDivElement>(null); // Ref for burger menu
-  const dropdownRef = useRef<HTMLDivElement>(null); // Ref for dropdown login
+  const menuRef = useRef<HTMLDivElement>(null);
+  const desktopDropdownRef = useRef<HTMLDivElement>(null);
+  const mobileDropdownRef = useRef<HTMLDivElement>(null);
 
   const menuItems = [
     { label: "Browse events", href: "/browse_events" },
@@ -45,8 +47,8 @@ const Navbar = () => {
     "/browse_events/category/[category]]",
     "/Order",
     "/ListEvents",
-    
   ];
+  
   const paths = usePathname();
 
   const onLogout = () => {
@@ -56,7 +58,12 @@ const Navbar = () => {
     router.push("/");
   };
 
-  // Type guards to differentiate between IUser and IPromotor
+  const handleMobileLoginClick = (href: string) => {
+    setMobileDropdownOpen(false);
+    setMenuOpen(false);
+    router.push(href);
+  };
+
   const isCustomer = (user: IUser | IPromotor | null): user is IUser => {
     return user !== null && "ref_code" in user && "isVerify" in user;
   };
@@ -69,13 +76,22 @@ const Navbar = () => {
     const handleOutsideClick = (event: MouseEvent) => {
       const target = event.target as Node;
 
-      // Close dropdown if click outside
+      // Close desktop dropdown if click outside
       if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(target) &&
-        !(target instanceof HTMLElement && target.closest(".dropdown-button"))
+        desktopDropdownRef.current &&
+        !desktopDropdownRef.current.contains(target) &&
+        !(target instanceof HTMLElement && target.closest(".desktop-dropdown-button"))
       ) {
-        setDropdownOpen(false);
+        setDesktopDropdownOpen(false);
+      }
+
+      // Close mobile dropdown if click outside
+      if (
+        mobileDropdownRef.current &&
+        !mobileDropdownRef.current.contains(target) &&
+        !(target instanceof HTMLElement && target.closest(".mobile-dropdown-button"))
+      ) {
+        setMobileDropdownOpen(false);
       }
 
       // Close menu if click outside
@@ -122,21 +138,21 @@ const Navbar = () => {
           {isAuth && user ? (
             <AvatarMenu user={user} onLogout={onLogout} />
           ) : (
-            <div className="relative" ref={dropdownRef}>
+            <div className="relative" ref={desktopDropdownRef}>
               <button
-                className="dropdown-button text-black hover:opacity-70 transition-opacity"
-                onClick={() => setDropdownOpen((prev) => !prev)}
+                className="desktop-dropdown-button text-black hover:opacity-70 transition-opacity"
+                onClick={() => setDesktopDropdownOpen(!desktopDropdownOpen)}
               >
                 Login
               </button>
-              {dropdownOpen && (
-                <div className="dropdown-menu absolute top-full mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
+              {desktopDropdownOpen && (
+                <div className="absolute top-full mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
                   {loginOptions.map((option) => (
                     <Link
                       key={option.label}
                       href={option.href}
                       className="block px-4 py-2 text-black hover:bg-gray-100"
-                      onClick={() => setDropdownOpen(false)} // Close dropdown on click
+                      onClick={() => setDesktopDropdownOpen(false)}
                     >
                       {option.label}
                     </Link>
@@ -150,7 +166,7 @@ const Navbar = () => {
         {/* Mobile Menu Toggle */}
         <button
           className="block md:hidden text-black focus:outline-none"
-          onClick={() => setMenuOpen((prev) => !prev)}
+          onClick={() => setMenuOpen(!menuOpen)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -189,7 +205,7 @@ const Navbar = () => {
                 <Link
                   href={item.href}
                   className="block px-4 py-2 text-center text-black rounded-lg border border-gray-200 hover:shadow-md transition-shadow"
-                  onClick={() => setMenuOpen(false)} // Close menu on click
+                  onClick={() => setMenuOpen(false)}
                 >
                   {item.label}
                 </Link>
@@ -197,40 +213,36 @@ const Navbar = () => {
             ))}
           </ul>
 
-          {/* Login Section */}
-          <ul className="mt-4 space-y-3">
+          {/* Mobile Login Section */}
+          <div className="mt-4 space-y-3" ref={mobileDropdownRef}>
             {isAuth && (isCustomer(user) || isPromotor(user)) ? (
-              <li>
+              <div>
                 <AvatarMenu user={user} onLogout={onLogout} />
-              </li>
+              </div>
             ) : (
-              <li>
+              <div>
                 <button
-                  className="block w-full px-4 py-2 text-center text-white bg-indigo-500 rounded-lg hover:bg-indigo-600 transition-colors"
-                  onClick={() => setDropdownOpen((prev) => !prev)}
+                  className="w-full px-4 py-2 text-center text-white bg-indigo-500 rounded-lg hover:bg-indigo-600 transition-colors mobile-dropdown-button"
+                  onClick={() => setMobileDropdownOpen(!mobileDropdownOpen)}
                 >
                   Login
                 </button>
-                {dropdownOpen && (
-                  <div className="dropdown-menu mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg">
+                {mobileDropdownOpen && (
+                  <div className="mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg">
                     {loginOptions.map((option) => (
-                      <Link
+                      <button
                         key={option.label}
-                        href={option.href}
-                        className="block px-4 py-2 text-center text-black hover:bg-gray-100"
-                        onClick={() => {
-                          setDropdownOpen(false); // Close dropdown on click
-                          setMenuOpen(false); // Close menu if needed
-                        }}
+                        className="w-full px-4 py-2 text-center text-black hover:bg-gray-100"
+                        onClick={() => handleMobileLoginClick(option.href)}
                       >
                         {option.label}
-                      </Link>
+                      </button>
                     ))}
                   </div>
                 )}
-              </li>
+              </div>
             )}
-          </ul>
+          </div>
         </div>
       )}
     </nav>
