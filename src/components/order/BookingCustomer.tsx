@@ -123,7 +123,7 @@ export default function BookingsCustomerClient({
                         <button
                           className="w-full py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 transition"
                           onClick={() =>
-                            window.open(`/review/${order.OrderDetails[0].ticket.event}`, "_blank")
+                            window.open(`/review/${order.OrderDetails[0].ticket.event.id}`, "_blank")
                           }
                         >
                           Write a Review

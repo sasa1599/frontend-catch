@@ -84,7 +84,7 @@ export default function FormReview({ event_id }: { event_id: string }) {
                     : "hover:bg-lightBlue hover:text-white"
                 } py-2 mx-2 rounded-lg transition ease-linear font-semibold border-2 border-lightBlue`}
               >
-                {isLoading ? "Loading ..." : "Submit Review"}
+                {isLoading ? "Loading ..." : "Enter Review"}
               </button>
             </Form>
           );
