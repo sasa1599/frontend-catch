@@ -15,7 +15,7 @@ const Hero = () => {
             EXPERIENCES
           </h1>
           <p className="text-lg md:text-xl mb-6">
-            Unforgettable live experiences. Transparent pricing. Personalized picks. With CATch, creating moments you'll love has never been easier.
+            Unforgettable live experiences. Transparent pricing. Personalized picks. With CATch, creating moments you&apos;ll love has never been easier.
           </p>
           <Link href="/sign-up/customer">
             <button className="px-6 md:px-8 py-3 bg-black text-white rounded-full hover:opacity-90 transition">

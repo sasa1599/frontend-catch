@@ -3,13 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { IUser, IPromotor } from "@/types/user";
 import { useSession } from "@/context/useSession";
 import SearchBar from "@/helpers/searchBar";
 import EventAvatarMenu from "./event_avatar";
 import AvatarMenu from "./avatarmenu";
-
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -29,8 +28,6 @@ const Navbar = () => {
     { label: "Customer", href: "/sign-in/signCustomer" },
     { label: "Promotor", href: "/sign-in/signPromotor" },
   ];
-
-  
 
   const onLogout = () => {
     localStorage.removeItem("token");
@@ -72,8 +69,6 @@ const Navbar = () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
-
-  
 
   return (
     <nav className="fixed top-0 left-0 right-0 bg-black z-50 px-4 md:px-6 py-4 shadow text-white">

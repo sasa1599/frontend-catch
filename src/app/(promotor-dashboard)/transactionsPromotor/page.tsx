@@ -1,11 +1,9 @@
 "use client";
 
-import PayButton from "@/components/midtrans/payButton";
 import PromotorSidebar from "@/components/ui/prosidebar";
 
 import dashPromoGuard from "@/hoc/dashPromoGuard";
 import useProSession from "@/hooks/promotorSession";
-
 import { IOrder } from "@/types/order";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
@@ -146,14 +144,7 @@ const PromotorTransaction: React.FC = () => {
               <tbody className="divide-y divide-gray-200">
                 {filteredTransactions.length > 0 ? (
                   filteredTransactions.map((order) => {
-                    const ticketCart = order.OrderDetails.map((detail) => ({
-                      quantity: detail.quantity,
-                      ticket: {
-                        id: detail.ticket.id,
-                        price: detail.ticket.price,
-                        seats: detail.ticket.seats,
-                      },
-                    }));
+
 
                     return (
                       <tr key={order.id} className="hover:bg-gray-50">
@@ -176,7 +167,7 @@ const PromotorTransaction: React.FC = () => {
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-500">
                         {order.coupon ? (
-                            <span className="text-green-600 ">✔</span> // Checkmark icon for vouchers
+                            <span className="text-green-600">✔</span> // Checkmark icon for vouchers
                           ) : (
                             "-"
                           )}

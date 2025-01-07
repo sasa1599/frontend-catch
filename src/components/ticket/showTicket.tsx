@@ -42,7 +42,6 @@ export default function ShowTickets({ event_id }: { event_id: string }) {
   const handleOrderTicket = async () => {
     if (!user) return;
     try {
-      // Cek apakah ticketCart kosong
       if (!ticketCart || ticketCart.length === 0) {
         toast.error(
           "You must select at least one ticket before placing an order."
@@ -133,7 +132,6 @@ export default function ShowTickets({ event_id }: { event_id: string }) {
       <TicketContext.Provider value={{ ticketCart, setTicketCart }}>
         <div className="flex flex-col">
           <div className="desc-content">
-            {/* isi kontent */}
             <div className="flex flex-col">
               {tickets &&
                 tickets.map((item, idx) => {
@@ -143,7 +141,7 @@ export default function ShowTickets({ event_id }: { event_id: string }) {
           </div>
         </div>
         <div className="sticky top-0 flex flex-col xl:self-start">
-          <div className="rounded-xl shadow-2xl flex flex-col gap-4  py-6">
+          <div className="rounded-xl shadow-2xl flex flex-col gap-4 py-6">
             <div className="flex flex-col gap-6">
               {ticketCart && ticketCart.length > 0 ? (
                 ticketCart.map((item, idx) => {
@@ -172,21 +170,36 @@ export default function ShowTickets({ event_id }: { event_id: string }) {
                 <h1></h1>
               )}
             </div>
+
             <div className="flex flex-col gap-2">
               {ticketCart && ticketCart?.length > 0 ? (
                 <>
-                  {coupon || points ? (
+                  {coupon || points || totalPrice > 100000 ? (
                     <div className="flex gap-2 justify-between">
+                      {/* Tombol Coupon */}
                       <button
                         onClick={handleReedemCoupon}
-                        disabled={!coupon}
+                        disabled={
+                          !coupon ||
+                          ticketCart.some(
+                            (item) => item.quantity * item.ticket.price === 0
+                          )
+                        }
                         className="rounded-md px-2 py-1 disabled:cursor-not-allowed disabled:opacity-50 bg-lightBlue font-semibold text-white text-xs"
                       >
                         CLAIM COUPON
                       </button>
+
+                      {/* Tombol Points */}
                       <button
                         onClick={handleReedemPoints}
-                        disabled={isReedemedPoints || points <= 0}
+                        disabled={
+                          isReedemedPoints ||
+                          points <= 0 ||
+                          ticketCart.some(
+                            (item) => item.quantity * item.ticket.price === 0
+                          )
+                        }
                         className={`flex gap-1 px-2 py-1 rounded-md border disabled:opacity-50 disabled:cursor-not-allowed transition duration-200 border-lightBlue font-semibold text-lightBlue text-xs`}
                       >
                         <span>CLAIM POINTS</span>
@@ -222,7 +235,7 @@ export default function ShowTickets({ event_id }: { event_id: string }) {
                         <span className="font-semibold text-red-500 text-xl">
                           -
                           {isReedemedPoints
-                            ? formatPrice((totalPrice - points) / 10)
+                            ? formatPrice(totalPrice / 10 - points)
                             : formatPrice(totalPrice / 10)}
                         </span>
                       </div>

@@ -25,7 +25,7 @@ export default function AboutUs() {
                   CATch the Moment: Our Mission, Services, and Passion for Events!
                 </h2>
                 <p className="text-base md:text-lg font-light text-gray-600 leading-relaxed">
-                  To honor the essence of live music, we've created a guide to Indonesia's best independent venues.
+                  To honor the essence of live music, we&apos;ve created a guide to Indonesia&apos;s best independent venues.
                 </p>
               </div>
             </div>
@@ -92,7 +92,7 @@ export default function AboutUs() {
                       We believe in the power of events
                     </h3>
                     <p className="text-base font-light text-gray-600 leading-relaxed">
-                      To create unforgettable memories, and our platform aims to bring people closer to the moments they'll cherish by streamlining ticket access to the best events.
+                      To create unforgettable memories, and our platform aims to bring people closer to the moments they&apos;ll cherish by streamlining ticket access to the best events.
                     </p>
                   </div>
                 </div>
@@ -156,7 +156,7 @@ export default function AboutUs() {
                     We believe in the power of events
                   </h3>
                   <p className="text-sm font-light mt-2">
-                    To create unforgettable memories, and our platform aims to bring people closer to the moments they'll cherish by streamlining ticket access to the best events.
+                    To create unforgettable memories, and our platform aims to bring people closer to the moments they&apos;ll cherish by streamlining ticket access to the best events.
                   </p>
                 </div>
               </div>

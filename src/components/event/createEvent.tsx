@@ -1,10 +1,17 @@
 "use client";
 
 import React, { useState } from "react";
-import { Formik, Field, ErrorMessage, Form } from "formik";
+import {
+  Formik,
+  Field,
+  ErrorMessage,
+  Form,
+  FieldProps,
+  FormikHelpers,
+} from "formik";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { ICategory, IEvent, ILocation } from "@/types/allInterface";
+import { FormValues, ICategory, IEvent, ILocation } from "@/types/allInterface";
 import RichTextEditor from "@/components/form/textEditor";
 import { FieldThumbnail } from "@/components/form/thumbnail";
 import { revalidate } from "../../libs/action";
@@ -101,7 +108,7 @@ export default function CreateEventPage() {
     >
       {(props) => {
         console.log(props);
-        
+
         return (
           <Form className="flex flex-col gap-3 w-full items-center justify-center text-black">
             {/* Thumbnail */}
@@ -213,55 +220,54 @@ export default function CreateEventPage() {
               </div>
             </div>
             {/* DateTime Picker */}
-            <div>
-              <label
-                htmlFor="datetime"
-                className="block mb-2 text-sm font-medium"
-              >
-                Date & Time
-              </label>
-              <Field name="datetime">
-                {({ field, form }: { field: any; form: any }) => (
-                  <div>
-                    <DateTimePicker
-                      id="dateTimePicker"
-                      onChange={(value: Date | null) => {
-                        console.log("Selected DateTime:", value);
-                        form.setFieldValue(field.name, value);
-                      }}
-                      value={field.value}
-                      format="dd/MM/y h:mm a"
-                      className="custom-calendar"
-                      clearIcon={null}
-                    />
-                    {field.value ? (
-                      <p className="mt-3 text-sm text-gray-600">
-                        Selected Date & Time:{" "}
-                        <span className="font-semibold">
-                          {field.value.toLocaleString("ID-id", {
-                            day: "2-digit",
-                            month: "2-digit",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            hour12: true,
-                          })}
-                        </span>
-                      </p>
-                    ) : (
-                      <p className="mt-3 text-sm text-gray-400">
-                        Please select a date and time
-                      </p>
-                    )}
-                    <ErrorMessage
-                      name="datetime"
-                      component="span"
-                      className="text-sm text-red-500"
-                    />
-                  </div>
-                )}
-              </Field>
-            </div>
+            <Field name="datetime">
+              {({
+                field,
+                form,
+              }: {
+                field: FieldProps["field"];
+                form: FormikHelpers<FormValues>;
+              }) => (
+                <div>
+                  <DateTimePicker
+                    id="dateTimePicker"
+                    onChange={(value: Date | null) => {
+                      console.log("Selected DateTime:", value);
+                      form.setFieldValue(field.name, value);
+                    }}
+                    value={field.value}
+                    format="dd/MM/y h:mm a"
+                    className="custom-calendar"
+                    clearIcon={null}
+                  />
+                  {field.value ? (
+                    <p className="mt-3 text-sm text-gray-600">
+                      Selected Date & Time:{" "}
+                      <span className="font-semibold">
+                        {field.value.toLocaleString("ID-id", {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          hour12: true,
+                        })}
+                      </span>
+                    </p>
+                  ) : (
+                    <p className="mt-3 text-sm text-gray-400">
+                      Please select a date and time
+                    </p>
+                  )}
+                  <ErrorMessage
+                    name="datetime"
+                    component="span"
+                    className="text-sm text-red-500"
+                  />
+                </div>
+              )}
+            </Field>
+
             {/* Discount Coupon */}
             <div className="flex flex-col px-2 w-[230px]">
               <label
