@@ -10,7 +10,6 @@ import SearchBar from "@/helpers/searchBar";
 import EventAvatarMenu from "./event_avatar";
 import AvatarMenu from "./avatarmenu";
 
-
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -29,8 +28,6 @@ const Navbar = () => {
     { label: "Customer", href: "/sign-in/signCustomer" },
     { label: "Promotor", href: "/sign-in/signPromotor" },
   ];
-
-  
 
   const onLogout = () => {
     localStorage.removeItem("token");
@@ -73,8 +70,6 @@ const Navbar = () => {
     };
   }, []);
 
-  
-
   return (
     <nav className="fixed top-0 left-0 right-0 bg-black z-50 px-4 md:px-6 py-4 shadow text-white">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -111,7 +106,7 @@ const Navbar = () => {
                 Login
               </button>
               {dropdownOpen && (
-                <div className="dropdown-menu absolute top-full mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
+                <div className="dropdown-menu absolute top-full mt-2 w-40 bg-black border border-gray-200 rounded-lg shadow-lg z-20">
                   {loginOptions.map((option) => (
                     <Link
                       key={option.label}

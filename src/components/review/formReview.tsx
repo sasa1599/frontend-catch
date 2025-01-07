@@ -4,11 +4,11 @@ import { ErrorMessage, Form, Formik, FormikProps } from "formik";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
 import { useState } from "react";
-import type { FormReview } from "@/types/review";
 import { toast } from "react-toastify";
 import StarRating from "./starRating";
 import axios from "@/helpers/axios";
 import { reviewScehma } from "@/libs/schema";
+import type { FormReview } from "@/types/review";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -27,9 +27,9 @@ export default function FormReview({ event_id }: { event_id: string }) {
       });
 
       toast.success(data.message);
-    } catch (err: any) {
+    } catch (err) {
       console.log(err);
-      toast.error(err.response.data.message);
+      toast.error("Review Error");
     } finally {
       SetIsLoading(false);
     }

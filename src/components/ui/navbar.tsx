@@ -45,6 +45,7 @@ const Navbar = () => {
     "/browse_events/category/[category]]",
     "/Order",
     "/ListEvents",
+    
   ];
   const paths = usePathname();
 

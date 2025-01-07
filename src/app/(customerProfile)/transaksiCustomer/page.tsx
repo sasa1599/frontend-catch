@@ -142,15 +142,6 @@ const CustomerTransaction: React.FC = () => {
               <tbody className="divide-y divide-gray-200">
                 {filteredTransactions.length > 0 ? (
                   filteredTransactions.map((order) => {
-                    const ticketCart = order.OrderDetails.map((detail) => ({
-                      quantity: detail.quantity,
-                      ticket: {
-                        id: detail.ticket.id,
-                        price: detail.ticket.price,
-                        seats: detail.ticket.seats,
-                      },
-                    }));
-
                     return (
                       <tr key={order.id} className="hover:bg-gray-50">
                         <td className="px-6 py-4">

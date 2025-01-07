@@ -15,7 +15,7 @@ export interface IOrder {
       price: number;
       seats: number;
       event: {
-        id: number,
+        id: number;
         title: string;
         thumbnail: string;
         datetime: string;

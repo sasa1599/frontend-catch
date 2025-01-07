@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { FaStar } from "react-icons/fa6";
 
 interface IProps {
@@ -9,18 +8,16 @@ interface IProps {
 }
 
 export default function StartRating({ setFieldValue, values }: IProps) {
-  const [rate, setRate] = useState<number>(0);
   const handleClick = (e: number) => {
-    // console.log(e);
-    setRate(e);
     setFieldValue("rating", e);
   };
+
   return (
     <>
       {Array.from({ length: 5 }).map((_, idx) => {
         const pointRate = idx + 1;
         return (
-          <label>
+          <label key={pointRate}>
             <input
               type="radio"
               name="rating"

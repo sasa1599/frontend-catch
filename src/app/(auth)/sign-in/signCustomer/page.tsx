@@ -3,6 +3,7 @@
 import { useSession } from "@/context/useSession";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -84,14 +85,20 @@ const SignCustomer = () => {
   return (
     <div className="min-h-screen flex flex-col lg:flex-row bg-gray-100 text-black">
       <div className="lg:w-1/2 w-full relative">
-        <img
+        <Image
           src="/signcc.png"
           alt="Login background"
-          className="w-full h-[100vh] object-cover"
+          layout="responsive"
+          width={1920} // Sesuaikan dengan lebar gambar asli
+          height={1080} // Sesuaikan dengan tinggi gambar asli
+          className="object-cover"
         />
-        <img
+        <Image
           src="/loginCat.gif"
           alt="Login animation"
+          layout="intrinsic"
+          width={600} // Sesuaikan dengan lebar gambar animasi
+          height={400} // Sesuaikan dengan tinggi gambar animasi
           className="absolute bottom-0 right-0 w-1/3 h-auto object-cover"
         />
       </div>

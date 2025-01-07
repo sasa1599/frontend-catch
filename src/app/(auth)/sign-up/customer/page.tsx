@@ -7,6 +7,7 @@ import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function CustomerSignUpPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +34,9 @@ export default function CustomerSignUpPage() {
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
     username: Yup.string().required("Username is required"),
-    email: Yup.string().email("Invalid email format").required("Email is required"),
+    email: Yup.string()
+      .email("Invalid email format")
+      .required("Email is required"),
     password: Yup.string()
       .min(8, "Password must be at least 8 characters")
       .required("Password is required"),
@@ -46,12 +49,16 @@ export default function CustomerSignUpPage() {
   const handleSubmit = async (values: FormValues) => {
     try {
       setIsLoading(true);
-  
+
       // Kirim request untuk registrasi
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL_BE}/register`, values, {
-        withCredentials: true,
-      });
-  
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL_BE}/register`,
+        values,
+        {
+          withCredentials: true,
+        }
+      );
+
       // Sukses registrasi
       toast.success(res.data.message || "Registration successful!");
       router.push("/");
@@ -59,7 +66,9 @@ export default function CustomerSignUpPage() {
       // Validasi apakah err berasal dari Axios
       if (axios.isAxiosError(err)) {
         const errorMessage =
-          err.response?.data?.message || err.message || "An error occurred during registration";
+          err.response?.data?.message ||
+          err.message ||
+          "An error occurred during registration";
         toast.error(errorMessage);
       } else {
         // Error tidak diketahui
@@ -73,13 +82,16 @@ export default function CustomerSignUpPage() {
   
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen bg-black text-gray-300 mt-16">
+    <div className="flex flex-col md:flex-row h-screen bg-black text-gray-300 mt-16">
       <div className="w-full lg:w-1/2 relative">
-        <img
-          src="/cinema.jpeg"
-          alt="Cinema venue"
-          className="w-full h-full object-cover"
-        />
+        <div>
+          <Image
+            src="/cinema.jpeg"
+            alt="Cinema venue"
+            fill
+            className="object-cover"
+          />
+        </div>
         <div className="absolute inset-0 bg-gradient-to-r from-black to-transparent" />
         <div className="absolute inset-0 flex flex-col justify-center p-6 lg:p-12 text-white">
           <h1 className="text-2xl lg:text-4xl font-bold mb-4 leading-snug">
@@ -101,8 +113,8 @@ export default function CustomerSignUpPage() {
             </h2>
             <p className="text-gray-400">
               When you register as a customer, you can browse available events,
-              purchase tickets for events, and provide feedback on the events you
-              have attended.
+              purchase tickets for events, and provide feedback on the events
+              you have attended.
             </p>
           </div>
           <Formik
@@ -123,7 +135,11 @@ export default function CustomerSignUpPage() {
                     placeholder="Enter your name"
                     className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md"
                   />
-                  <ErrorMessage name="name" component="div" className="text-red-500 text-sm mt-1" />
+                  <ErrorMessage
+                    name="name"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
                 </div>
 
                 <div>
@@ -137,7 +153,11 @@ export default function CustomerSignUpPage() {
                     placeholder="Enter your username"
                     className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md"
                   />
-                  <ErrorMessage name="username" component="div" className="text-red-500 text-sm mt-1" />
+                  <ErrorMessage
+                    name="username"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
                 </div>
 
                 <div>
@@ -151,7 +171,11 @@ export default function CustomerSignUpPage() {
                     placeholder="Enter your email"
                     className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md"
                   />
-                  <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
+                  <ErrorMessage
+                    name="email"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
                 </div>
 
                 <div>
@@ -165,11 +189,18 @@ export default function CustomerSignUpPage() {
                     placeholder="Enter your password"
                     className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md"
                   />
-                  <ErrorMessage name="password" component="div" className="text-red-500 text-sm mt-1" />
+                  <ErrorMessage
+                    name="password"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
                 </div>
 
                 <div>
-                  <label htmlFor="confirmPassword" className="block text-gray-300">
+                  <label
+                    htmlFor="confirmPassword"
+                    className="block text-gray-300"
+                  >
                     Confirm Password
                   </label>
                   <Field
@@ -179,11 +210,18 @@ export default function CustomerSignUpPage() {
                     placeholder="Confirm your password"
                     className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md"
                   />
-                  <ErrorMessage name="confirmPassword" component="div" className="text-red-500 text-sm mt-1" />
+                  <ErrorMessage
+                    name="confirmPassword"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
                 </div>
 
                 <div>
-                  <label htmlFor="referred_code" className="block text-gray-300">
+                  <label
+                    htmlFor="referred_code"
+                    className="block text-gray-300"
+                  >
                     Referral Number (optional)
                   </label>
                   <Field
@@ -193,7 +231,11 @@ export default function CustomerSignUpPage() {
                     placeholder="Enter the referral number"
                     className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md"
                   />
-                  <ErrorMessage name="referred_code" component="div" className="text-red-500 text-sm mt-1" />
+                  <ErrorMessage
+                    name="referred_code"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
                 </div>
 
                 <button
