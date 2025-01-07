@@ -31,7 +31,7 @@ export async function getOrderDetail(order_id: string) {
   }
 }
 
-export async function getSnapToken(order_id: number, total_price: number) {
+export async function getSnapToken(order_id: number, total_price: number, final_price:number) {
   try {
     const token = localStorage.getItem("token");
     console.log("Token from localStorage:", token); // Pastikan token ada
@@ -40,7 +40,7 @@ export async function getSnapToken(order_id: number, total_price: number) {
       `${process.env.NEXT_PUBLIC_BASE_URL_BE}/order/payment`,
       {
         order_id,
-        gross_amount: total_price,
+        gross_amount: final_price,
         total_price: total_price
       },
       {

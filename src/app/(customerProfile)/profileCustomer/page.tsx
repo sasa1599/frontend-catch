@@ -86,8 +86,6 @@ const ProfileCustomer: React.FC = () => {
     }
   };
 
-
-
   const editAvatar = async (file: File) => {
     if (!file || !user) return;
 

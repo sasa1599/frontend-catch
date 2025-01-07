@@ -55,14 +55,13 @@ export default function PromotorSignUpPage() {
       );
 
       toast.success(res.data.message || "Registration successful!");
-      setIsLoading(false);
-
       router.push("/");
     } catch (err) {
       setIsLoading(false);
       console.error("Error during registration:", err);
       toast.error("An error occurred during registration");
     } finally {
+      // Pastikan loading state diatur ke false
       setIsLoading(false);
     }
   };

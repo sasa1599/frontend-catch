@@ -127,6 +127,8 @@ export default function ShowTickets({ event_id }: { event_id: string }) {
     setIsReedemedPoints(true);
   };
 
+  console.log("final",final_price)
+  
   return (
     <main>
       <TicketContext.Provider value={{ ticketCart, setTicketCart }}>
@@ -235,7 +237,7 @@ export default function ShowTickets({ event_id }: { event_id: string }) {
                         <span className="font-semibold text-red-500 text-xl">
                           -
                           {isReedemedPoints
-                            ? formatPrice(totalPrice / 10 - points)
+                            ? formatPrice((totalPrice- points)/10)
                             : formatPrice(totalPrice / 10)}
                         </span>
                       </div>
@@ -255,6 +257,7 @@ export default function ShowTickets({ event_id }: { event_id: string }) {
               {isLoading ? "Loading ..." : "Book your ticket now!"}
             </button>
           </div>
+          
         </div>
       </TicketContext.Provider>
     </main>

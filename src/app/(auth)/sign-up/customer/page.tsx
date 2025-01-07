@@ -79,6 +79,7 @@ export default function CustomerSignUpPage() {
       setIsLoading(false);
     }
   };
+  
 
   return (
     <div className="flex flex-col md:flex-row h-screen bg-black text-gray-300 mt-16">

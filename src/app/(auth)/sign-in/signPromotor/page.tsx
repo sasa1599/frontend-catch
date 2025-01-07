@@ -35,7 +35,7 @@ const SignPromotor = () => {
   const handleLogin = async (values: FormValues) => {
     try {
       setIsLoading(true);
-
+  
       const payload = {
         data: {
           username: values.username,
@@ -79,6 +79,7 @@ const SignPromotor = () => {
       setIsLoading(false);
     }
   };
+  
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row bg-gray-50 text-black">

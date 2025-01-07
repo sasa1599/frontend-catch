@@ -68,9 +68,9 @@ export default function TicketOrder({ ticket }: { ticket: ITicket }) {
     }
   };
 
-  return (
-    <div className="flex flex-col bg-black w-full">
-      <p className="font-semibold text-xl pt-4">{ticket.category}</p>
+    return (
+      <div className="flex flex-col bg-black w-full">
+        <p className="font-semibold text-xl pt-4">{ticket.category}</p>
 
       {/* Click to Order Ticket */}
       <div className="flex items-center justify-between">
