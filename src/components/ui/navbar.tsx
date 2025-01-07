@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { IUser, IPromotor } from "@/types/user";
 import { useSession } from "@/context/useSession";
@@ -48,7 +48,7 @@ const Navbar = () => {
     "/Order",
     "/ListEvents",
   ];
-  
+
   const paths = usePathname();
 
   const onLogout = () => {
@@ -80,7 +80,10 @@ const Navbar = () => {
       if (
         desktopDropdownRef.current &&
         !desktopDropdownRef.current.contains(target) &&
-        !(target instanceof HTMLElement && target.closest(".desktop-dropdown-button"))
+        !(
+          target instanceof HTMLElement &&
+          target.closest(".desktop-dropdown-button")
+        )
       ) {
         setDesktopDropdownOpen(false);
       }
@@ -89,7 +92,10 @@ const Navbar = () => {
       if (
         mobileDropdownRef.current &&
         !mobileDropdownRef.current.contains(target) &&
-        !(target instanceof HTMLElement && target.closest(".mobile-dropdown-button"))
+        !(
+          target instanceof HTMLElement &&
+          target.closest(".mobile-dropdown-button")
+        )
       ) {
         setMobileDropdownOpen(false);
       }
@@ -121,7 +127,9 @@ const Navbar = () => {
 
         {/* Desktop SearchBar */}
         <div className="hidden md:flex flex-1 mx-4">
-          <SearchBar />
+          <Suspense>
+            <SearchBar />
+          </Suspense>
         </div>
 
         {/* Desktop Menu */}
@@ -195,7 +203,9 @@ const Navbar = () => {
         >
           {/* Mobile SearchBar */}
           <div className="mb-4">
-            <SearchBar />
+            <Suspense>
+              <SearchBar />
+            </Suspense>
           </div>
 
           {/* Mobile Menu Items */}
