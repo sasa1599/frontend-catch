@@ -203,7 +203,9 @@ const Navbar = () => {
         >
           {/* Mobile SearchBar */}
           <div className="mb-4">
-            <SearchBar />
+            <Suspense>
+              <SearchBar />
+            </Suspense>
           </div>
 
           {/* Mobile Menu Items */}
