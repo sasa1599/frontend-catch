@@ -92,8 +92,7 @@ export default function CustomerSignUpPage() {
             className="object-cover"
           />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-r from-black to-transparent" />
-        <div className="absolute inset-0 flex flex-col justify-center p-6 lg:p-12 text-white">
+        <div className="md:absolute inset-0 flex flex-col justify-center p-6 lg:p-12 text-white">
           <h1 className="text-2xl lg:text-4xl font-bold mb-4 leading-snug">
             You can attend events as you wish, <br /> but your wallet remains
             safe!
