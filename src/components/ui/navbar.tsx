@@ -133,7 +133,7 @@ const Navbar = () => {
         </div>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden md:flex items-center gap-6 mr-32">
           {menuItems.map((item) => (
             <Link
               key={item.label}
